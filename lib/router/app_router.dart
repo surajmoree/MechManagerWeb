@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_bloc.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_event.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_state.dart';
+import 'package:mech_manager/modules/job_sheet/edit_jobsheet/edit_job_sheet.dart';
 
 import '../modules/dashboard/dashboard_page.dart';
 import '../modules/estimate/estimate_page.dart';
@@ -34,8 +35,8 @@ class AppRouter {
       case "/invoice":
         return MaterialPageRoute(builder: (_) => InvoicePage());
 
-      // case "/jobcard":
-      //   return MaterialPageRoute(builder: (_) => JobSheetListing());
+      case "/editjobcard":
+        return MaterialPageRoute(builder: (_) => EditJobSheet());
 
       default:
         return MaterialPageRoute(

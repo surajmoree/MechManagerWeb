@@ -1,156 +1,224 @@
 import 'package:flutter/material.dart';
 import 'package:mech_manager/config/colors.dart';
 
-class MyDrawer extends StatelessWidget {
+ValueNotifier<String> selectedRouteNotifier =
+    ValueNotifier<String>("/dashboard_page");
+
+class MyDrawer extends StatefulWidget {
   final VoidCallback closeDrawer;
 
   const MyDrawer({required this.closeDrawer});
 
   @override
+  State<MyDrawer> createState() => _MyDrawerState();
+}
+
+class _MyDrawerState extends State<MyDrawer> {
+  String selectedRoute = '/dashboard_page';
+
+  void selectedItem(route) {
+    setState(() {
+      selectedRoute = route;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Card(
-      color: whiteColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topRight: Radius.circular(20),
-          bottomRight: Radius.circular(20),
+    return SizedBox(height: double.infinity,
+      child: Card(
+        color: whiteColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+          ),
         ),
-      ),
-      elevation: 5,
-      child: Container(
-        width: 220,
-        child: Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.black, // Define your black color
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(20),
+        elevation: 5,
+      
+        //  width: 220,
+          child: Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: blackColor,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(20),
+                  ),
+                ),
+                width: double.infinity,
+                height: 60,
+                child: Center(
+                  child: SizedBox(
+                    width: 170,
+                    child: Image.asset(
+                      'assets/icons/mech-logo.png',
+                    ),
+                  ),
                 ),
               ),
-              width: double.infinity,
-              height: 50,
-              child: Center(
-                child: Image.asset(
-                  'assets/icons/mech-logo.png',
+              SizedBox(height: 5),
+              Expanded(
+                child: Scrollbar(
+                  thumbVisibility: true,
+                  child: SingleChildScrollView(
+                      child: ValueListenableBuilder<String>(
+                          valueListenable: selectedRouteNotifier,
+                          builder: (context, selectedRoute, child) {
+                            return Column(
+                              children: [
+                                DrawerItem(
+                                  imageIcon: '',
+                                  title: 'Dashboard',
+                                  route: '/dashboard_page',
+                                  isSelected: selectedRoute == '/dashboard_page',
+                                  onTap: () {
+                                    selectedRouteNotifier.value = "/dashboard_page";
+                                    Navigator.of(context)
+                                        .pushReplacementNamed('/dashboard_page');
+                                    widget.closeDrawer();
+                                  },
+                                ),
+                                SizedBox(height: 2,),
+                                DrawerItem(
+                                  imageIcon: '',
+                                  title: 'Job Card',
+                                  route: '/job_sheet_listing',
+                                  isSelected: selectedRoute == "/job_sheet_listing",
+                                  onTap: () {
+                                    selectedRouteNotifier.value =
+                                        "/job_sheet_listing";
+                                    Navigator.of(context)
+                                        .pushReplacementNamed('/job_sheet_listing');
+                                    widget.closeDrawer();
+                                  },
+                                ),
+                                SizedBox(height: 2,),
+                                DrawerItem(
+                                  imageIcon: '',
+                                  title: 'Estimate',
+                                  route: '/estimate',
+                                  isSelected: selectedRoute == "/estimate",
+                                  onTap: () {
+                                    selectedRouteNotifier.value = "/estimate";
+                                    Navigator.of(context)
+                                        .pushReplacementNamed('/estimate');
+                                  },
+                                ),
+                                SizedBox(height: 2,),
+                                DrawerItem(
+                                  imageIcon: '',
+                                  title: 'Invoice',
+                                  route: '/invoice',
+                                  isSelected: selectedRoute == "/invoice",
+                                  onTap: () {
+                                    selectedRouteNotifier.value = "/invoice";
+                                    Navigator.of(context)
+                                        .pushReplacementNamed('/invoice');
+                                  },
+                                ),
+                                SizedBox(height: 3,),
+                                DrawerItem(
+                                    imageIcon: '',
+                                    title: 'Staff',
+                                    route: '/dashboard',
+                                    isSelected: selectedRoute == "/invoice",
+                                    onTap: widget.closeDrawer),
+                                    SizedBox(height: 3,),
+                                DrawerItem(
+                                    imageIcon: '',
+                                    title: 'Customers',
+                                    route: '/job_sheet_listing',
+                                    isSelected: selectedRoute == "/invoice",
+                                    onTap: widget.closeDrawer),
+                                    SizedBox(height: 3,),
+                                DrawerItem(
+                                    imageIcon: '',
+                                    title: 'Spare parts',
+                                    route: '/estimate',
+                                    isSelected: selectedRoute == "/invoice",
+                                    onTap: widget.closeDrawer),
+                                    SizedBox(height: 3,),
+                                DrawerItem(
+                                    imageIcon: '',
+                                    title: 'Stocks',
+                                    route: '/estimate',
+                                    isSelected: selectedRoute == "/invoice",
+                                    onTap: widget.closeDrawer),
+                                    SizedBox(height: 3,),
+                                DrawerItem(
+                                    imageIcon: '',
+                                    title: 'Mechanics',
+                                    route: '/job_sheet_listing',
+                                    isSelected: selectedRoute == "/invoice",
+                                    onTap: widget.closeDrawer),
+                                    SizedBox(height: 3,),
+                                DrawerItem(
+                                    imageIcon: '',
+                                    title: 'Laboures',
+                                    route: '/estimate',
+                                    isSelected: selectedRoute == "/invoice",
+                                    onTap: widget.closeDrawer),
+                                    SizedBox(height: 3,),
+                                DrawerItem(
+                                    imageIcon: '',
+                                    title: 'Settings',
+                                    route: '/estimate',
+                                    isSelected: selectedRoute == "/invoice",
+                                    onTap: widget.closeDrawer),
+                                    SizedBox(height: 3,),
+                                   
+                                    
+                                Container(
+                                  width: 160,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(7)),
+                                    color: Colors.black, // Define your black color
+                                  ),
+                                  child: ListTile(
+                                    leading: Text(
+                                      '',
+                                      style: TextStyle(
+                                          fontSize: 18, color: whiteColor),
+                                    ),
+                                    title: Text(
+                                      'Logout',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14), // Minimized font size
+                                    ),
+                                    onTap: widget.closeDrawer,
+                                  ),
+                                ),
+                                SizedBox(height: 8,),
+                              ],
+                            );
+                          })),
                 ),
               ),
-            ),
-            SizedBox(height: 5),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    DrawerItem(
-                      image: 'assets/Icons/jobcard.png',
-                      title: 'Dashboard',
-                      route: '/dashboard_page',
-                      onTap: () {
-                        Navigator.of(context)
-                            .pushReplacementNamed('/dashboard_page');
-                        closeDrawer();
-                      },
-                    ),
-                    DrawerItem(
-                      image: 'assets/Icons/jobcard.png',
-                      title: 'Job Card',
-                      route: '/job_sheet_listing',
-                      onTap: () {
-                        Navigator.of(context)
-                            .pushReplacementNamed('/job_sheet_listing');
-                        closeDrawer();
-                      },
-                    ),
-                    DrawerItem(
-                      image: 'assets/Icons/estimate.png',
-                      title: 'Estimate',
-                      route: '/estimate',
-                      onTap: () {
-                        Navigator.of(context).pushReplacementNamed('/estimate');
-                      },
-                    ),
-                    DrawerItem(
-                      image: 'assets/Icons/invoice.png',
-                      title: 'Invoice',
-                      route: '/invoice',
-                      onTap: () {
-                        Navigator.of(context).pushReplacementNamed('/invoice');
-                      },
-                    ),
-                    DrawerItem(
-                        image: 'assets/Icons/jobcard.png',
-                        title: 'Dashboard',
-                        route: '/dashboard',
-                        onTap: closeDrawer),
-                    DrawerItem(
-                        image: 'assets/Icons/jobcard.png',
-                        title: 'Job Card',
-                        route: '/job_sheet_listing',
-                        onTap: closeDrawer),
-                    DrawerItem(
-                        image: 'assets/Icons/estimate.png',
-                        title: 'Estimate',
-                        route: '/estimate',
-                        onTap: closeDrawer),
-                    DrawerItem(
-                        image: 'assets/Icons/invoice.png',
-                        title: 'Invoice',
-                        route: '/estimate',
-                        onTap: closeDrawer),
-                    DrawerItem(
-                        image: 'assets/Icons/jobcard.png',
-                        title: 'Job Card',
-                        route: '/job_sheet_listing',
-                        onTap: closeDrawer),
-                    DrawerItem(
-                        image: 'assets/Icons/estimate.png',
-                        title: 'Estimate',
-                        route: '/estimate',
-                        onTap: closeDrawer),
-                    DrawerItem(
-                        image: 'assets/Icons/setting.png',
-                        title: 'Settings',
-                        route: '/estimate',
-                        onTap: closeDrawer),
-                    Container(
-                      width: double.infinity,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        color: Colors.black, // Define your black color
-                      ),
-                      child: ListTile(
-                        leading: Icon(Icons.logout, color: Colors.white),
-                        title: Text(
-                          'Logout',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14), // Minimized font size
-                        ),
-                        onTap: closeDrawer,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+            ],
+          ),
+        
       ),
     );
   }
 }
 
 class DrawerItem extends StatelessWidget {
-  final String image;
+  //final String image;
+  final String imageIcon;
   final String title;
   final String route;
+  final bool isSelected;
   final VoidCallback onTap;
 
   const DrawerItem({
-    required this.image,
+    // required this.image,
+    required this.imageIcon,
     required this.title,
     required this.route,
+    required this.isSelected,
     required this.onTap,
   });
 
@@ -158,17 +226,36 @@ class DrawerItem extends StatelessWidget {
   Widget build(BuildContext context) {
     double imageSize = MediaQuery.of(context).size.width < 600 ? 20 : 24;
     return ListTile(
-      selectedColor: Colors.grey[200],
-      leading: Image.asset(
-        image,
-        width: imageSize,
-        height: imageSize,
-        fit: BoxFit.cover,
-        color: Colors.black,
+      splashColor: Colors.transparent,
+      hoverColor: Colors.transparent,
+      focusColor: Colors.transparent,
+      dense: true,
+      visualDensity: VisualDensity(vertical: -1.5),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(7),
       ),
+      selected: isSelected,
+      selectedTileColor: backgroundColor,
+      //selectedColor: Colors.grey[200],
+      leading: Text(
+        imageIcon,
+        style:
+            TextStyle(fontSize: 18, color: isSelected ? blackColor : greyColor),
+      ),
+      //Image.asset(
+      //image,
+      // imageIcon,
+      // width: imageSize,
+      // height: imageSize,
+      // fit: BoxFit.cover,
+      // color: Colors.black,
+      // ),
       title: Text(
         title,
-        style: TextStyle(color: Colors.black, fontSize: 14),
+        style: TextStyle(
+            color: isSelected ? blackColor : greyColor,
+            fontSize: 14,
+            fontFamily: 'meck'),
       ),
       onTap: () {
         onTap();

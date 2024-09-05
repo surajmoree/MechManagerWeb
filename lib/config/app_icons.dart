@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ionicons/ionicons.dart';
 
 
 // const IconData mailIcon = Ionicons.mail;
@@ -21,18 +22,18 @@ const IconData humbergerIcon = Icons.menu;
 const IconData trashIcon = Icons.delete;
 const IconData verticleDot = Icons.more_vert;
 const IconData addIcon = Icons.add_outlined;
-// const IconData globeIcon = Ionicons.globe_outline;
+ const IconData globeIcon = Ionicons.globe_outline;
 const IconData logout = Icons.logout;
-// const IconData carIcon = Ionicons.car;
+ const IconData carIcon = Ionicons.car;
 const IconData cameraIcon = Icons.camera;
-// const IconData additonalIcon = Ionicons.add_circle_outline;
+ const IconData additonalIcon = Ionicons.add_circle_outline;
 const IconData rotate = Icons.rotate_90_degrees_ccw;
 const IconData estimateIcon = Icons.file_copy_sharp;
 const IconData invoiceIcon = Icons.article_rounded;
 const IconData uparrow = Icons.arrow_upward_rounded;
 const IconData downarrow = Icons.arrow_downward;
-// const IconData favIcon = Ionicons.heart;
-// const IconData whatsappIcon = Ionicons.logo_whatsapp;
+ const IconData favIcon = Ionicons.heart;
+ const IconData whatsappIcon = Ionicons.logo_whatsapp;
 const IconData imageNotSupport = Icons.image_not_supported_outlined;
 const IconData mailIcon = Icons.mail_outline;
 const IconData call= Icons.call;

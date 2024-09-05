@@ -13,6 +13,7 @@ class _InvoicePageState extends State<InvoicePage>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   bool _isDrawerOpen = true;
+  final ValueNotifier<String> activeRouteNotifier = ValueNotifier<String>('/job_sheet_listing');
 
   @override
   void initState() {
@@ -45,6 +46,8 @@ class _InvoicePageState extends State<InvoicePage>
 
   Widget build(BuildContext context) {
     return BaseLayout(
+      activeRouteNotifier: activeRouteNotifier,
+    //  activeRouteNotifier: activeRouteNotifier,
       title: 'MechManager Admin',
       closeDrawer: _toggleDrawer,
       isDrawerOpen: _isDrawerOpen,

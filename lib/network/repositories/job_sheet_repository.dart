@@ -5,11 +5,9 @@ class JobSheetRepository extends Repository
 {
    final jobSheetApi = JobSheetApi();
 
-   Future<dynamic> getJobSheets(jsonData)async
-   {
+  Future<dynamic> getJobSheets(jsonData) async {
     return jobSheetApi.getJobSheets(jsonData);
-   }
-
+  }
     Future<dynamic> deleteJobSheet(jsonData) {
     return jobSheetApi.deleteJobSheet(jsonData);
   }

@@ -53,6 +53,7 @@ class MyApp extends StatelessWidget {
           BlocProvider<SearchMechanicBloc>(create: (context) => SearchMechanicBloc())
         ],
         child: MaterialApp(
+          theme: ThemeData(fontFamily: 'meck',),
           debugShowCheckedModeBanner: false,
           initialRoute: initialRoute,
           title: 'MechManager',

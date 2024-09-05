@@ -3,6 +3,7 @@ import 'package:mech_manager/components/skeletone/mobile_drawer.dart';
 import 'package:mech_manager/config/colors.dart';
 
 import 'components/skeletone/drawer.dart';
+//final ValueNotifier<String> activeRouteNotifier = ValueNotifier<String>('/dashboard_page');
 
 class BaseLayout extends StatelessWidget {
   final Widget body;
@@ -11,16 +12,20 @@ class BaseLayout extends StatelessWidget {
   final bool isDrawerOpen;
   final bool? showFloatingActionButton;
   final List<Widget>? routeWidgets;
+   final ValueNotifier<String> activeRouteNotifier;
+  int ctx;
 
-  const BaseLayout({
-    super.key,
+   BaseLayout({
+    Key? key,
     required this.body,
     required this.title,
     required this.closeDrawer,
     required this.isDrawerOpen,
     this.showFloatingActionButton = true,
+    required this.activeRouteNotifier,
     this.routeWidgets,
-  });
+     this.ctx =0,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +49,10 @@ class BaseLayout extends StatelessWidget {
                   return isMobile? 
                   Container():
                    SizedBox(
-                    width: isMobile ? 180 : 230,
-                    child: MyDrawer(closeDrawer: closeDrawer),
+                    width: isMobile ? 180 : 211,
+                    child: MyDrawer(closeDrawer: closeDrawer, 
+                    //activeRouteNotifier: activeRouteNotifier,
+                    ),
                     // child: isMobile?
                     //  null: MyDrawer(closeDrawer: closeDrawer),
                   );

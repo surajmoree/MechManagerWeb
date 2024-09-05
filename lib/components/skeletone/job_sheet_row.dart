@@ -30,9 +30,9 @@ class _JobSheetRowState extends State<JobSheetRow> {
   String countryCode = '+91';
   String whatsappUrl = "";
   String selectedStatus = "";
-
   bool showServicingDateField = false;
 
+  @override
   void initState() {
     super.initState();
     selectedStatus = widget.jobSheetDetail!.vehicleStatus!;
@@ -107,10 +107,14 @@ class _JobSheetRowState extends State<JobSheetRow> {
                                     MaterialPageRoute(
                                         builder: (context) =>
                                             const EditJobSheet()));
-                                context.read<JobSheetDetailsBloc>().add(
-                                    GetJobSheetDetails(
-                                        id: widget.jobSheetDetail!.id
-                                            .toString()));
+                                context
+                                                          .read<
+                                                              JobSheetDetailsBloc>()
+                                                          .add(GetJobSheetDetails(
+                                                              id: widget
+                                                                  .jobSheetDetail!
+                                                                  .id
+                                                                  .toString()));
                               },
                               child: Icon(
                                 editIcon,
@@ -243,7 +247,9 @@ class _JobSheetRowState extends State<JobSheetRow> {
                         ],
                       ),
                     ),
-                    SizedBox(width: 60,),
+                    SizedBox(
+                      width: 60,
+                    ),
                     Expanded(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,

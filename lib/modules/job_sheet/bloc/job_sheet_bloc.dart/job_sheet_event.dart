@@ -10,23 +10,23 @@ class JobSheetEvent extends Equatable {
 
 
 class FetchJobSheets extends JobSheetEvent {
-  final int? timestamp;
-  final String? searchKeyword;
-  final String? direction;
-  final String? fromDate;
-  final String? lastRecordUpdatedTime;
-  final String? toDate;
-  final jobSheetStatus? status;
-  const FetchJobSheets({
-    this.timestamp,
-    this.searchKeyword,
-    this.direction,
-    this.fromDate,
-    this.toDate,
-    this.lastRecordUpdatedTime,
-    required this.status,
-  });
-}
+    final int? timestamp;
+    final String? searchKeyword;
+    final String? direction;
+    final String? fromDate;
+    final String? lastRecordUpdatedTime;
+    final String? toDate;
+    final jobSheetStatus? status;
+    const FetchJobSheets({
+      this.timestamp,
+      this.searchKeyword,
+      this.direction,
+      this.fromDate,
+      this.toDate,
+      this.lastRecordUpdatedTime,
+      required this.status,
+    });
+  }
 
 class DeleteJobSheet extends JobSheetEvent {
   final String id;
