@@ -25,7 +25,8 @@ class _JobSheetListingState extends State<JobSheetListing>
   late AnimationController _animationController;
   bool _isDrawerOpen = true;
   String selectedFilterValue = "";
-  final ValueNotifier<String> activeRouteNotifier = ValueNotifier<String>('/job_sheet_listing');
+  final ValueNotifier<String> activeRouteNotifier =
+      ValueNotifier<String>('/job_sheet_listing');
   @override
   void initState() {
     super.initState();
@@ -82,7 +83,7 @@ class _JobSheetListingState extends State<JobSheetListing>
     final screenHeight = MediaQuery.of(context).size.height;
 
     return BaseLayout(
-      activeRouteNotifier: activeRouteNotifier,
+        activeRouteNotifier: activeRouteNotifier,
         title: 'MechManager Admin',
         closeDrawer: _toggleDrawer,
         isDrawerOpen: _isDrawerOpen,
@@ -91,12 +92,11 @@ class _JobSheetListingState extends State<JobSheetListing>
             onTap: () {
               activeRouteNotifier.value = "/dashboard_page";
               //  Navigator.pushNamed(context, '/dashboard_page');
-               Navigator.of(context)
-                                        .pushReplacementNamed('/dashboard_page');
+              Navigator.of(context).pushReplacementNamed('/dashboard_page');
             },
             child: const Text(
               "Home",
-              style: TextStyle(color: Colors.blue),
+              style: TextStyle(color: blueColor),
             ),
           ),
           const Text(" / "),
@@ -124,7 +124,6 @@ class _JobSheetListingState extends State<JobSheetListing>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.only(left: 4, right: 4),
                     child: SizedBox(
@@ -134,9 +133,9 @@ class _JobSheetListingState extends State<JobSheetListing>
                           const Text(
                             'Job Card',
                             style: TextStyle(
-                              fontSize: 17,
-                              color: blackColor,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: textColor,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                           GestureDetector(
@@ -321,7 +320,7 @@ class _JobSheetListingState extends State<JobSheetListing>
                             Container(
                               width: containerWidth + 20,
                               height: 60,
-                              color: lightGreyColor,
+                              color: textfieldColor,
                               child: TextField(
                                 controller: _searchController,
                                 onChanged: (value) {
@@ -339,34 +338,29 @@ class _JobSheetListingState extends State<JobSheetListing>
                                     _fetchInitialJobSheets();
                                   }
                                 },
-                                decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 15.0, horizontal: 10.0),
+                                decoration: const InputDecoration(
                                   hintStyle: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    color: hintTextColor,
-                                    fontFamily: 'Mulish',
-                                    fontSize: textSize,
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.grey.shade500),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.grey.shade500),
-                                  ),
+                                      color: hintTextColor,
+                                      fontFamily: 'Mulish',
+                                      fontSize: 14),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 12, horizontal: 8),
                                   border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.grey.shade500),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5)),
+                                    borderSide: BorderSide(
+                                      width: 0,
+                                      style: BorderStyle.none,
+                                    ),
                                   ),
+                                  isDense: true,
                                   hintText:
-                                      'Search by vehicle number and customer name',
+                                      "Search by vehicle number and customer name",
+                                  filled: true,
                                   fillColor: lightGreyColor,
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 5),
                             const SizedBox(width: 5),
                             Container(
                               width: 50,
@@ -422,9 +416,11 @@ class _JobSheetListingState extends State<JobSheetListing>
                               child: Row(
                                 children: [
                                   Container(
-                                    width: 300.0,
-                                    height: 40,
-                                    color: lightGreyColor,
+                                    width: 240.0,
+                                    height: 37,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(5))),
                                     child: TextField(
                                       controller: _searchController,
                                       onChanged: (value) {
@@ -443,30 +439,25 @@ class _JobSheetListingState extends State<JobSheetListing>
                                           _fetchInitialJobSheets();
                                         }
                                       },
-                                      decoration: InputDecoration(
+                                      decoration: const InputDecoration(
                                         hintStyle: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          color: hintTextColor,
-                                          fontFamily: 'Mulish',
-                                          fontSize: screenHeight * 0.023,
-                                        ),
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                                horizontal: 10.0),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Colors.grey.shade500),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Colors.grey.shade500),
-                                        ),
+                                            color: hintTextColor,
+                                            fontFamily: 'Mulish',
+                                            fontSize: 14),
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 11, horizontal: 8),
                                         border: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(3)),
                                           borderSide: BorderSide(
-                                              color: Colors.grey.shade500),
+                                            width: 0,
+                                            style: BorderStyle.none,
+                                          ),
                                         ),
+                                        isDense: true,
                                         hintText:
-                                            'Search by vehicle number and customer name',
+                                            "Search by vehicle number and customer name",
+                                        filled: true,
                                         fillColor: lightGreyColor,
                                       ),
                                     ),
@@ -474,73 +465,79 @@ class _JobSheetListingState extends State<JobSheetListing>
                                   const SizedBox(width: 5),
                                   DecoratedBox(
                                     decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Colors.grey.shade500),
-                                      borderRadius: BorderRadius.circular(5),
+                                      borderRadius: BorderRadius.circular(3),
                                       color:
                                           lightGreyColor, // Matches the TextField's background color
                                     ),
-                                    child: PopupMenuButton<String>(
-                                      tooltip: '',
-                                      icon: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            selectedFilterValue.isEmpty
-                                                ? "Filter by"
-                                                : selectedFilterValue,
-                                            style: const TextStyle(
-                                              color: Colors.black87,
-                                              fontWeight: FontWeight.w500,
+                                    child: SizedBox(
+                                      height: 37,
+                                      child: PopupMenuButton<String>(
+                                        tooltip: '',
+                                        icon: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              selectedFilterValue.isEmpty
+                                                  ? "Filter by"
+                                                  : selectedFilterValue,
+                                              style: const TextStyle(
+                                                color: Colors.black87,
+                                                fontWeight: FontWeight.w500,
+                                              ),
                                             ),
-                                          ),
-                                          const SizedBox(width: 8),
-                                          const Icon(
-                                            Icons.expand_more_outlined,
-                                            color: Colors.black54,
-                                          ),
-                                        ],
+                                            const SizedBox(width: 5),
+                                            const Icon(
+                                              Icons.expand_more_outlined,
+                                              color: Colors.black54,
+                                            ),
+                                          ],
+                                        ),
+                                        itemBuilder: (BuildContext context) {
+                                          return filterBy.map((String option) {
+                                            return PopupMenuItem<String>(
+                                              value: option,
+                                              child: Text(option),
+                                            );
+                                          }).toList();
+                                        },
+                                        initialValue:
+                                            selectedFilterValue.isNotEmpty
+                                                ? selectedFilterValue
+                                                : "Filter by",
+                                        onSelected: (String value) {
+                                          setState(() {
+                                            selectedFilterValue = value;
+                                            performFilterOperation(
+                                                filterOption:
+                                                    selectedFilterValue);
+                                          });
+                                        },
+                                        color: lightGreyColor,
+                                        elevation: 3,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        offset: const Offset(0, 50),
                                       ),
-                                      itemBuilder: (BuildContext context) {
-                                        return filterBy.map((String option) {
-                                          return PopupMenuItem<String>(
-                                            value: option,
-                                            child: Text(option),
-                                          );
-                                        }).toList();
-                                      },
-                                      initialValue:
-                                          selectedFilterValue.isNotEmpty
-                                              ? selectedFilterValue
-                                              : "Filter by",
-                                      onSelected: (String value) {
-                                        setState(() {
-                                          selectedFilterValue = value;
-                                          performFilterOperation(
-                                              filterOption:
-                                                  selectedFilterValue);
-                                        });
-                                      },
-                                      color: lightGreyColor,
-                                      elevation: 3,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      offset: const Offset(0, 50),
                                     ),
                                   ),
                                   const SizedBox(width: 5),
                                   Container(
                                     width: 40,
-                                    height: 40,
+                                    height: 37,
                                     decoration: const BoxDecoration(
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(5)),
                                       color: primaryColor,
                                     ),
-                                    child: const Icon(Icons.search),
+                                    child: Center(
+                                        child: const Text(
+                                      '',
+                                      style: TextStyle(fontSize: 18),
+                                    )),
                                   ),
                                 ],
                               ),

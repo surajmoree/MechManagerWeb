@@ -12,3 +12,9 @@ class SearchCustomerComplaint extends SearchEvent {
   final String searchKeyword;
   const SearchCustomerComplaint({required this.searchKeyword});
 }
+
+class SearchVehicleDetails extends SearchEvent {
+  final String searchKeyword;
+  const SearchVehicleDetails({required this.searchKeyword});
+}
+

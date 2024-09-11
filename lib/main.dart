@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
   final String? initialRoute;
   final AppRouter appRouter;
   static final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
-  
+
   const MyApp({super.key, required this.appRouter, required this.initialRoute});
 
   @override
@@ -39,21 +39,25 @@ class MyApp extends StatelessWidget {
             create: (context) => LogInCubit(),
           ),
 
-            BlocProvider<JobSheetBloc>(
-          create: (context) => JobSheetBloc()
-            ..add(const FetchJobSheets(status: jobSheetStatus.initial))
-            // ..add(const FetchEstimateList(status: jobSheetStatus.initial))
-            // ..add(const FetchInvoiceList(status: jobSheetStatus.initial))
-            // ..add(const FetchDashboard(status: jobSheetStatus.initial))
-            // ..add(const FetchServiceList(status: jobSheetStatus.initial)),
-        ),
+          BlocProvider<JobSheetBloc>(
+              create: (context) => JobSheetBloc()
+                ..add(const FetchJobSheets(status: jobSheetStatus.initial))
+                // ..add(const FetchEstimateList(status: jobSheetStatus.initial))
+                // ..add(const FetchInvoiceList(status: jobSheetStatus.initial))
+                ..add(const FetchDashboard(status: jobSheetStatus.initial))
+              // ..add(const FetchServiceList(status: jobSheetStatus.initial)),
+              ),
           // SearchMechanicBloc
-          BlocProvider<JobSheetDetailsBloc>(create: (context)=> JobSheetDetailsBloc()),
-          BlocProvider<SearchBloc>(create: (context)=> SearchBloc()),
-          BlocProvider<SearchMechanicBloc>(create: (context) => SearchMechanicBloc())
+          BlocProvider<JobSheetDetailsBloc>(
+              create: (context) => JobSheetDetailsBloc()),
+          BlocProvider<SearchBloc>(create: (context) => SearchBloc()),
+          BlocProvider<SearchMechanicBloc>(
+              create: (context) => SearchMechanicBloc())
         ],
         child: MaterialApp(
-          theme: ThemeData(fontFamily: 'meck',),
+          theme: ThemeData(
+            fontFamily: 'meck',
+          ),
           debugShowCheckedModeBanner: false,
           initialRoute: initialRoute,
           title: 'MechManager',
@@ -61,7 +65,7 @@ class MyApp extends StatelessWidget {
           onGenerateRoute: appRouter.onGenerateRoute,
           builder: (context, widget) => ResponsiveWrapper.builder(
             ClampingScrollWrapper.builder(context, widget!),
-            maxWidth:MediaQuery.of(context).size.width,
+            maxWidth: MediaQuery.of(context).size.width,
             minWidth: 470,
             defaultScale: true,
             breakpoints: [
@@ -77,5 +81,71 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
+
+/*
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  Authentication().checkLogin().then((isLogin) {
+    runApp(MyApp(
+      appRouter: AppRouter(),
+      initialRoute: isLogin ? '/dashboard_page' : '/login_screen',
+    ));
+  }).catchError((error) {
+    // Handle any errors during authentication check.
+  });
+}
+
+class MyApp extends StatelessWidget {
+  final String? initialRoute;
+  final AppRouter appRouter;
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
+
+  const MyApp({super.key, required this.appRouter, required this.initialRoute});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<LogInCubit>(
+            create: (context) => LogInCubit(),
+          ),
+          BlocProvider<JobSheetBloc>(
+            create: (context) => JobSheetBloc()
+              ..add(const FetchJobSheets(status: jobSheetStatus.initial))
+              ..add(const FetchDashboard(status: jobSheetStatus.initial)),
+          ),
+          BlocProvider<JobSheetDetailsBloc>(create: (context) => JobSheetDetailsBloc()),
+          BlocProvider<SearchBloc>(create: (context) => SearchBloc()),
+          BlocProvider<SearchMechanicBloc>(create: (context) => SearchMechanicBloc()),
+        ],
+        child: MaterialApp(
+          theme: ThemeData(fontFamily: 'meck'),
+          debugShowCheckedModeBanner: false,
+          initialRoute: initialRoute,
+          title: 'MechManager',
+          navigatorKey: MyApp.navigatorKey,
+          onGenerateRoute: appRouter.onGenerateRoute,
+          builder: (context, widget) => ResponsiveWrapper.builder(
+            ClampingScrollWrapper.builder(context, widget!),
+            maxWidth: MediaQuery.of(context).size.width,
+            minWidth: 470,
+            defaultScale: true,
+            breakpoints: [
+              ResponsiveBreakpoint.resize(500, name: MOBILE),
+              ResponsiveBreakpoint.autoScale(850, name: TABLET),
+              ResponsiveBreakpoint.autoScale(1250, name: DESKTOP),
+            ],
+            background: Container(color: const Color(0xFFF5F5F5)),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+*/
 
 

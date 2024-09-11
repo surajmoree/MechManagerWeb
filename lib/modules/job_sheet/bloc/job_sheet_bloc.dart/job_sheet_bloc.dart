@@ -1,22 +1,24 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mech_manager/config.dart';
+import 'package:mech_manager/models/dashboard_model.dart';
 import 'package:mech_manager/models/job_sheet.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_event.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_state.dart';
 import 'package:mech_manager/network/repositories/job_sheet_repository.dart';
 
-class JobSheetBloc extends Bloc<JobSheetEvent,JobSheetState>
-{
-  JobSheetBloc(): super(JobSheetState())
-  {
-     on<FetchJobSheets>(_onFetchJobSheets);
-     on<DeleteJobSheet>(_onDeleteJobSheet);
+class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
+  JobSheetBloc() : super(JobSheetState()) {
+    on<FetchJobSheets>(_onFetchJobSheets);
+    on<DeleteJobSheet>(_onDeleteJobSheet);
+    on<FetchDashboard>(_onFetchDashboard);
   }
   final JobSheetRepository jobSheetRepository = JobSheetRepository();
 
- // get job listing data
-  Future<void> _onFetchJobSheets(FetchJobSheets event, Emitter<JobSheetState>emit)async
-  {
+  // get job listing data
+  Future<void> _onFetchJobSheets(
+      FetchJobSheets event, Emitter<JobSheetState> emit) async {
     if (state.hasReachedMax! && event.status == jobSheetStatus.success) {
       return;
     }
@@ -26,9 +28,9 @@ class JobSheetBloc extends Bloc<JobSheetEvent,JobSheetState>
               ? jobSheetStatus.success
               : jobSheetStatus.loading),
     );
-     dynamic token = await storage.read(key: "token");
+    dynamic token = await storage.read(key: "token");
 
-     Map<String, String> jsonData = {
+    Map<String, String> jsonData = {
       'token': token.toString(),
       'direction': 'down',
       'timestamp':
@@ -38,9 +40,7 @@ class JobSheetBloc extends Bloc<JobSheetEvent,JobSheetState>
       'toDate': event.toDate ?? "",
     };
 
-
     final result = await jobSheetRepository.getJobSheets(jsonData);
-
 
     if (result != null && result.isNotEmpty) {
       List<JobSheetModel> jobSheetsList = result
@@ -52,7 +52,7 @@ class JobSheetBloc extends Bloc<JobSheetEvent,JobSheetState>
       if (event.timestamp != null && event.timestamp.toString().isNotEmpty) {
         jobSheetsList = List.from(state.jobSheetList)..addAll(jobSheetsList);
       }
-      
+
       return emit(state.copyWith(
         status: jobSheetStatus.success,
         jobSheetList: jobSheetsList,
@@ -61,11 +61,36 @@ class JobSheetBloc extends Bloc<JobSheetEvent,JobSheetState>
       ));
     } else {
       return emit(state.copyWith(
+          status: jobSheetStatus.success,
+          jobSheetList: [],
+          hasReachedMax: true));
+    }
+  }
+
+  //fetch dashoboard
+
+  _onFetchDashboard(FetchDashboard event, Emitter<JobSheetState> emit) async {
+    emit(state.copyWith(
+      status: (event.status == jobSheetStatus.success)
+          ? jobSheetStatus.success
+          : jobSheetStatus.loading,
+    ));
+    dynamic token = await storage.read(key: 'token');
+    Map<String,String> jsonData ={
+   "token" : token.toString(),
+    };
+
+    final result = await jobSheetRepository.dashboardData(jsonData);
+    print('dashboard data from bloc == $result');
+    if(result != null && result.isNotEmpty)
+    {
+      emit(state.copyWith(status: jobSheetStatus.success,dashboardModel: DashboardModel.fromJson(result)));
+    } else {
+      return emit(state.copyWith(
         status: jobSheetStatus.failure,
       ));
     }
   }
-
 
   //delete jobsheet
   _onDeleteJobSheet(DeleteJobSheet event, Emitter<JobSheetState> emit) async {
@@ -76,8 +101,7 @@ class JobSheetBloc extends Bloc<JobSheetEvent,JobSheetState>
       "id": event.id.toString(),
     };
 
-    final result =
-        await jobSheetRepository.deleteJobSheet(jsonData);
+    final result = await jobSheetRepository.deleteJobSheet(jsonData);
 
     if (result['status'] == "success") {
       // state.jobSheetList

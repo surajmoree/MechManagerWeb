@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:mech_manager/config/colors.dart';
 
 class OverviewCard extends StatelessWidget {
   final String title;
-  final int count;
-  final IconData icon;
+  final String count;
+  //final IconData icon;
+  final Widget container;
   final Color backgroundColor;
   final Color iconColor;
+  
 
   const OverviewCard({
     required this.title,
     required this.count,
-    required this.icon,
+    required this.container,
+   // required this.icon,
     required this.backgroundColor,
     required this.iconColor,
   });
@@ -23,19 +27,20 @@ class OverviewCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: 40, color: iconColor),
+          Container(child: container,),
+         // Icon(icon, size: 40, color: iconColor),
           SizedBox(width: 8),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 title,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                style: TextStyle( fontWeight: FontWeight.w700,fontSize: 14,color: textColor),
               ),
               Text(
-                '$count',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                count,
+                style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700),
               ),
             ],
           )
@@ -57,6 +62,7 @@ class ResponsiveCard extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         return Container(
+      
         
           decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)),border: Border.all(color: Colors.grey.shade300)),
 

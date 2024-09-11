@@ -1,26 +1,51 @@
-import 'package:equatable/equatable.dart';
 
-class JobSheetDetailsEvent extends Equatable
-{
- const JobSheetDetailsEvent();
+import 'package:equatable/equatable.dart';
+import 'package:image_picker/image_picker.dart';
+
+class JobSheetDetailsEvent extends Equatable {
+  const JobSheetDetailsEvent();
   @override
   List<Object> get props => [];
-  
 }
 
-
-class GetJobSheetDetails extends JobSheetDetailsEvent
-{
+class GetJobSheetDetails extends JobSheetDetailsEvent {
   final String id;
 
- const GetJobSheetDetails({required this.id});
-  
+  const GetJobSheetDetails({required this.id});
 }
 
-class GetJobSheetImages extends JobSheetDetailsEvent
-{
+class GetJobSheetImages extends JobSheetDetailsEvent {
   final String id;
 
- const GetJobSheetImages({required this.id});
-  
+  const GetJobSheetImages({required this.id});
+}
+
+class UpdateJobSheet extends JobSheetDetailsEvent {
+  final Map<String, dynamic>? formData;
+  final String id;
+  final XFile frontImage;
+  final XFile rightHandSideImage;
+  final XFile leftHandSideImage;
+  final XFile rearImage;
+  final XFile dashboardImage;
+  final XFile engineImage;
+  final XFile image1;
+  final XFile image2;
+  final XFile image3;
+  final XFile image4;
+
+  const UpdateJobSheet({
+    this.formData,
+    required this.id,
+    required this.frontImage,
+    required this.rightHandSideImage,
+    required this.leftHandSideImage,
+    required this.rearImage,
+    required this.dashboardImage,
+    required this.engineImage,
+    required this.image1,
+    required this.image2,
+    required this.image3,
+    required this.image4,
+  });
 }

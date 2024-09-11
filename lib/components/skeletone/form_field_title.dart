@@ -17,7 +17,7 @@ class FormFieldTitle extends StatelessWidget {
           child: Text(
             title,
             style: const TextStyle(
-                color: blackColor, fontSize: 15, fontWeight: FontWeight.bold),
+                color: blackColor, fontSize: 14, fontWeight: FontWeight.w600),
           )),
     );
   }

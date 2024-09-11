@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:mech_manager/models/dashboard_model.dart';
 import 'package:mech_manager/models/job_sheet.dart';
 
 enum jobSheetStatus {
@@ -19,6 +20,7 @@ enum jobSheetStatus {
 class JobSheetState extends Equatable {
   jobSheetStatus? status;
   List<JobSheetModel> jobSheetList;
+  DashboardModel? dashboardModel;
 
   int? lastTimestamp;
   int? currentEstimateId;
@@ -32,7 +34,7 @@ class JobSheetState extends Equatable {
   JobSheetState({
     this.status = jobSheetStatus.initial,
     this.jobSheetList = const [],
-   
+    this.dashboardModel = DashboardModel.empty,
     this.lastTimestamp,
     this.page = 1,
     this.hasReachedMax = false,
@@ -48,7 +50,7 @@ class JobSheetState extends Equatable {
   List<Object> get props => [
         status!,
         jobSheetList,
-       
+       dashboardModel!,
         page!,
         hasReachedMax!,
         loadShow!,
@@ -62,7 +64,7 @@ class JobSheetState extends Equatable {
   JobSheetState copyWith(
       {jobSheetStatus? status,
       List<JobSheetModel>? jobSheetList,
-    
+      DashboardModel? dashboardModel,
       int? lastTimestamp,
       int? currentEstimateId,
      
@@ -74,7 +76,7 @@ class JobSheetState extends Equatable {
     return JobSheetState(
         status: status ?? this.status,
         jobSheetList: jobSheetList ?? this.jobSheetList,
-      
+        dashboardModel: dashboardModel ?? this.dashboardModel,
         currentEstimateId: currentEstimateId ?? this.currentEstimateId,
         
         lastTimestamp: lastTimestamp ?? this.lastTimestamp,

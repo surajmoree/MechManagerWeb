@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mech_manager/components/skeletone/center_loader.dart';
-import 'package:mech_manager/config/app_icons.dart';
 import 'package:mech_manager/config/colors.dart';
 import 'package:mech_manager/config/data.dart';
 import 'package:mech_manager/models/job_sheet.dart';
@@ -23,7 +22,7 @@ class JobSheetRow extends StatefulWidget {
 }
 
 class _JobSheetRowState extends State<JobSheetRow> {
-  bool _validate = false;
+
   final _formKey = GlobalKey<FormState>();
   TextEditingController _vehicleNumberController = TextEditingController();
   TextEditingController _dateController = TextEditingController();
@@ -63,13 +62,13 @@ class _JobSheetRowState extends State<JobSheetRow> {
         child: Container(
           width: screenWidth,
           child: Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10),
+            padding: const EdgeInsets.only(left: 20, right: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 15, bottom: 10),
+                  padding: const EdgeInsets.only(top: 15, bottom: 5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -101,47 +100,53 @@ class _JobSheetRowState extends State<JobSheetRow> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const EditJobSheet()));
-                                context
-                                                          .read<
-                                                              JobSheetDetailsBloc>()
-                                                          .add(GetJobSheetDetails(
-                                                              id: widget
-                                                                  .jobSheetDetail!
-                                                                  .id
-                                                                  .toString()));
-                              },
-                              child: Icon(
-                                editIcon,
-                                color: blueColor,
-                                size: 20,
-                              ),
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const EditJobSheet()));
+                                  context.read<JobSheetDetailsBloc>().add(
+                                      GetJobSheetDetails(
+                                          id: widget.jobSheetDetail!.id
+                                              .toString()));
+                                },
+                                child: Text(
+                                  '',
+                                  style:
+                                      TextStyle(color: blueColor, fontSize: 16),
+                                )
+                                // Icon(
+                                //   editIcon,
+                                //   color: blueColor,
+                                //   size: 20,
+                                // ),
+                                ),
+                            Text(
+                              "",
+                              style: TextStyle(
+                                  color: jobcardIconColor, fontSize: 16),
                             ),
-                            Icon(
-                              estimateIcon,
-                              color: Colors.green,
-                              size: 20,
-                            ),
-                            // Image.asset(
-                            //   'assets/icons/trash.png',
-                            //   height: 15,
-                            //   width: 15,
+                            // Icon(
+                            //   estimateIcon,
+                            //   color: Colors.green,
+                            //   size: 20,
                             // ),
+
                             //estimateIcon
                             GestureDetector(
                               onTap: () {
                                 showDeleteConfirmation(context);
-                              },
-                              child: Icon(
-                                trashIcon,
-                                color: Colors.red,
-                                size: 20,
+                              }, //
+                              child: Text(
+                                '',
+                                style: TextStyle(color: redColor, fontSize: 16),
                               ),
+                              // Icon(
+                              //   trashIcon,
+                              //   color: Colors.red,
+                              //   size: 20,
+                              // ),
                             ),
                           ],
                         ),
@@ -151,31 +156,27 @@ class _JobSheetRowState extends State<JobSheetRow> {
                 ),
                 Row(
                   children: [
-                    const Icon(
-                      mailIcon,
-                      color: blackColorLight,
-                      size: 18,
+                    Text(
+                      '',
+                      style: TextStyle(fontSize: 12),
                     ),
                     const SizedBox(width: 5),
-                    Text(widget.jobSheetDetail!.customerEmail.toString())
+                    Text(
+                      widget.jobSheetDetail!.customerEmail.toString(),
+                      style: TextStyle(fontFamily: 'meck', fontSize: 13),
+                    )
                   ],
-                ),
-                const SizedBox(
-                  height: 4,
                 ),
                 Row(
                   children: [
-                    const Icon(
-                      call,
-                      color: blackColorLight,
-                      size: 18,
+                    Text(
+                      '',
+                      style: TextStyle(fontSize: 18),
                     ),
                     const SizedBox(width: 5),
-                    Text(widget.jobSheetDetail!.customerMobileNumber.toString())
+                    Text(widget.jobSheetDetail!.customerMobileNumber.toString(),
+                        style: TextStyle(fontFamily: 'meck', fontSize: 13))
                   ],
-                ),
-                const SizedBox(
-                  height: 4,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -190,7 +191,7 @@ class _JobSheetRowState extends State<JobSheetRow> {
                             "Created Date:",
                             textAlign: TextAlign.left,
                             style:
-                                TextStyle(fontSize: 15, color: blackColorLight),
+                                TextStyle(fontSize: 12, color: blackColorLight),
                           ),
                           widget.jobSheetDetail!.createdAtDate
                                   .toString()
@@ -202,7 +203,8 @@ class _JobSheetRowState extends State<JobSheetRow> {
                                           .toString(),
                                       textAlign: TextAlign.left,
                                       style: const TextStyle(
-                                          fontSize: 15, color: blackColorDark),
+                                        fontSize: 13,
+                                      ),
                                     ),
                                     SizedBox(
                                       width: 3,
@@ -212,16 +214,19 @@ class _JobSheetRowState extends State<JobSheetRow> {
                                           .toString(),
                                       textAlign: TextAlign.left,
                                       style: const TextStyle(
-                                          fontSize: 15, color: blackColorDark),
+                                          fontSize: 13, color: blackColorDark),
                                     )
                                   ],
                                 )
                               : const SizedBox.shrink(),
+                          SizedBox(
+                            height: 5,
+                          ),
                           const Text(
-                            "Created Date:",
+                            "Vehicle Name:",
                             textAlign: TextAlign.left,
                             style:
-                                TextStyle(fontSize: 15, color: blackColorLight),
+                                TextStyle(fontSize: 12, color: blackColorLight),
                           ),
                           widget.jobSheetDetail!.vehicleName
                                   .toString()
@@ -230,20 +235,20 @@ class _JobSheetRowState extends State<JobSheetRow> {
                                   widget.jobSheetDetail!.vehicleName.toString(),
                                   textAlign: TextAlign.left,
                                   style: const TextStyle(
-                                      fontSize: 15, color: blackColorDark))
+                                      fontSize: 13, color: blackColorDark))
                               : const SizedBox.shrink(),
                           SizedBox(
-                            height: 4,
+                            height: 5,
                           ),
                           Text(
                             "Status:",
                             style:
-                                TextStyle(fontSize: 15, color: blackColorLight),
-                          ),
-                          SizedBox(
-                            height: 4,
+                                TextStyle(fontSize: 12, color: blackColorLight),
                           ),
                           statusDropDown(widget.jobSheetDetail!.vehicleStatus!),
+                          const SizedBox(
+                            height: 30,
+                          )
                         ],
                       ),
                     ),
@@ -259,7 +264,7 @@ class _JobSheetRowState extends State<JobSheetRow> {
                           const Text(
                             "Vehical Number:",
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 12,
                               color: blackColorLight,
                             ),
                           ),
@@ -271,7 +276,7 @@ class _JobSheetRowState extends State<JobSheetRow> {
                                       .toString()
                                       .toUpperCase(),
                                   style: const TextStyle(
-                                    fontSize: 15,
+                                    fontSize: 13,
                                     color: blackColorDark,
                                   ),
                                 )
@@ -282,7 +287,7 @@ class _JobSheetRowState extends State<JobSheetRow> {
                           const Text(
                             "Vehical Manufacturer:",
                             style: TextStyle(
-                              fontSize: 15,
+                              fontSize: 12,
                               color: blackColorLight,
                             ),
                           ),
@@ -293,7 +298,7 @@ class _JobSheetRowState extends State<JobSheetRow> {
                                   widget.jobSheetDetail!.vehicleManufacturers
                                       .toString(),
                                   style: const TextStyle(
-                                    fontSize: 15,
+                                    fontSize: 13,
                                     color: blackColorDark,
                                   ),
                                 )
@@ -304,7 +309,7 @@ class _JobSheetRowState extends State<JobSheetRow> {
                           Text(
                             "Mechanics:",
                             style:
-                                TextStyle(fontSize: 15, color: blackColorLight),
+                                TextStyle(fontSize: 12, color: blackColorLight),
                           ),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -318,16 +323,16 @@ class _JobSheetRowState extends State<JobSheetRow> {
                                     Container(
                                       margin: const EdgeInsets.all(4),
                                       decoration: BoxDecoration(
-                                          color: lightyellowColor,
+                                          color: backgroundColor,
                                           borderRadius:
-                                              BorderRadius.circular(10)),
+                                              BorderRadius.circular(20)),
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 5),
+                                          horizontal: 8, vertical: 3),
                                       child: Text(
                                         mechanic['value'],
                                         maxLines: 4,
                                         style: const TextStyle(
-                                          fontSize: 15,
+                                          fontSize: 13,
                                           color: blackColorDark,
                                         ),
                                       ),
@@ -337,6 +342,9 @@ class _JobSheetRowState extends State<JobSheetRow> {
                               )
                             ],
                           ),
+                          const SizedBox(
+                            height: 30,
+                          )
                         ],
                       ),
                     )
@@ -353,7 +361,7 @@ class _JobSheetRowState extends State<JobSheetRow> {
     );
   }
 
-  Future<void> showStatusConfirmation(
+   Future<void> showStatusConfirmation(
       BuildContext context, String newValue) async {
     await showDialog(
         context: context,
@@ -380,7 +388,8 @@ class _JobSheetRowState extends State<JobSheetRow> {
                       const FetchJobSheets(status: jobSheetStatus.success));
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => JobSheetListing()),
+                    MaterialPageRoute(
+                        builder: (context) =>  JobSheetListing()),
                   );
                 },
                 style: OutlinedButton.styleFrom(
@@ -406,16 +415,14 @@ class _JobSheetRowState extends State<JobSheetRow> {
             Size.fromHeight(40),
           ),
           isDense: true,
-
-          // contentPadding: const EdgeInsets.symmetric(horizontal: 5),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey.shade500),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey.shade500),
-          ),
-          border: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey.shade500),
+          filled: true,
+          fillColor: lightGreyColor,
+          border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(3)),
+            borderSide: BorderSide(
+              width: 0,
+              style: BorderStyle.none,
+            ),
           ),
         ),
         textStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),

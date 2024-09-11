@@ -1,12 +1,13 @@
-import 'dart:io';
+
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mech_manager/config/app_icons.dart';
 import 'package:mech_manager/config/colors.dart';
 
 class DisplaySelectedImage extends StatelessWidget {
-  final File imageFile;
+  final XFile imageFile;
   final String existedImageUrl;
   const DisplaySelectedImage(
       {super.key, required this.imageFile, this.existedImageUrl = ""});

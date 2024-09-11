@@ -28,6 +28,13 @@ class FetchJobSheets extends JobSheetEvent {
     });
   }
 
+  class FetchDashboard extends JobSheetEvent
+  {
+    final jobSheetStatus? status;
+
+ const FetchDashboard({ this.status});
+  }
+
 class DeleteJobSheet extends JobSheetEvent {
   final String id;
   const DeleteJobSheet({required this.id});

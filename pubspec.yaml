@@ -96,12 +96,9 @@ flutter:
   # example:
   fonts:
     - family: meck
-      fonts:  
+      fonts:
         - asset: assets/fonts/ws.woff
         - asset: assets/fonts/ws.woff2
-        - asset: assets/fonts/ws.eot
-        - asset: assets/fonts/ws.ttf
-        - asset: assets/fonts/ws.svg
           
   #   - family: Trajan Pro
   #     fonts:

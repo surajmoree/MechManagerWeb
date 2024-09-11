@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:formz/formz.dart';
 
 import '../../components/skeletone/center_loader.dart';
@@ -293,14 +294,19 @@ class LoginScreenState extends State<LoginScreen> {
     return BlocConsumer<LogInCubit, LogInState>(listener: (context, state) {
       if (state.status.isSubmissionSuccess) {
         CenterLoader.hide();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Login Successfully',
-                style: TextStyle(color: Colors.white)),
-            backgroundColor: successColor,
-            duration: Duration(seconds: 2),
-          ),
-        );
+      //  Fluttertoast.cancel();
+          Fluttertoast.showToast(
+              msg: "Login Successfully",
+              backgroundColor: successColor,
+              toastLength: Toast.LENGTH_SHORT);
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     content: Text('Login Successfully',
+        //         style: TextStyle(color: Colors.white)),
+        //     backgroundColor: successColor,
+        //     duration: Duration(seconds: 2),
+        //   ),
+        // );
         Navigator.pushNamed(context, '/dashboard_page');
       } else if (state.status.isSubmissionInProgress) {
         CenterLoader.show(context);

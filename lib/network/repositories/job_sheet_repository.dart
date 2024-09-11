@@ -31,4 +31,19 @@ class JobSheetRepository extends Repository
   {
     return jobSheetApi.searchMechanic(jsonData);
   }
+
+  Future<dynamic> dashboardData(jsonData)
+  {
+    return jobSheetApi.dashboardData(jsonData);
+  }
+
+  Future<dynamic> updateJobSheet(jsonData,String id)
+  {
+    return jobSheetApi.updatedJobSheet(jsonData, id);
+  }
+
+  Future<dynamic> searchVehicleDetails(jsonData)async
+  {
+    return jobSheetApi.searchVehicleDetails(jsonData);
+  }
 }

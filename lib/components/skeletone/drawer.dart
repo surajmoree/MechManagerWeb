@@ -7,7 +7,7 @@ ValueNotifier<String> selectedRouteNotifier =
 class MyDrawer extends StatefulWidget {
   final VoidCallback closeDrawer;
 
-  const MyDrawer({required this.closeDrawer});
+  const MyDrawer({super.key, required this.closeDrawer});
 
   @override
   State<MyDrawer> createState() => _MyDrawerState();
@@ -24,7 +24,8 @@ class _MyDrawerState extends State<MyDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(height: double.infinity,
+    return 
+    SizedBox(
       child: Card(
         color: whiteColor,
         shape: RoundedRectangleBorder(
@@ -39,7 +40,7 @@ class _MyDrawerState extends State<MyDrawer> {
           child: Column(
             children: [
               Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: blackColor,
                   borderRadius: BorderRadius.only(
                     topRight: Radius.circular(20),
@@ -58,8 +59,7 @@ class _MyDrawerState extends State<MyDrawer> {
               ),
               SizedBox(height: 5),
               Expanded(
-                child: Scrollbar(
-                  thumbVisibility: true,
+
                   child: SingleChildScrollView(
                       child: ValueListenableBuilder<String>(
                           valueListenable: selectedRouteNotifier,
@@ -195,7 +195,7 @@ class _MyDrawerState extends State<MyDrawer> {
                               ],
                             );
                           })),
-                ),
+               // ),
               ),
             ],
           ),
@@ -240,7 +240,7 @@ class DrawerItem extends StatelessWidget {
       leading: Text(
         imageIcon,
         style:
-            TextStyle(fontSize: 18, color: isSelected ? blackColor : greyColor),
+            TextStyle(fontSize: 18, color: isSelected ? textColor : dashboardTextColor),
       ),
       //Image.asset(
       //image,
@@ -253,7 +253,7 @@ class DrawerItem extends StatelessWidget {
       title: Text(
         title,
         style: TextStyle(
-            color: isSelected ? blackColor : greyColor,
+            color: isSelected ? textColor : dashboardTextColor,
             fontSize: 14,
             fontFamily: 'meck'),
       ),

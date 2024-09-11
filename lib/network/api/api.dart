@@ -80,6 +80,32 @@ class Api {
     }
   }
 
+  Future<Map> requestPUT(
+      {required String? path, Map<String, Object>? parameters}) async {
+    bool chk = parameters!.containsKey("token");
+    var headersData = _headers;
+    if (chk) {
+      headersData['Authorization'] = 'Bearer ${parameters['token']}';
+    }
+    dynamic uri;
+    if (_protocol == 'https') {
+      uri = Uri.https(_host, path!);
+    } else {
+      uri = Uri.http(_host, path!);
+    }
+  
+    final results =
+        await http.put(uri, headers: headersData, body: jsonEncode(parameters));
+
+    if (results.body.isNotEmpty) {
+      final jsonObject = jsonDecode(results.body);
+      return jsonObject;
+    } else {
+      return {};
+    }
+  }
+
+
 
 
   dynamic stringToBase64(data) {

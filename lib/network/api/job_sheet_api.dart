@@ -69,6 +69,42 @@ class JobSheetApi extends Api{
     }
   }
 
+  Future<dynamic> dashboardData(jsonData) async
+  {
+    try{
+      final response = await requestGET(path: '/dashboard',parameters: jsonData);
+      print("dashboard response=== $response");
+      return response;
+    }catch (er) {
+      print("Error is---------$er");
+    }
+  }
+
+
+Future<dynamic> updatedJobSheet(jsonData, String id)async
+{
+  try{
+    final response = await requestPUT(path: '/update_job_sheet/$id', parameters: jsonData);
+    print('jobcard update response $response');
+    return response;
+  }catch (er) {
+      print("Error is---------$er");
+    }
+}
+
+//search vehicle///////
+
+Future<dynamic> searchVehicleDetails(jsonData)async
+{
+  try{
+    final response = await requestGET(path: '/get_vehicles', parameters: jsonData);
+    return response['vehicles'];
+
+  }
+  catch (er) {
+      print("Error is---------$er");
+    }
+}
 
 
 
