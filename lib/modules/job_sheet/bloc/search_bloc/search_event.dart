@@ -18,3 +18,8 @@ class SearchVehicleDetails extends SearchEvent {
   const SearchVehicleDetails({required this.searchKeyword});
 }
 
+class SearchCustomerDetails extends SearchEvent {
+  final String searchKeyword;
+  const SearchCustomerDetails({required this.searchKeyword});
+}
+

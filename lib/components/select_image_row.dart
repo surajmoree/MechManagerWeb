@@ -52,7 +52,7 @@ class SelectImageRow extends StatelessWidget {
                 ),
               ),
               child: const Text(
-                'Upload Image',
+                'Select Image',
                 style: TextStyle(
                   fontFamily: 'Mulish',
                   fontSize: 14,

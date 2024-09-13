@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -15,15 +14,12 @@ import 'package:mech_manager/config/app_icons.dart';
 import 'package:mech_manager/config/colors.dart';
 import 'package:mech_manager/config/data.dart';
 import 'package:mech_manager/models/customer_complaint.dart';
+import 'package:mech_manager/models/customer_model.dart';
 import 'package:mech_manager/models/mechanic_model.dart';
 import 'package:mech_manager/models/vehicle_model.dart';
-import 'package:mech_manager/modules/dashboard/dashboard_page.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_bloc.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_event.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_state.dart';
-import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_details_bloc.dart/job_sheet_details_bloc.dart';
-import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_details_bloc.dart/job_sheet_details_event.dart';
-import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_details_bloc.dart/job_sheet_details_state.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/search_bloc/search_bloc.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/search_bloc/search_event.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/search_bloc/search_state.dart';
@@ -32,62 +28,55 @@ import 'package:mech_manager/modules/job_sheet/bloc/search_mechanic_bloc/search_
 import 'package:mech_manager/modules/job_sheet/bloc/search_mechanic_bloc/search_mechanic_state.dart';
 import 'package:mech_manager/modules/job_sheet/job_sheet_listening.dart';
 
-class EditJobSheet extends StatefulWidget {
-  const EditJobSheet({super.key});
+class CreateJobSheet extends StatefulWidget {
+  const CreateJobSheet({super.key});
 
   @override
-  State<EditJobSheet> createState() => _EditJobSheetState();
+  State<CreateJobSheet> createState() => _CreateJobSheetState();
 }
 
-class _EditJobSheetState extends State<EditJobSheet>
+class _CreateJobSheetState extends State<CreateJobSheet>
     with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  final _formKey = GlobalKey<FormState>();
+  bool _isDrawerOpen = true;
+  List<dynamic> assignMechanicList = [];
+  List<dynamic> tasksList = [];
   final ValueNotifier<String> activeRouteNotifier =
       ValueNotifier<String>('/job_sheet_listing');
-  late AnimationController _animationController;
-  bool _isDrawerOpen = true;
-  List<dynamic> vehicalImages = [];
-  List<dynamic> selectedDocsFiles = <dynamic>[];
-  // FilePickerResult? allDocs;
-  List<File>? selectedDocs = [];
-  List<String>? imageName = <String>[];
-  List<Image?> selectedImage = List.filled(6, null);
-  bool? showUpdateButton = false;
-  bool task = false;
-  dynamic valuejack = {'name': "Jack & Tommy", 'checked': true, 'value': ""};
-  dynamic valuestep = {'name': "Stepney", 'checked': true, 'value': ""};
-  dynamic valuetool = {'name': "Tool Kit", 'checked': true, 'value': ""};
-  dynamic valuetap = {'name': "Tape", 'checked': true, 'value': ""};
-  dynamic valuebattery = {'name': "Battery", 'checked': true, 'value': ""};
-  dynamic valuerh = {'name': "Mirror RH", 'checked': true, 'value': ""};
-  dynamic valuelh = {'name': "Mirror LH", 'checked': true, 'value': ""};
-  dynamic valuemat = {'name': "Mats", 'checked': true, 'value': ""};
-  dynamic valueMudFlap = {'name': "Mud Flap", 'checked': true, 'value': ""};
-  // dynamic valueWheelcap = {'name': "Wheelcap", 'checked': true, 'value': ""};
-  TextEditingController _wheelcapController = TextEditingController();
-  TextEditingController _alternatePhoneNumber = TextEditingController();
-  TextEditingController _fullNameController = TextEditingController();
-  TextEditingController _adressController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _phoneNumberController = TextEditingController();
-  TextEditingController _vehicleNumberController = TextEditingController();
-  TextEditingController _vehicleNameController = TextEditingController();
-  TextEditingController _kmsController = TextEditingController();
-  TextEditingController _customerComplaintController = TextEditingController();
-  TextEditingController _taskToDoController = TextEditingController();
-  TextEditingController _assignMechanicController = TextEditingController();
-  TextEditingController _taskController = TextEditingController();
-  TextEditingController _mudFlapController = TextEditingController();
-  TextEditingController _matevalueController = TextEditingController();
-  TextEditingController batteryNameController = TextEditingController();
-  List<String> batteryBrandsWithoutDuplicates = batteryBrands.toSet().toList();
+  dynamic valuejack = {'name': "Jack & Tommy", 'checked': false, 'value': ""};
+  dynamic valuestep = {'name': "Stepney", 'checked': false, 'value': ""};
+  dynamic valuetool = {'name': "Tool Kit", 'checked': false, 'value': ""};
+  dynamic valuetap = {'name': "Tape", 'checked': false, 'value': ""};
+  dynamic valuebattery = {'name': "Battery", 'checked': false, 'value': ""};
+  dynamic valuerh = {'name': "Mirror RH", 'checked': false, 'value': ""};
+  dynamic valuelh = {'name': "Mirror LH", 'checked': false, 'value': ""};
+  dynamic valuemat = {'name': "Mats", 'checked': false, 'value': ""};
+  dynamic valueMudFlap = {'name': "Mud Flap", 'checked': false, 'value': ""};
 
+  TextEditingController fullNameController = TextEditingController();
+  TextEditingController adressController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController _wheelcapController = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController _alternatePhoneNumber = TextEditingController();
+  TextEditingController vehicleNumberController = TextEditingController();
+  TextEditingController vehicleNameController = TextEditingController();
+  TextEditingController batteryNameController = TextEditingController();
+  TextEditingController kmsController = TextEditingController();
+  TextEditingController customerComplaintController = TextEditingController();
+  TextEditingController taskToDoController = TextEditingController();
+  TextEditingController assignMechanicController = TextEditingController();
+  TextEditingController taskController = TextEditingController();
+  TextEditingController mudFlapController = TextEditingController();
+  TextEditingController matevalueController = TextEditingController();
+  TextEditingController fieldTextEditingController = TextEditingController();
   //dropdown  controller
   String manufacturerController = '';
   String fuelController = '';
   String batteryCompanyController = '';
   String errorMessage = '';
-  String statusListController = '';
-
+  String statusListController = 'New Job';
   //images
   XFile frontImage = XFile("");
   XFile rightHandSideImage = XFile("");
@@ -96,127 +85,19 @@ class _EditJobSheetState extends State<EditJobSheet>
   XFile dashboardImage = XFile("");
   XFile engineImage = XFile("");
 
-//   XFile? frontImage;
-// XFile? rightHandSideImage;
-// XFile? leftHandSideImage;
-// XFile? rearImage;
-// XFile? dashboardImage;
-// XFile? engineImage;
-// XFile? imageOne;
-// XFile? imageTwo;
-// XFile? imageThree;
-// XFile? imageFour;
-
-  // Existing urls
-  String frontExistedImageUrl = "";
-  String rightHandExistedImageUrl = "";
-  String leftHandExistedImageUrl = "";
-  String rearExistedImageUrl = "";
-  String dashboardExistedImageUrl = "";
-  String engineExistedImageUrl = "";
-  String image1ExistedImageUrl = "";
-  String image2ExistedImageUrl = "";
-  String image3ExistedImageUrl = "";
-  String image4ExistedImageUrl = "";
-
   // Additonal Images
   XFile imageOne = XFile("");
   XFile imageTwo = XFile("");
   XFile imageThree = XFile("");
   XFile imageFour = XFile("");
-
-  final _formKey = GlobalKey<FormState>();
+  bool? showUpdateButton = false;
+  final FocusNode vehiclefFocusNode = FocusNode();
+  final FocusNode mobileFocusNode = FocusNode();
   bool _validate = false;
   bool _nameValidate = false;
   bool _mobileValidate = false;
-  List<dynamic> assignMechanicList = [];
-  List<dynamic> tasksList = [];
-
+  bool _task = false;
   int updateIndex = 0;
-  int additonalImageThumbCount = 0;
-  bool isLoading = false;
-  assignValue(JobSheetDetailsState state) {
-    setState(() {
-      _vehicleNumberController.text =
-          state.jobSheetDetails!.vehicleNumber.toString();
-      _vehicleNameController.text =
-          state.jobSheetDetails!.vehicleName.toString();
-      manufacturerController =
-          (state.jobSheetDetails!.manufacturers.toString().isEmpty)
-              ? ''
-              : state.jobSheetDetails!.manufacturers.toString();
-      _fullNameController.text = state.jobSheetDetails!.fullName.toString();
-      _adressController.text = state.jobSheetDetails!.address.toString();
-      _emailController.text = state.jobSheetDetails!.email.toString();
-      _phoneNumberController.text =
-          state.jobSheetDetails!.mobileNumber.toString();
-      _alternatePhoneNumber.text =
-          state.jobSheetDetails!.alternateMobileNumber.toString();
-      _kmsController.text = state.jobSheetDetails!.kms.toString();
-      fuelController = (state.jobSheetDetails!.fuel.toString().isEmpty)
-          ? ''
-          : state.jobSheetDetails!.fuel.toString();
-
-      statusListController = (state.jobSheetDetails!.status.toString().isEmpty)
-          ? ''
-          : state.jobSheetDetails!.status.toString();
-
-      valuejack = state.jobSheetDetails!.items![0];
-      valuestep = state.jobSheetDetails!.items![1];
-      valuetool = state.jobSheetDetails!.items![2];
-      valuetap = state.jobSheetDetails!.items![3];
-      valuebattery = state.jobSheetDetails!.items![4];
-      valuerh = state.jobSheetDetails!.items![5];
-      valuelh = state.jobSheetDetails!.items![6];
-      valuemat = state.jobSheetDetails!.items![7];
-      valueMudFlap = state.jobSheetDetails!.items![8];
-
-      // valueWheelcap = state.jobSheetDetails!.items![9];
-
-      batteryCompanyController =
-          state.jobSheetDetails!.items![4]['value'].toString();
-      _matevalueController.text =
-          state.jobSheetDetails!.items![7]['value'].toString();
-      _mudFlapController.text =
-          state.jobSheetDetails!.items![8]['value'].toString();
-
-      // _wheelcapController.text =
-      //     state.jobSheetDetails!.items![9]['value'].toString();
-      tasksList = state.jobSheetDetails!.customerComplaints!;
-
-      assignMechanicList = state.jobSheetDetails!.assignMechanics!;
-
-      frontExistedImageUrl =
-          state.jobSheetDetails!.vehicleFrontThumb.toString();
-      rightHandExistedImageUrl =
-          state.jobSheetDetails!.vehicleRightThumb.toString();
-      leftHandExistedImageUrl =
-          state.jobSheetDetails!.vehicleLeftThumb.toString();
-      rearExistedImageUrl = state.jobSheetDetails!.vehicleRearThumb.toString();
-      dashboardExistedImageUrl =
-          state.jobSheetDetails!.vehicleDashboardThumb.toString();
-      engineExistedImageUrl =
-          state.jobSheetDetails!.vehicleDickeyThumb.toString();
-      image1ExistedImageUrl = state.jobSheetDetails!.image1Thumb.toString();
-      image2ExistedImageUrl = state.jobSheetDetails!.image2Thumb.toString();
-      image3ExistedImageUrl = state.jobSheetDetails!.image3Thumb.toString();
-      image4ExistedImageUrl = state.jobSheetDetails!.image4Thumb.toString();
-
-      //extra added images
-
-      if (state.jobSheetDetails!.image1Thumb!.runtimeType != Null) {
-        additonalImageThumbCount++;
-      } else if (state.jobSheetDetails!.image2Thumb!.runtimeType != Null) {
-        additonalImageThumbCount++;
-      } else if (state.jobSheetDetails!.image3Thumb!.runtimeType != Null) {
-        additonalImageThumbCount++;
-      } else if (state.jobSheetDetails!.image4Thumb!.runtimeType != Null) {
-        additonalImageThumbCount++;
-      }
-      appConfig.additonalImageCount = additonalImageThumbCount;
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -248,101 +129,42 @@ class _EditJobSheetState extends State<EditJobSheet>
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
-    return BlocConsumer<JobSheetDetailsBloc, JobSheetDetailsState>(
+    return BlocListener<JobSheetBloc, JobSheetState>(
         listener: (context, state) {
-      if (state.status == JobSheetDetailsStatus.jobcardUpdated) {
-        CenterLoader.hide();
-        Fluttertoast.showToast(
-            msg: "Job card updated successfully",
-            backgroundColor: successColor,
-            toastLength: Toast.LENGTH_SHORT);
-        Navigator.pushNamed(context, "/job_sheet_listing");
-      } else if (state.status == JobSheetDetailsStatus.updating) {
-        CenterLoader.show(context);
-      }
-      if (state.status == JobSheetDetailsStatus.success) {
-        assignValue(state);
-      }
-    }, builder: (context, state) {
-      return WillPopScope(
-        onWillPop: () async {
-          appConfig.toastCount = 0;
-          appConfig.additonalImageCount = 0;
-          context
-              .read<JobSheetBloc>()
-              .add(const FetchJobSheets(status: jobSheetStatus.success));
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => JobSheetListing()),
-          );
-
-          return true;
+          if (state.status == jobSheetStatus.sending) {
+            CenterLoader.show(context);
+          }
+          if (state.status == jobSheetStatus.submitSuccess) {
+            CenterLoader.hide();
+            Fluttertoast.showToast(
+                toastLength: Toast.LENGTH_SHORT,
+                msg: "Job card added successfully",
+                backgroundColor: successDarkColor);
+            Navigator.pushNamed(context, "/job_sheet_listing");
+          } else if (state.status == jobSheetStatus.submitFailure) {
+            CenterLoader.hide();
+          }
         },
-        child: BaseLayout(
-            showFloatingActionButton: false,
-            activeRouteNotifier: activeRouteNotifier,
-            title: 'MechMenager Admin',
-            closeDrawer: _toggleDrawer,
-            isDrawerOpen: _isDrawerOpen,
-            routeWidgets: [
-              GestureDetector(
-                onTap: () {
-                  activeRouteNotifier.value = "/dashboard_page";
-                  //  Navigator.pushNamed(context, '/dashboard_page');
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => DashboardPage()));
-                },
-                child: const Text(
-                  "Home",
-                  style: TextStyle(color: Colors.blue),
-                ),
-              ),
-              const Text(" / "),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => JobSheetListing()));
-                },
-                child: const Text(
-                  "Job Card",
-                  style: TextStyle(color: Colors.blue),
-                ),
-              ),
-              const Text(" / "),
-              const Text(
-                "Update",
-                style: TextStyle(color: greyColor),
-              ),
-              const Expanded(child: SizedBox()),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => JobSheetListing()));
-                },
-                child: const Row(
-                  children: [
-                    Icon(
-                      Icons.arrow_back_ios,
-                      size: 15,
-                    ),
-                    Text(
-                      "Back",
-                      style: TextStyle(color: blueColor),
-                    ),
-                  ],
-                ),
-              )
-            ],
-            body: (state.status == JobSheetDetailsStatus.initial ||
-                    state.status == JobSheetDetailsStatus.loading)
-                ? const CenterLoader()
-                : Form(
+        child: WillPopScope(
+            onWillPop: () async {
+              appConfig.toastCount = 0;
+              appConfig.additonalImageCount = 0;
+              context
+                  .read<JobSheetBloc>()
+                  .add(const FetchJobSheets(status: jobSheetStatus.success));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => JobSheetListing()),
+              );
+              return true;
+            },
+            child: BaseLayout(
+                title: 'MechMenager Admin',
+                closeDrawer: _toggleDrawer,
+                isDrawerOpen: _isDrawerOpen,
+                showFloatingActionButton: false,
+                activeRouteNotifier: activeRouteNotifier,
+                body: Form(
                     key: _formKey,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 20, right: 20),
@@ -415,15 +237,14 @@ class _EditJobSheetState extends State<EditJobSheet>
                                                           SearchState>(
                                                       builder:
                                                           (context, state) {
-                                                    return Autocomplete(
+                                                    return Autocomplete<
+                                                        VehicleModel>(
                                                       optionsBuilder:
                                                           (TextEditingValue
                                                               textEditingValue) {
                                                         if (textEditingValue
-                                                                .text ==
-                                                            '') {
-                                                          return const Iterable<
-                                                              VehicleModel>.empty();
+                                                            .text.isEmpty) {
+                                                          return [];
                                                         }
                                                         return state
                                                             .vehicleDetails!
@@ -441,22 +262,18 @@ class _EditJobSheetState extends State<EditJobSheet>
                                                       fieldViewBuilder: (BuildContext
                                                               context,
                                                           TextEditingController
-                                                              _fieldTextEditingController,
+                                                              fieldTextEditingController,
                                                           FocusNode
                                                               fieldFocusNode,
                                                           VoidCallback
                                                               onFieldSubmitted) {
-                                                        if (_vehicleNumberController
-                                                            .text.isEmpty) {
-                                                          _vehicleNumberController =
-                                                              _fieldTextEditingController;
-                                                        }
-
                                                         return TextField(
                                                           controller:
-                                                              _vehicleNumberController,
-                                                          focusNode:
-                                                              fieldFocusNode,
+                                                              fieldTextEditingController,
+                                                          focusNode: _validate
+                                                              ? vehiclefFocusNode
+                                                              : fieldFocusNode,
+
                                                           style: TextStyle(
                                                               fontSize: 13),
                                                           // focusNode: fieldFocusNode,
@@ -509,41 +326,41 @@ class _EditJobSheetState extends State<EditJobSheet>
                                                                   .add(SearchVehicleDetails(
                                                                       searchKeyword:
                                                                           text));
+                                                              vehicleNumberController =
+                                                                  fieldTextEditingController;
                                                             }
                                                           },
                                                         );
                                                       },
                                                       onSelected: (suggestion) {
                                                         setState(() {
-                                                          _vehicleNumberController
+                                                          vehicleNumberController
                                                                   .text =
                                                               suggestion
                                                                   .vehiclenumber!;
 
-                                                          _vehicleNameController
+                                                          vehicleNameController
                                                                   .text =
                                                               suggestion
                                                                   .vehiclename!;
 
-                                                          _fullNameController
+                                                          fullNameController
                                                                   .text =
                                                               suggestion
                                                                   .fullName!;
 
-                                                          _adressController
+                                                          adressController
                                                                   .text =
                                                               suggestion
                                                                   .address!;
 
-                                                          _emailController
-                                                                  .text =
+                                                          emailController.text =
                                                               suggestion.email!;
 
-                                                          _phoneNumberController
+                                                          phoneNumberController
                                                                   .text =
                                                               suggestion
                                                                   .mobileNumber!;
-
                                                           if (suggestion
                                                                   .manufacturers!
                                                                   .isNotEmpty &&
@@ -557,18 +374,20 @@ class _EditJobSheetState extends State<EditJobSheet>
                                                             manufacturerController =
                                                                 "";
                                                           }
+
                                                           // Set cursor position to the end of the text
-                                                          _vehicleNumberController
+                                                          vehicleNumberController
                                                                   .selection =
                                                               TextSelection.fromPosition(
                                                                   TextPosition(
-                                                                      offset: _vehicleNumberController
+                                                                      offset: vehicleNumberController
                                                                           .text
                                                                           .length));
+                                                          // Set cursor position to the end of the text
                                                         });
                                                       },
                                                     );
-                                                  }),
+                                                  })
                                                 ],
                                               ),
                                             ),
@@ -588,8 +407,7 @@ class _EditJobSheetState extends State<EditJobSheet>
                                                   ),
                                                   TextField(
                                                     controller:
-                                                        _vehicleNameController,
-                                                    // focusNode: fieldFocusNode,
+                                                        vehicleNameController,
                                                     style:
                                                         TextStyle(fontSize: 13),
                                                     decoration:
@@ -740,41 +558,144 @@ class _EditJobSheetState extends State<EditJobSheet>
                                                   SizedBox(
                                                     height: 2,
                                                   ),
-                                                  TextField(
-                                                    controller:
-                                                        _fullNameController,
-                                                    // focusNode: fieldFocusNode,
-                                                    style:
-                                                        TextStyle(fontSize: 13),
-                                                    decoration:
-                                                        const InputDecoration(
-                                                      hintStyle: TextStyle(
-                                                          color: hintTextColor,
-                                                          fontFamily: 'Mulish',
-                                                          fontSize: 14),
-                                                      contentPadding:
-                                                          EdgeInsets.symmetric(
-                                                              vertical: 12,
-                                                              horizontal: 16),
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    5)),
-                                                        borderSide: BorderSide(
-                                                          width: 0,
-                                                          style:
-                                                              BorderStyle.none,
-                                                        ),
-                                                      ),
-                                                      isDense: true,
-                                                      hintText:
-                                                          "Enter first name",
-                                                      filled: true,
-                                                      fillColor: textfieldColor,
-                                                    ),
-                                                  ),
+                                                  BlocBuilder<SearchBloc,
+                                                          SearchState>(
+                                                      builder:
+                                                          (context, state) {
+                                                    return Autocomplete<
+                                                        CustomerModel>(
+                                                      optionsBuilder:
+                                                          (TextEditingValue
+                                                              textEditingValue) {
+                                                        if (textEditingValue
+                                                                .text ==
+                                                            '') {
+                                                          return const Iterable<
+                                                              CustomerModel>.empty();
+                                                        }
+                                                        return state
+                                                            .customerList!
+                                                            .where((element) => element
+                                                                .fullName
+                                                                .toString()
+                                                                .toLowerCase()
+                                                                .contains(
+                                                                    textEditingValue
+                                                                        .text
+                                                                        .toLowerCase()));
+                                                      },
+                                                      displayStringForOption:
+                                                          (vehicle) =>
+                                                              vehicle.fullName!,
+                                                      fieldViewBuilder: (BuildContext
+                                                              context,
+                                                          TextEditingController
+                                                              _fieldTextEditingController,
+                                                          FocusNode
+                                                              fieldFocusNode,
+                                                          VoidCallback
+                                                              onFieldSubmitted) {
+                                                        if (fullNameController
+                                                            .text.isEmpty) {
+                                                          fullNameController =
+                                                              _fieldTextEditingController;
+                                                        }
+                                                        return TextField(
+                                                          controller:
+                                                              fullNameController,
+                                                          focusNode:
+                                                              fieldFocusNode,
+                                                          style: TextStyle(
+                                                              fontSize: 13),
+                                                          decoration:
+                                                              InputDecoration(
+                                                            hintStyle: TextStyle(
+                                                                color:
+                                                                    hintTextColor,
+                                                                fontFamily:
+                                                                    'Mulish',
+                                                                fontSize: 14),
+                                                            contentPadding:
+                                                                EdgeInsets
+                                                                    .symmetric(
+                                                                        vertical:
+                                                                            12,
+                                                                        horizontal:
+                                                                            16),
+                                                            border:
+                                                                OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .all(Radius
+                                                                          .circular(
+                                                                              5)),
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                width: 0,
+                                                                style:
+                                                                    BorderStyle
+                                                                        .none,
+                                                              ),
+                                                            ),
+                                                            isDense: true,
+                                                            hintText:
+                                                                "Enter first name",
+                                                            filled: true,
+                                                            errorText: _nameValidate
+                                                                ? "Please enter correct full name"
+                                                                : null,
+                                                            fillColor:
+                                                                textfieldColor,
+                                                          ),
+                                                          onChanged: (text) {
+                                                            if (text
+                                                                .isNotEmpty) {
+                                                              context
+                                                                  .read<
+                                                                      SearchBloc>()
+                                                                  .add(SearchCustomerDetails(
+                                                                      searchKeyword:
+                                                                          text));
+                                                            }
+                                                          },
+                                                        );
+                                                      },
+                                                      onSelected: (suggestion) {
+                                                        setState(
+                                                          () {
+                                                            fullNameController
+                                                                    .text =
+                                                                suggestion
+                                                                    .fullName!;
+
+                                                            adressController
+                                                                    .text =
+                                                                suggestion
+                                                                    .address!;
+
+                                                            emailController
+                                                                    .text =
+                                                                suggestion
+                                                                    .email!;
+
+                                                            phoneNumberController
+                                                                    .text =
+                                                                suggestion
+                                                                    .mobileNumber!;
+
+                                                            // Set cursor position to the end of the text
+                                                            fullNameController
+                                                                    .selection =
+                                                                TextSelection.fromPosition(
+                                                                    TextPosition(
+                                                                        offset: fullNameController
+                                                                            .text
+                                                                            .length));
+                                                          },
+                                                        );
+                                                      },
+                                                    );
+                                                  }),
                                                 ],
                                               ),
                                             ),
@@ -797,8 +718,7 @@ class _EditJobSheetState extends State<EditJobSheet>
                                                   ),
                                                   TextField(
                                                     controller:
-                                                        _adressController,
-                                                    // focusNode: fieldFocusNode,
+                                                        adressController,
                                                     style:
                                                         TextStyle(fontSize: 13),
                                                     decoration:
@@ -852,9 +772,10 @@ class _EditJobSheetState extends State<EditJobSheet>
                                                     height: 2,
                                                   ),
                                                   TextField(
-                                                    controller:
-                                                        _emailController,
+                                                    controller: emailController,
                                                     // focusNode: fieldFocusNode,
+                                                    keyboardType: TextInputType
+                                                        .emailAddress,
                                                     style:
                                                         TextStyle(fontSize: 13),
                                                     decoration:
@@ -921,12 +842,13 @@ class _EditJobSheetState extends State<EditJobSheet>
                                                   ),
                                                   TextField(
                                                     controller:
-                                                        _phoneNumberController,
+                                                        phoneNumberController,
                                                     style:
                                                         TextStyle(fontSize: 13),
-                                                    // focusNode: fieldFocusNode,
-                                                    decoration:
-                                                        const InputDecoration(
+                                                    focusNode: mobileFocusNode,
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                    decoration: InputDecoration(
                                                       hintStyle: TextStyle(
                                                           color: hintTextColor,
                                                           fontFamily: 'Mulish',
@@ -948,6 +870,9 @@ class _EditJobSheetState extends State<EditJobSheet>
                                                         ),
                                                       ),
                                                       isDense: true,
+                                                      errorText: _mobileValidate
+                                                          ? "The mobile Number field is reqired"
+                                                          : null,
                                                       hintText: "0000000000",
                                                       filled: true,
                                                       fillColor: textfieldColor,
@@ -1049,7 +974,7 @@ class _EditJobSheetState extends State<EditJobSheet>
                                           children: [
                                             Expanded(
                                               child: DropdownButtonFormField2(
-                                                value: statusListController.isNotEmpty ? statusListController.toString() : '',
+                                                value: statusListController,
                                                 decoration:
                                                     const InputDecoration(
                                                   contentPadding:
@@ -1142,7 +1067,7 @@ class _EditJobSheetState extends State<EditJobSheet>
                                                     height: 2,
                                                   ),
                                                   TextField(
-                                                    controller: _kmsController,
+                                                    controller: kmsController,
                                                     // focusNode: fieldFocusNode,
                                                     style:
                                                         TextStyle(fontSize: 13),
@@ -1490,7 +1415,7 @@ class _EditJobSheetState extends State<EditJobSheet>
                                                             width: 140,
                                                             child: TextField(
                                                               controller:
-                                                                  _mudFlapController,
+                                                                  mudFlapController,
                                                               keyboardType:
                                                                   TextInputType
                                                                       .number,
@@ -1531,12 +1456,12 @@ class _EditJobSheetState extends State<EditJobSheet>
                                                                 valueMudFlap[
                                                                         'value'] =
                                                                     value;
-                                                                _mudFlapController
+                                                                mudFlapController
                                                                         .text =
                                                                     value;
-                                                                _mudFlapController
+                                                                mudFlapController
                                                                         .value =
-                                                                    _mudFlapController
+                                                                    mudFlapController
                                                                         .value
                                                                         .copyWith(
                                                                   text: value,
@@ -1648,12 +1573,12 @@ class _EditJobSheetState extends State<EditJobSheet>
                                                                     valuemat[
                                                                             'checked'] =
                                                                         value!;
-                                                                    //  if (!value) {
-                                                                    //   _matevalueController
-                                                                    //       .text = "";
-                                                                    //   valuemat['value'] =
-                                                                    //       "";
-                                                                    // }
+                                                                    if (!value) {
+                                                                      matevalueController
+                                                                          .text = "";
+                                                                      valuemat[
+                                                                          'value'] = "";
+                                                                    }
                                                                   });
                                                                 }),
                                                           ),
@@ -1672,7 +1597,7 @@ class _EditJobSheetState extends State<EditJobSheet>
                                                             width: 140,
                                                             child: TextField(
                                                               controller:
-                                                                  _matevalueController,
+                                                                  matevalueController,
                                                               keyboardType:
                                                                   TextInputType
                                                                       .number,
@@ -1713,12 +1638,12 @@ class _EditJobSheetState extends State<EditJobSheet>
                                                                 valuemat[
                                                                         'value'] =
                                                                     value;
-                                                                _matevalueController
+                                                                matevalueController
                                                                         .text =
                                                                     value;
-                                                                _matevalueController
+                                                                matevalueController
                                                                         .value =
-                                                                    _matevalueController
+                                                                    matevalueController
                                                                         .value
                                                                         .copyWith(
                                                                   text: value,
@@ -1838,197 +1763,210 @@ class _EditJobSheetState extends State<EditJobSheet>
                                         SizedBox(
                                           height: 4,
                                         ),
-                                        BlocBuilder<SearchBloc, SearchState>(
-                                            builder: (context, state) {
-                                          return Autocomplete<
-                                              CustomerComplaintModel>(
-                                            optionsBuilder: (TextEditingValue
-                                                textEditingValue) {
-                                              if (textEditingValue
-                                                  .text.isEmpty) {
-                                                return [];
-                                              }
-                                              return state
-                                                  .customerComplaintList!
-                                                  .where((element) => element
-                                                      .customerComplaint!
-                                                      .toLowerCase()
-                                                      .contains(textEditingValue
-                                                          .text
-                                                          .toLowerCase()));
-                                            },
-                                            displayStringForOption:
-                                                (complaints) => complaints
-                                                    .customerComplaint!,
-                                            fieldViewBuilder: (BuildContext
-                                                    context,
-                                                TextEditingController
-                                                    fieldTextEditingController,
-                                                FocusNode fieldFocusNode,
-                                                VoidCallback onFieldSubmitted) {
-                                              _taskController =
-                                                  fieldTextEditingController;
-                                              return Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  SizedBox(
-                                                    height: 40,
-                                                    child: TextField(
-                                                      textAlignVertical:
-                                                          TextAlignVertical
-                                                              .center, // Ensures text is vertically centered
-                                                      keyboardType:
-                                                          TextInputType.text,
-                                                      focusNode: fieldFocusNode,
-                                                      controller:
-                                                          fieldTextEditingController,
-                                                      decoration:
-                                                          InputDecoration(
-                                                        suffix:
-                                                            (showUpdateButton ==
-                                                                    false)
-                                                                ? Padding(
-                                                                    padding:
-                                                                        const EdgeInsets
-                                                                            .all(
-                                                                            4.0),
-                                                                    child:
-                                                                        SizedBox(
-                                                                      width:
-                                                                          100,
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                                height: 40,
+                                                child: BlocBuilder<SearchBloc,
+                                                        SearchState>(
+                                                    builder: (context, state) {
+                                                  return Autocomplete<
+                                                      CustomerComplaintModel>(
+                                                    optionsBuilder:
+                                                        (TextEditingValue
+                                                            textEditingValue) {
+                                                      if (textEditingValue
+                                                          .text.isEmpty) {
+                                                        return [];
+                                                      }
+                                                      return state
+                                                          .customerComplaintList!
+                                                          .where((element) => element
+                                                              .customerComplaint!
+                                                              .toLowerCase()
+                                                              .contains(
+                                                                  textEditingValue
+                                                                      .text
+                                                                      .toLowerCase()));
+                                                    },
+                                                    displayStringForOption:
+                                                        (complaints) => complaints
+                                                            .customerComplaint!,
+                                                    fieldViewBuilder: (BuildContext
+                                                            context,
+                                                        TextEditingController
+                                                            fieldTextEditingController,
+                                                        FocusNode
+                                                            fieldFocusNode,
+                                                        VoidCallback
+                                                            onFieldSubmitted) {
+                                                      taskController =
+                                                          fieldTextEditingController;
+                                                      return TextField(
+                                                        textAlignVertical:
+                                                            TextAlignVertical
+                                                                .center, // Ensures text is vertically centered
+                                                        keyboardType:
+                                                            TextInputType.text,
+                                                        focusNode:
+                                                            fieldFocusNode,
+                                                        controller:
+                                                            fieldTextEditingController,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          suffix:
+                                                              (showUpdateButton ==
+                                                                      false)
+                                                                  ? Padding(
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          4.0),
                                                                       child:
-                                                                          ElevatedButton(
-                                                                        onPressed:
-                                                                            () {
-                                                                          setState(
-                                                                              () {
-                                                                            task =
-                                                                                _taskController.text.isEmpty;
-                                                                          });
-                                                                          addTask();
-                                                                        },
-                                                                        style: ElevatedButton
-                                                                            .styleFrom(
-                                                                          backgroundColor:
-                                                                              taskbuttonColor,
-                                                                          shape:
-                                                                              RoundedRectangleBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(5),
-                                                                          ),
-                                                                        ),
+                                                                          SizedBox(
+                                                                        width:
+                                                                            100,
                                                                         child:
-                                                                            const Center(
+                                                                            ElevatedButton(
+                                                                          onPressed:
+                                                                              () {
+                                                                            setState(() {
+                                                                              _task = taskController.text.isEmpty;
+                                                                            });
+                                                                            var checkTaskAvailable = tasksList.where((element) =>
+                                                                                element['task'] ==
+                                                                                taskController.text);
+                                                                            if (checkTaskAvailable.isEmpty) {
+                                                                              addTask();
+                                                                            } else {
+                                                                              taskController.clear();
+                                                                              Fluttertoast.showToast(msg: "This task already exists");
+                                                                            }
+                                                                          },
+                                                                          style:
+                                                                              ElevatedButton.styleFrom(
+                                                                            backgroundColor:
+                                                                                taskbuttonColor,
+                                                                            shape:
+                                                                                RoundedRectangleBorder(
+                                                                              borderRadius: BorderRadius.circular(5),
+                                                                            ),
+                                                                          ),
                                                                           child:
-                                                                              Text(
-                                                                            'Add Task',
-                                                                            style:
-                                                                                TextStyle(fontSize: 12, color: whiteColor),
+                                                                              const Center(
+                                                                            child:
+                                                                                Text(
+                                                                              'Add Task',
+                                                                              style: TextStyle(fontSize: 12, color: whiteColor),
+                                                                            ),
                                                                           ),
                                                                         ),
                                                                       ),
-                                                                    ),
-                                                                  )
-                                                                : Padding(
-                                                                    padding:
-                                                                        const EdgeInsets
-                                                                            .all(
-                                                                            4.0),
-                                                                    child:
-                                                                        SizedBox(
-                                                                      width:
-                                                                          140,
+                                                                    )
+                                                                  : Padding(
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          4.0),
                                                                       child:
-                                                                          ElevatedButton(
-                                                                        onPressed:
-                                                                            () =>
-                                                                                updateTask(),
-                                                                        style: ElevatedButton
-                                                                            .styleFrom(
-                                                                          backgroundColor:
-                                                                              primaryColor,
-                                                                          shape:
-                                                                              RoundedRectangleBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(5),
+                                                                          SizedBox(
+                                                                        width:
+                                                                            140,
+                                                                        child:
+                                                                            ElevatedButton(
+                                                                          onPressed: () =>
+                                                                              updateTask(),
+                                                                          style:
+                                                                              ElevatedButton.styleFrom(
+                                                                            backgroundColor:
+                                                                                primaryColor,
+                                                                            shape:
+                                                                                RoundedRectangleBorder(
+                                                                              borderRadius: BorderRadius.circular(5),
+                                                                            ),
                                                                           ),
+                                                                          child:
+                                                                              const Text('Update Task'),
                                                                         ),
-                                                                        child: const Text(
-                                                                            'Update Task'),
                                                                       ),
                                                                     ),
-                                                                  ),
 
-                                                        hintStyle:
-                                                            const TextStyle(
-                                                          color: hintTextColor,
-                                                          fontFamily: 'Mulish',
-                                                          fontSize: 14,
-                                                        ),
-                                                        // contentPadding:
-                                                        //     EdgeInsets.symmetric(
-                                                        //         vertical: 8,
-                                                        //         horizontal: 16),
-                                                        isDense: true,
-                                                        hintText: "Enter task",
-                                                        filled: true,
-                                                        fillColor:
-                                                            textfieldColor,
-                                                        errorText: task
-                                                            ? "Enter Complaints or tasks to do"
-                                                            : null,
-                                                        border:
-                                                            OutlineInputBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5),
-                                                          borderSide:
-                                                              const BorderSide(
-                                                            width: 0,
-                                                            style: BorderStyle
-                                                                .none,
+                                                          hintStyle:
+                                                              const TextStyle(
+                                                            color:
+                                                                hintTextColor,
+                                                            fontFamily:
+                                                                'Mulish',
+                                                            fontSize: 14,
+                                                          ),
+                                                          // contentPadding:
+                                                          //     EdgeInsets.symmetric(
+                                                          //         vertical: 8,
+                                                          //         horizontal: 16),
+                                                          isDense: true,
+                                                          hintText:
+                                                              "Enter task",
+                                                          filled: true,
+                                                          fillColor:
+                                                              textfieldColor,
+                                                          errorText: _task
+                                                              ? "Enter Complaints or tasks to do"
+                                                              : null,
+                                                          border:
+                                                              OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5),
+                                                            borderSide:
+                                                                const BorderSide(
+                                                              width: 0,
+                                                              style: BorderStyle
+                                                                  .none,
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      onChanged: (text) {
-                                                        if (text.isNotEmpty) {
-                                                          context
-                                                              .read<
-                                                                  SearchBloc>()
-                                                              .add(SearchCustomerComplaint(
-                                                                  searchKeyword:
-                                                                      text));
-                                                        }
-                                                      },
-                                                    ),
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                            onSelected: (suggestion) {
-                                              _taskController.text =
-                                                  suggestion.customerComplaint!;
-                                              setState(() {
-                                                task = _taskController
-                                                    .text.isEmpty;
-                                              });
-                                              var checkTaskAvailable =
-                                                  tasksList.where((element) =>
-                                                      element['task'] ==
-                                                      suggestion
-                                                          .customerComplaint);
-                                              if (checkTaskAvailable.isEmpty) {
-                                                addTask();
-                                              } else {
-                                                _taskController.clear();
-                                                Fluttertoast.showToast(
-                                                    msg:
-                                                        "This task is allready existed");
-                                              }
-                                            },
-                                          );
-                                        }),
+                                                        onChanged: (text) {
+                                                          if (text.isNotEmpty) {
+                                                            context
+                                                                .read<
+                                                                    SearchBloc>()
+                                                                .add(SearchCustomerComplaint(
+                                                                    searchKeyword:
+                                                                        text));
+                                                          }
+                                                        },
+                                                      );
+                                                    },
+                                                    onSelected: (suggestion) {
+                                                      taskController.text =
+                                                          suggestion
+                                                              .customerComplaint!;
+                                                      setState(() {
+                                                        _task = taskController
+                                                            .text.isEmpty;
+                                                      });
+                                                      var checkTaskAvailable =
+                                                          tasksList.where(
+                                                              (element) =>
+                                                                  element[
+                                                                      'task'] ==
+                                                                  suggestion
+                                                                      .customerComplaint);
+                                                      if (checkTaskAvailable
+                                                          .isEmpty) {
+                                                        addTask();
+                                                      } else {
+                                                        taskController.clear();
+                                                        Fluttertoast.showToast(
+                                                            msg:
+                                                                "This task is already exist");
+                                                      }
+                                                    },
+                                                  );
+                                                })),
+                                          ],
+                                        ),
                                         const SizedBox(
                                           height: 5,
                                         ),
@@ -2097,7 +2035,7 @@ class _EditJobSheetState extends State<EditJobSheet>
                                                                 tasksList[i]
                                                                     ['task']);
                                                           },
-                                                          child: Text(
+                                                          child: const Text(
                                                             '',
                                                             style: TextStyle(
                                                                 color:
@@ -2105,31 +2043,20 @@ class _EditJobSheetState extends State<EditJobSheet>
                                                                 fontSize: 16),
                                                           ),
                                                         ),
-                                                        SizedBox(
+                                                        const SizedBox(
                                                           width: 10,
                                                         ),
-                                                        // IconButton(
-                                                        //   icon: const Icon(
-                                                        //     Icons.edit,
-                                                        //     color: blueColor,
-                                                        //     size: 18,
-                                                        //   ),
-                                                        //   onPressed: () {
-                                                        //     editTask(
-                                                        //         i,
-                                                        //         tasksList[i]
-                                                        //             ['task']);
-                                                        //   },
-                                                        //   color: primaryColor,
-                                                        // ),
+
                                                         GestureDetector(
                                                           onTap: () {
                                                             deleteTask(
                                                                 i,
                                                                 tasksList[i]
                                                                     ['task']);
+                                                            taskController
+                                                                .clear();
                                                           },
-                                                          child: Text(
+                                                          child: const Text(
                                                             '',
                                                             style: TextStyle(
                                                                 color: redColor,
@@ -2157,7 +2084,7 @@ class _EditJobSheetState extends State<EditJobSheet>
                                                 // ),
                                                 // ),
                                               ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 10,
                                             ),
                                           ],
@@ -2212,7 +2139,7 @@ class _EditJobSheetState extends State<EditJobSheet>
                                                     fieldTextEditingController,
                                                 FocusNode fieldFocusNode,
                                                 VoidCallback onFieldSubmitted) {
-                                              _assignMechanicController =
+                                              assignMechanicController =
                                                   fieldTextEditingController;
                                               return TextField(
                                                 controller:
@@ -2274,7 +2201,7 @@ class _EditJobSheetState extends State<EditJobSheet>
                                                   });
                                                 });
                                               }
-                                              _assignMechanicController.clear();
+                                              assignMechanicController.clear();
                                             },
                                           );
                                         }),
@@ -2346,6 +2273,7 @@ class _EditJobSheetState extends State<EditJobSheet>
                                   const Divider(
                                     color: Color.fromARGB(255, 207, 207, 207),
                                   ),
+
                                   Padding(
                                     padding: const EdgeInsets.only(
                                       left: 18,
@@ -2359,7 +2287,6 @@ class _EditJobSheetState extends State<EditJobSheet>
                                           title: 'Front',
                                           takeImage: takeImage,
                                           imageFile: frontImage,
-                                          existedImageUrl: frontExistedImageUrl,
                                         ),
                                         const SizedBox(
                                           height: 5,
@@ -2367,55 +2294,50 @@ class _EditJobSheetState extends State<EditJobSheet>
 
                                         // Right hand side
                                         SelectImageRow(
-                                            title: "Right Hand Side",
-                                            takeImage: takeImage,
-                                            imageFile: rightHandSideImage,
-                                            existedImageUrl:
-                                                rightHandExistedImageUrl),
+                                          title: "Right Hand Side",
+                                          takeImage: takeImage,
+                                          imageFile: rightHandSideImage,
+                                        ),
                                         const SizedBox(
                                           height: 5,
                                         ),
 
                                         // left hand side
                                         SelectImageRow(
-                                            title: "Left Hand Side",
-                                            takeImage: takeImage,
-                                            imageFile: leftHandSideImage,
-                                            existedImageUrl:
-                                                leftHandExistedImageUrl),
+                                          title: "Left Hand Side",
+                                          takeImage: takeImage,
+                                          imageFile: leftHandSideImage,
+                                        ),
                                         const SizedBox(
                                           height: 5,
                                         ),
 
                                         // Rear Image
                                         SelectImageRow(
-                                            title: "Rear",
-                                            takeImage: takeImage,
-                                            imageFile: rearImage,
-                                            existedImageUrl:
-                                                rearExistedImageUrl),
+                                          title: "Rear",
+                                          takeImage: takeImage,
+                                          imageFile: rearImage,
+                                        ),
                                         const SizedBox(
                                           height: 5,
                                         ),
 
                                         // Dashboard image
                                         SelectImageRow(
-                                            title: "Dashboard",
-                                            takeImage: takeImage,
-                                            imageFile: dashboardImage,
-                                            existedImageUrl:
-                                                dashboardExistedImageUrl),
+                                          title: "Dashboard",
+                                          takeImage: takeImage,
+                                          imageFile: dashboardImage,
+                                        ),
                                         const SizedBox(
                                           height: 5,
                                         ),
 
                                         // Engine Image
                                         SelectImageRow(
-                                            title: "Engine",
-                                            takeImage: takeImage,
-                                            imageFile: engineImage,
-                                            existedImageUrl:
-                                                engineExistedImageUrl),
+                                          title: "Engine",
+                                          takeImage: takeImage,
+                                          imageFile: engineImage,
+                                        ),
                                         const SizedBox(
                                           height: 5,
                                         ),
@@ -2434,60 +2356,109 @@ class _EditJobSheetState extends State<EditJobSheet>
                                       right: 18,
                                     ),
                                     child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         const FormFieldTitle(
-                                            title: "Additional Images:"),
-                                        SelectImageRow(
-                                          title: "Additional Image 1 :",
-                                          takeImage: takeImage,
-                                          imageFile: getAdditionalImageFile(
-                                                  "image1") ??
-                                              XFile(''),
-                                          existedImageUrl:
-                                              image1ExistedImageUrl,
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        SelectImageRow(
-                                          title: "Additional Image 2 :",
-                                          takeImage: takeImage,
-                                          imageFile: getAdditionalImageFile(
-                                                  "image2") ??
-                                              XFile(''),
-                                          existedImageUrl:
-                                              image2ExistedImageUrl,
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        SelectImageRow(
-                                          title: "Additional Image 3 :",
-                                          takeImage: takeImage,
-                                          imageFile: getAdditionalImageFile(
-                                                  "image3") ??
-                                              XFile(''),
-                                          existedImageUrl:
-                                              image3ExistedImageUrl,
-                                        ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        SelectImageRow(
-                                          title: "Additional Image 4 :",
-                                          takeImage: takeImage,
-                                          imageFile: getAdditionalImageFile(
-                                                  "image4") ??
-                                              XFile(''),
-                                          existedImageUrl:
-                                              image4ExistedImageUrl,
-                                        ),
+                                            title: "Select Image:"),
+                                        (appConfig.additonalImageCount != 0)
+                                            ? Column(
+                                                children: [
+                                                  for (int i = 1;
+                                                      i <=
+                                                          appConfig
+                                                              .additonalImageCount;
+                                                      i++) ...[
+                                                    if (i <= 4)
+                                                      SelectImageRow(
+                                                        title:
+                                                            "Select Image $i :",
+                                                        takeImage: takeImage,
+                                                        imageFile:
+                                                            getAdditionalImageFile(
+                                                                    "image$i") ??
+                                                                XFile(''),
+                                                      ),
+                                                    const SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                  ],
+                                                  const SizedBox(
+                                                    height: 20,
+                                                  ),
+                                                ],
+                                              )
+                                            : const SizedBox.shrink(),
+                                        (appConfig.additonalImageCount < 4)
+                                            ?
+                                            /* Align(
+                                                alignment: Alignment.topLeft,
+                                                child: ElevatedButton.icon(
+                                                  style: const ButtonStyle(
+                                                      backgroundColor:
+                                                          MaterialStatePropertyAll(
+                                                              successDarkColor)),
+                                                  icon: const Icon(
+                                                    additonalIcon,
+                                                  ),
+                                                  onPressed: () {
+                                                    appConfig
+                                                        .additonalImageCount++;
+                                                    setState(() {});
+                                                  },
+                                                  label: const Text(
+                                                      'Additional Images'),
+                                                ),
+                                              )
+                                              */
+
+                                            Column(
+                                                children: [
+                                                  SizedBox(
+                                                    height: 3,
+                                                  ),
+                                                  SizedBox(
+                                                      height: 37,
+                                                      width: 165,
+                                                      child: ElevatedButton(
+                                                          onPressed: () {
+                                                            appConfig
+                                                                .additonalImageCount++;
+                                                            setState(() {});
+                                                          },
+                                                          style: ElevatedButton
+                                                              .styleFrom(
+                                                            backgroundColor:
+                                                                taskbuttonColor,
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5),
+                                                            ),
+                                                          ),
+                                                          child: Text(
+                                                            'Additional Images',
+                                                            style: TextStyle(
+                                                              fontFamily:
+                                                                  'meck',
+                                                              fontSize: 13,
+                                                              color: whiteColor,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500,
+                                                            ),
+                                                          ))),
+                                                ],
+                                              )
+                                            : const SizedBox.shrink(),
                                         const SizedBox(
                                           height: 20,
                                         ),
                                       ],
                                     ),
-                                  ),
+                                  )
                                 ],
                               ),
                             ),
@@ -2503,115 +2474,83 @@ class _EditJobSheetState extends State<EditJobSheet>
                                       onPressed: () {
                                         print('saveee');
                                         setState(() {
-                                          _validate = _vehicleNumberController
+                                          _validate = vehicleNumberController
                                               .text.isEmpty;
                                           _mobileValidate =
-                                              _phoneNumberController
+                                              phoneNumberController
                                                   .text.isEmpty;
                                           _nameValidate =
-                                              _fullNameController.text.isEmpty;
+                                              fullNameController.text.isEmpty;
+                                          vehiclefFocusNode.requestFocus();
                                         });
-                                        if (_formKey.currentState!.validate() &&
-                                            !_validate &&
-                                            !_nameValidate &&
-                                            !_mobileValidate) {
+
+                                        if (_formKey.currentState!.validate()) {
                                           Map<String, dynamic> formData = {
-                                            "address": _adressController.text
+                                             "id": "",
+                                            "job_sheet_id": "001-001",
+                                            "full_name": fullNameController.text
                                                 .toString(),
-                                            "assign_mechanics":
-                                                jsonEncode(assignMechanicList),
-                                            "created_at_date": state
-                                                .jobSheetDetails!.createdAtDate
+                                            "address": adressController.text
                                                 .toString(),
-                                            "created_at_time": state
-                                                .jobSheetDetails!.createdAtTime
-                                                .toString(),
-                                            "customer_complaints":
-                                                jsonEncode(tasksList),
-                                            "dashbord_img": state
-                                                .jobSheetDetails!.dashboardImg,
-                                            "deleted_at": state
-                                                .jobSheetDetails!.deletedAt,
-                                            "dickey_img": state
-                                                .jobSheetDetails!.dickeyImg,
-                                            "email": _emailController.text,
-                                            "front_img":
-                                                "1714658914521-b478ib.jpg",
-                                            "fuel": fuelController.toString(),
-                                            "full_name": _fullNameController
-                                                .text
-                                                .toString(),
-                                            "id": state.jobSheetDetails!.id,
-                                            "image1_img": state
-                                                .jobSheetDetails!.image1Img,
-                                            "image1_thumb": state
-                                                .jobSheetDetails!.image1Thumb,
-                                            "image2_img": state
-                                                .jobSheetDetails!.image2Img,
-                                            "image2_thumb": state
-                                                .jobSheetDetails!.image2Thumb,
-                                            "image3_img": state
-                                                .jobSheetDetails!.image3Img,
-                                            "image3_thumb": state
-                                                .jobSheetDetails!.image3Thumb,
-                                            "image4_img": state
-                                                .jobSheetDetails!.image4Img,
-                                            "image4_thumb": state
-                                                .jobSheetDetails!.image4Thumb,
-                                            "items":
-                                                "[${jsonEncode(valuejack)}, ${jsonEncode(valuestep)},${jsonEncode(valuetool)},${jsonEncode(valuetap)}, ${jsonEncode(valuebattery)},${jsonEncode(valuerh)},${jsonEncode(valuelh)},${jsonEncode(valuemat)},${jsonEncode(valueMudFlap)}]",
-                                            "job_sheet_id":
-                                                "${state.jobSheetDetails!.jobSheetId}",
-                                            "kms": _kmsController.text,
-                                            "left_img":
-                                                state.jobSheetDetails!.leftImg,
-                                            "manufacturers":
-                                                manufacturerController,
-                                            "status": statusListController,
+                                            "email":
+                                                emailController.text.toString(),
                                             "mobile_number":
-                                                _phoneNumberController.text,
+                                                phoneNumberController.text
+                                                    .toString(),
                                             "alternet_number":
                                                 _alternatePhoneNumber.text,
-                                            "rear_img":
-                                                state.jobSheetDetails!.rearImg,
-                                            "right_img":
-                                                state.jobSheetDetails!.rightImg,
-                                            "updated_at": state
-                                                .jobSheetDetails!.updatedAt,
-                                            "vehicle_dashbord_thumb": state
-                                                .jobSheetDetails!
-                                                .vehicleDashboardThumb,
-                                            "vehicle_dickey_thumb": state
-                                                .jobSheetDetails!
-                                                .vehicleDickeyThumb,
-                                            "vehicle_front_thumb": state
-                                                .jobSheetDetails!
-                                                .vehicleFrontThumb,
-                                            "vehicle_left_thumb": state
-                                                .jobSheetDetails!
-                                                .vehicleLeftThumb,
-                                            "vehicle_name":
-                                                _vehicleNameController.text,
                                             "vehicle_number":
-                                                _vehicleNumberController.text,
-                                            "vehicle_rear_thumb": state
-                                                .jobSheetDetails!
-                                                .vehicleRearThumb,
-                                            "vehicle_right_thumb": state
-                                                .jobSheetDetails!
-                                                .vehicleRightThumb,
-                                            "vehicle_dashboard_img": state
-                                                .jobSheetDetails!.dashboardImg,
-                                            "vehicle_dickey_img": state
-                                                .jobSheetDetails!.dickeyImg,
-                                            "vehicle_rear_img":
-                                                state.jobSheetDetails!.rearImg,
-                                            "vehicle_left_hand_img":
-                                                state.jobSheetDetails!.leftImg,
-                                            "vehicle_right_hand_img":
-                                                state.jobSheetDetails!.rightImg,
-                                            "vehicle_front_img":
-                                                state.jobSheetDetails!.frontImg,
+                                                vehicleNumberController.text
+                                                    .toString(),
+                                            "vehicle_name":
+                                                vehicleNameController.text
+                                                    .toString(),
+                                            "manufacturers":
+                                                (manufacturerController == "")
+                                                    ? ""
+                                                    : manufacturerController
+                                                        .toString(),
+                                            "status":
+                                                (statusListController == "")
+                                                    ? "New Job"
+                                                    : statusListController
+                                                        .toString(),
+                                            "kms":
+                                                kmsController.text.toString(),
+                                            "fuel": (fuelController == "")
+                                                ? ""
+                                                : fuelController.toString(),
+                                            "items":
+                                                "[${jsonEncode(valuejack)}, ${jsonEncode(valuestep)},${jsonEncode(valuetool)},${jsonEncode(valuetap)}, ${jsonEncode(valuebattery)},${jsonEncode(valuerh)},${jsonEncode(valuelh)},${jsonEncode(valuemat)},${jsonEncode(valueMudFlap)}]",
+                                            "customer_complaints":
+                                                jsonEncode(tasksList),
+                                            "task_to_do": "",
+                                            "vehicle_front":
+                                                (frontImage.path.isNotEmpty)
+                                                    ? "1"
+                                                    : "0",
+                                            "vehicle_right_hand":
+                                                (rightHandSideImage
+                                                        .path.isNotEmpty)
+                                                    ? "1"
+                                                    : "0",
+                                            "vehicle_left_hand":
+                                                (leftHandSideImage
+                                                        .path.isNotEmpty)
+                                                    ? "1"
+                                                    : "0",
+                                            "vehicle_rear":
+                                                (rearImage.path.isNotEmpty)
+                                                    ? "1"
+                                                    : "0",
+                                            "vehicle_dashboard":
+                                                (dashboardImage.path.isNotEmpty)
+                                                    ? "1"
+                                                    : "0",
+                                            "vehicle_dickey":
+                                                (engineImage.path.isNotEmpty)
+                                                    ? "1"
+                                                    : "0",
                                             "vehicle_image1":
                                                 (imageOne.path.isNotEmpty)
                                                     ? "1"
@@ -2628,20 +2567,11 @@ class _EditJobSheetState extends State<EditJobSheet>
                                                 (imageFour.path.isNotEmpty)
                                                     ? "1"
                                                     : "0",
-                                            "image1": state
-                                                .jobSheetDetails!.image1Img,
-                                            "image2": state
-                                                .jobSheetDetails!.image2Img,
-                                            "image3": state
-                                                .jobSheetDetails!.image3Img,
-                                            "image4":
-                                                state.jobSheetDetails!.image4Img
+                                            "assign_mechanics":
+                                                jsonEncode(assignMechanicList),
                                           };
-                                          context
-                                              .read<JobSheetDetailsBloc>()
-                                              .add(UpdateJobSheet(
-                                                  id: state.jobSheetDetails!.id
-                                                      .toString(),
+                                          context.read<JobSheetBloc>().add(
+                                              AddJobSheet(
                                                   formData: formData,
                                                   frontImage: frontImage,
                                                   rightHandSideImage:
@@ -2656,6 +2586,7 @@ class _EditJobSheetState extends State<EditJobSheet>
                                                   image2: imageTwo,
                                                   image3: imageThree,
                                                   image4: imageFour));
+
                                           setState(() {
                                             appConfig.toastCount = 0;
                                           });
@@ -2679,12 +2610,12 @@ class _EditJobSheetState extends State<EditJobSheet>
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 20,
                                   ),
                                   GestureDetector(
                                       onTap: () {},
-                                      child: Text(
+                                      child: const Text(
                                         'Clear',
                                         style: TextStyle(color: blueColor),
                                       )),
@@ -2694,8 +2625,55 @@ class _EditJobSheetState extends State<EditJobSheet>
                           ],
                         ),
                       ),
-                    ))),
-      );
+                    )))));
+  }
+
+  addTask() {
+    setState(() {
+      dynamic newTask = {
+        'task': taskController.text,
+        'status': 0,
+      };
+      if (newTask['task'].isNotEmpty) {
+        tasksList.add(newTask);
+        taskController.clear();
+      }
+    });
+  }
+
+  void editTask(int index, String task) {
+    taskController.text = task;
+    taskController.selection = TextSelection.fromPosition(
+      TextPosition(offset: taskController.text.length),
+    );
+    showUpdateButton = true;
+    updateIndex = index;
+    setState(() {});
+  }
+
+  void updateTask() {
+    if (taskController.text.isNotEmpty) {
+      tasksList[updateIndex] = {
+        'status': tasksList[updateIndex]['status'],
+        'task': taskController.text
+      };
+      taskController.clear();
+    } else {
+      deleteTask(updateIndex, taskController.text);
+    }
+    setState(() {
+      showUpdateButton = false;
+    });
+  }
+
+  void deleteTask(int index, String task) {
+    setState(() {
+      tasksList.removeWhere((item) => item['task'] == task);
+      if (index == updateIndex) {
+        showUpdateButton = false;
+        updateIndex = -1;
+        taskController.clear();
+      }
     });
   }
 
@@ -2743,54 +2721,5 @@ class _EditJobSheetState extends State<EditJobSheet>
       selectedFile = imageFour;
     }
     return selectedFile;
-  }
-
-  addTask() {
-    setState(() {
-      dynamic newTask = {
-        'task': _taskController.text,
-        'status': 0,
-      };
-      if (newTask['task'].isNotEmpty) {
-        tasksList.add(newTask);
-        _taskController.clear();
-      }
-    });
-  }
-
-  void editTask(int index, String task) {
-    _taskController.text = task;
-    _taskController.selection = TextSelection.fromPosition(
-      TextPosition(offset: _taskController.text.length),
-    );
-    showUpdateButton = true;
-    updateIndex = index;
-    setState(() {});
-  }
-
-  void updateTask() {
-    if (_taskController.text.isNotEmpty) {
-      tasksList[updateIndex] = {
-        'status': tasksList[updateIndex]['status'],
-        'task': _taskController.text
-      };
-      _taskController.clear();
-    } else {
-      deleteTask(updateIndex, _taskController.text);
-    }
-    setState(() {
-      showUpdateButton = false;
-    });
-  }
-
-  void deleteTask(int index, String task) {
-    setState(() {
-      tasksList.removeWhere((item) => item['task'] == task);
-      if (index == updateIndex) {
-        showUpdateButton = false;
-        updateIndex = -1;
-        _taskController.clear();
-      }
-    });
   }
 }

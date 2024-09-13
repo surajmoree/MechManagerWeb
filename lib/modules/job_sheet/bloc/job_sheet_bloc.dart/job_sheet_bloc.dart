@@ -1,7 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:mech_manager/config.dart';
+import 'package:mech_manager/config/constants.dart';
 import 'package:mech_manager/models/dashboard_model.dart';
 import 'package:mech_manager/models/job_sheet.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_event.dart';
@@ -11,10 +16,116 @@ import 'package:mech_manager/network/repositories/job_sheet_repository.dart';
 class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
   JobSheetBloc() : super(JobSheetState()) {
     on<FetchJobSheets>(_onFetchJobSheets);
+    on<AddJobSheet>(_onAddJobSheet);
+    
     on<DeleteJobSheet>(_onDeleteJobSheet);
     on<FetchDashboard>(_onFetchDashboard);
   }
   final JobSheetRepository jobSheetRepository = JobSheetRepository();
+
+   Future<void> _onAddJobSheet(
+      AddJobSheet event, Emitter<JobSheetState> emit) async {
+    emit(state.copyWith(status: jobSheetStatus.sending));
+    // create job sheet api call
+    dynamic token = await storage.read(key: "token");
+    Map<String, dynamic> jsonData = {
+      "token": token.toString(),
+      "formData": jsonEncode(event.formData),
+    };
+    dynamic response = await jobSheetRepository.addJobSheet(jsonData);
+    if (response['id'].runtimeType != Null) {
+      emit(state.copyWith(status: jobSheetStatus.submitSuccess));
+    } else {
+      emit(state.copyWith(status: jobSheetStatus.submitFailure));
+    }
+    // send images
+    if (response['id'] != null) {
+      if (event.frontImage.path.isNotEmpty) {
+        callApiForSend(event.frontImage, token, response['id'].toString(),
+            'vehicle_front_img');
+      }
+      if (event.rightHandSideImage.path.isNotEmpty) {
+        callApiForSend(event.rightHandSideImage, token,
+            response['id'].toString(), 'vehicle_right_hand_img');
+      }
+      if (event.leftHandSideImage.path.isNotEmpty) {
+        callApiForSend(event.leftHandSideImage, token,
+            response['id'].toString(), 'vehicle_left_hand_img');
+      }
+      if (event.rearImage.path.isNotEmpty) {
+        callApiForSend(event.rearImage, token, response['id'].toString(),
+            'vehicle_rear_img');
+      }
+      if (event.dashboardImage.path.isNotEmpty) {
+        callApiForSend(event.dashboardImage, token, response['id'].toString(),
+            'vehicle_dashboard_img');
+      }
+      if (event.engineImage.path.isNotEmpty) {
+        callApiForSend(event.engineImage, token, response['id'].toString(),
+            'vehicle_dickey_img');
+      }
+      // Additional images
+      if (event.image1.path.isNotEmpty) {
+        callApiForSend(
+            event.image1, token, response['id'].toString(), 'images1');
+      }
+      if (event.image2.path.isNotEmpty) {
+        callApiForSend(
+            event.image2, token, response['id'].toString(), 'images2');
+      }
+      if (event.image3.path.isNotEmpty) {
+        callApiForSend(
+            event.image3, token, response['id'].toString(), 'images3');
+      }
+      if (event.image4.path.isNotEmpty) {
+        callApiForSend(
+            event.image4, token, response['id'].toString(), 'images4');
+      }
+    }
+  }
+
+
+   callApiForSend(
+      XFile imageFile, String token, String id, String imageType) async {
+    List<int> imageData =
+        await imageFile.readAsBytes(); // Works for both web and mobile
+
+    const host = Constants.hostname;
+    const protocol = Constants.protocol;
+
+    var uri = Uri.parse(
+        "$protocol://$host/update_images/$id/$imageType/${DateTime.now().microsecondsSinceEpoch}");
+
+    var request = http.MultipartRequest("PUT", uri);
+
+    dynamic modifiedFileName = generateUniqueFileName(imageFile.name);
+
+    request.files.add(http.MultipartFile.fromBytes(
+      imageType,
+      imageData,
+      filename: modifiedFileName,
+    ));
+
+    request.headers.addAll({
+      'Accept': 'application/json, text/plain',
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $token"
+    });
+
+    var imageSendResponse = await request.send();
+    if (imageSendResponse.statusCode == 200) {
+      // Handle success
+    } else {
+      // Handle failure
+    }
+  }
+
+
+        generateUniqueFileName(originalFileName) {
+    dynamic timestamp = DateTime.now().microsecondsSinceEpoch;
+    dynamic randomString = Random().nextInt(900000) + 100000;
+    return "$timestamp-$randomString.jpg";
+  }
 
   // get job listing data
   Future<void> _onFetchJobSheets(
@@ -70,21 +181,23 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
   //fetch dashoboard
 
   _onFetchDashboard(FetchDashboard event, Emitter<JobSheetState> emit) async {
-    emit(state.copyWith(
-      status: (event.status == jobSheetStatus.success)
-          ? jobSheetStatus.success
-          : jobSheetStatus.loading,
-    ));
-    dynamic token = await storage.read(key: 'token');
-    Map<String,String> jsonData ={
-   "token" : token.toString(),
-    };
+    emit(
+      state.copyWith(
+          status: (event.status == jobSheetStatus.success)
+              ? jobSheetStatus.success
+              : jobSheetStatus.loading),
+    );
+    dynamic token = await storage.read(key: "token");
 
+    Map<String, String> jsonData = {
+      'token': token!.toString(),
+    };
     final result = await jobSheetRepository.dashboardData(jsonData);
-    print('dashboard data from bloc == $result');
-    if(result != null && result.isNotEmpty)
-    {
-      emit(state.copyWith(status: jobSheetStatus.success,dashboardModel: DashboardModel.fromJson(result)));
+
+    if (result != null && result.isNotEmpty) {
+      return emit(state.copyWith(
+          status: jobSheetStatus.success,
+          dashboardModel: DashboardModel.fromJson(result)));
     } else {
       return emit(state.copyWith(
         status: jobSheetStatus.failure,

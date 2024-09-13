@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:formz/formz.dart';
+import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_bloc.dart';
+import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_event.dart';
+import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_state.dart';
 
 import '../../components/skeletone/center_loader.dart';
 import '../../config/colors.dart';
@@ -306,8 +309,18 @@ class LoginScreenState extends State<LoginScreen> {
         //     backgroundColor: successColor,
         //     duration: Duration(seconds: 2),
         //   ),
-        // );
-        Navigator.pushNamed(context, '/dashboard_page');
+        // );]
+        context
+              .read<JobSheetBloc>()
+              .add(const FetchDashboard(status: jobSheetStatus.initial));
+        context
+              .read<JobSheetBloc>()
+              .add(const FetchJobSheets(status: jobSheetStatus.initial));
+              
+              context
+              .read<JobSheetBloc>()
+              .add(const FetchJobSheets(status: jobSheetStatus.initial));
+         Navigator.pushNamed(context, '/dashboard_page');
       } else if (state.status.isSubmissionInProgress) {
         CenterLoader.show(context);
       } else if (state.status.isSubmissionFailure) {

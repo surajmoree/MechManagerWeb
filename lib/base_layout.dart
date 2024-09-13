@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mech_manager/components/skeletone/mobile_drawer.dart';
 import 'package:mech_manager/config/colors.dart';
-import 'package:mech_manager/modules/dashboard/dashboard_page.dart';
+import 'package:mech_manager/modules/job_sheet/create_jobsheet/create_job_sheet.dart';
 
 import 'components/skeletone/drawer.dart';
 //final ValueNotifier<String> activeRouteNotifier = ValueNotifier<String>('/dashboard_page');
@@ -61,8 +61,8 @@ class BaseLayout extends StatelessWidget {
                 }),
               Expanded(
                 child: Column(
-                 // crossAxisAlignment: CrossAxisAlignment.start,
-                 mainAxisAlignment: MainAxisAlignment.start,
+                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     PreferredSize(
                       preferredSize: Size(screenSize.width, 100),
@@ -120,8 +120,10 @@ class BaseLayout extends StatelessWidget {
                       50), // Adjust this value for more or less rounding
                 ),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => DashboardPage()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CreateJobSheet()));
                 },
                 child: const Icon(
                   Icons.add,

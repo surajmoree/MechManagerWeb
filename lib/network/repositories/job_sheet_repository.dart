@@ -4,7 +4,11 @@ import 'package:mech_manager/network/repositories/repository.dart';
 class JobSheetRepository extends Repository
 {
    final jobSheetApi = JobSheetApi();
-
+  
+ // create new job sheet
+  Future<dynamic> addJobSheet(jsonData) async {
+    return jobSheetApi.addJobSheet(jsonData);
+  }
   Future<dynamic> getJobSheets(jsonData) async {
     return jobSheetApi.getJobSheets(jsonData);
   }
@@ -45,5 +49,10 @@ class JobSheetRepository extends Repository
   Future<dynamic> searchVehicleDetails(jsonData)async
   {
     return jobSheetApi.searchVehicleDetails(jsonData);
+  }
+
+  Future<dynamic> searchCustomerDetails(jsonData)async
+  {
+    return jobSheetApi.searchCustomerDetails(jsonData);
   }
 }

@@ -13,7 +13,9 @@ class Api {
     bool chk = parameters!.containsKey("token");
     var headersData = _headers;
     dynamic res = jsonEncode(parameters);
-    if (chk) {}
+    if (chk) {
+       headersData['Authorization'] = 'Bearer ${parameters['token']}';
+    }
     dynamic uri;
     if (_protocol == 'https') {
       uri = Uri.https(_host, path!);

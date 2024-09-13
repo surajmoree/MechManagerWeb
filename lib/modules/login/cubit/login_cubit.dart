@@ -80,7 +80,7 @@ class LogInCubit extends Cubit<LogInState> {
           );
         }
       } else if (result != null && result.containsKey('token')) {
-        _storage.write(key: 'token', value: result['token']);
+        await _storage.write(key: 'token', value: result['token']);
         emit(state.copyWith(status: FormzStatus.submissionSuccess));
       } else {
         emit(

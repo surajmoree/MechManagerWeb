@@ -50,310 +50,315 @@ class _JobSheetRowState extends State<JobSheetRow> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
-    return Form(
-      key: _formKey,
-      child: Card(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
-            side: BorderSide(color: Colors.grey.shade300)),
-        shadowColor: greyColor,
-        color: whiteColor,
-        elevation: 0,
-        child: Container(
-          width: screenWidth,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 15, bottom: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Container(
-                            //  padding: EdgeInsets.only(top: 20),
-                            width: MediaQuery.of(context).size.width * 0.5,
-                            child: Wrap(
-                              children: [
-                                Text(
-                                  widget.jobSheetDetail!.customerName
-                                      .toString(),
-                                  maxLines: 3,
-                                  textAlign: TextAlign.start,
-                                  style: const TextStyle(
-                                      color: blackColor,
-                                      fontFamily: 'Mulish',
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              ],
-                            )),
-                      ),
-                      Container(
-                        width: 100,
-                        height: 20,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const EditJobSheet()));
-                                  context.read<JobSheetDetailsBloc>().add(
-                                      GetJobSheetDetails(
-                                          id: widget.jobSheetDetail!.id
-                                              .toString()));
-                                },
-                                child: Text(
-                                  '',
-                                  style:
-                                      TextStyle(color: blueColor, fontSize: 16),
-                                )
-                                // Icon(
-                                //   editIcon,
-                                //   color: blueColor,
-                                //   size: 20,
-                                // ),
-                                ),
-                            Text(
-                              "",
-                              style: TextStyle(
-                                  color: jobcardIconColor, fontSize: 16),
-                            ),
-                            // Icon(
-                            //   estimateIcon,
-                            //   color: Colors.green,
-                            //   size: 20,
-                            // ),
-
-                            //estimateIcon
-                            GestureDetector(
-                              onTap: () {
-                                showDeleteConfirmation(context);
-                              }, //
-                              child: Text(
-                                '',
-                                style: TextStyle(color: redColor, fontSize: 16),
+    return GestureDetector(
+      onTap: () {
+        
+      },
+      child: Form(
+        key: _formKey,
+        child: Card(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+              side: BorderSide(color: Colors.grey.shade300)),
+          shadowColor: greyColor,
+          color: whiteColor,
+          elevation: 0,
+          child: Container(
+            width: screenWidth,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15, bottom: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                              //  padding: EdgeInsets.only(top: 20),
+                              width: MediaQuery.of(context).size.width * 0.5,
+                              child: Wrap(
+                                children: [
+                                  Text(
+                                    widget.jobSheetDetail!.customerName
+                                        .toString(),
+                                    maxLines: 3,
+                                    textAlign: TextAlign.start,
+                                    style: const TextStyle(
+                                        color: blackColor,
+                                        fontFamily: 'Mulish',
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ],
+                              )),
+                        ),
+                        Container(
+                          width: 100,
+                          height: 20,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const EditJobSheet()));
+                                    context.read<JobSheetDetailsBloc>().add(
+                                        GetJobSheetDetails(
+                                            id: widget.jobSheetDetail!.id
+                                                .toString()));
+                                  },
+                                  child: Text(
+                                    '',
+                                    style:
+                                        TextStyle(color: blueColor, fontSize: 16),
+                                  )
+                                  // Icon(
+                                  //   editIcon,
+                                  //   color: blueColor,
+                                  //   size: 20,
+                                  // ),
+                                  ),
+                              Text(
+                                "",
+                                style: TextStyle(
+                                    color: jobcardIconColor, fontSize: 16),
                               ),
                               // Icon(
-                              //   trashIcon,
-                              //   color: Colors.red,
+                              //   estimateIcon,
+                              //   color: Colors.green,
                               //   size: 20,
                               // ),
+      
+                              //estimateIcon
+                              GestureDetector(
+                                onTap: () {
+                                  showDeleteConfirmation(context);
+                                }, //
+                                child: Text(
+                                  '',
+                                  style: TextStyle(color: redColor, fontSize: 16),
+                                ),
+                                // Icon(
+                                //   trashIcon,
+                                //   color: Colors.red,
+                                //   size: 20,
+                                // ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        '',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        widget.jobSheetDetail!.customerEmail.toString(),
+                        style: TextStyle(fontFamily: 'meck', fontSize: 13),
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        '',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      const SizedBox(width: 5),
+                      Text(widget.jobSheetDetail!.customerMobileNumber.toString(),
+                          style: TextStyle(fontFamily: 'meck', fontSize: 13))
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          //   mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(
+                              "Created Date:",
+                              textAlign: TextAlign.left,
+                              style:
+                                  TextStyle(fontSize: 12, color: blackColorLight),
                             ),
+                            widget.jobSheetDetail!.createdAtDate
+                                    .toString()
+                                    .isNotEmpty
+                                ? Row(
+                                    children: [
+                                      Text(
+                                        widget.jobSheetDetail!.createdAtDate
+                                            .toString(),
+                                        textAlign: TextAlign.left,
+                                        style: const TextStyle(
+                                          fontSize: 13,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 3,
+                                      ),
+                                      Text(
+                                        widget.jobSheetDetail!.createdAtTime
+                                            .toString(),
+                                        textAlign: TextAlign.left,
+                                        style: const TextStyle(
+                                            fontSize: 13, color: blackColorDark),
+                                      )
+                                    ],
+                                  )
+                                : const SizedBox.shrink(),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            const Text(
+                              "Vehicle Name:",
+                              textAlign: TextAlign.left,
+                              style:
+                                  TextStyle(fontSize: 12, color: blackColorLight),
+                            ),
+                            widget.jobSheetDetail!.vehicleName
+                                    .toString()
+                                    .isNotEmpty
+                                ? Text(
+                                    widget.jobSheetDetail!.vehicleName.toString(),
+                                    textAlign: TextAlign.left,
+                                    style: const TextStyle(
+                                        fontSize: 13, color: blackColorDark))
+                                : const SizedBox.shrink(),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              "Status:",
+                              style:
+                                  TextStyle(fontSize: 12, color: blackColorLight),
+                            ),
+                            statusDropDown(widget.jobSheetDetail!.vehicleStatus!),
+                            const SizedBox(
+                              height: 30,
+                            )
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                Row(
-                  children: [
-                    Text(
-                      '',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      widget.jobSheetDetail!.customerEmail.toString(),
-                      style: TextStyle(fontFamily: 'meck', fontSize: 13),
-                    )
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text(
-                      '',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    const SizedBox(width: 5),
-                    Text(widget.jobSheetDetail!.customerMobileNumber.toString(),
-                        style: TextStyle(fontFamily: 'meck', fontSize: 13))
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        //   mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text(
-                            "Created Date:",
-                            textAlign: TextAlign.left,
-                            style:
-                                TextStyle(fontSize: 12, color: blackColorLight),
-                          ),
-                          widget.jobSheetDetail!.createdAtDate
-                                  .toString()
-                                  .isNotEmpty
-                              ? Row(
+                      SizedBox(
+                        width: 60,
+                      ),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(
+                              "Vehical Number:",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: blackColorLight,
+                              ),
+                            ),
+                            widget.jobSheetDetail!.vehicleNumber
+                                    .toString()
+                                    .isNotEmpty
+                                ? Text(
+                                    widget.jobSheetDetail!.vehicleNumber
+                                        .toString()
+                                        .toUpperCase(),
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      color: blackColorDark,
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            const Text(
+                              "Vehical Manufacturer:",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: blackColorLight,
+                              ),
+                            ),
+                            widget.jobSheetDetail!.vehicleManufacturers
+                                    .toString()
+                                    .isNotEmpty
+                                ? Text(
+                                    widget.jobSheetDetail!.vehicleManufacturers
+                                        .toString(),
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      color: blackColorDark,
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Text(
+                              "Mechanics:",
+                              style:
+                                  TextStyle(fontSize: 12, color: blackColorLight),
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Wrap(
                                   children: [
-                                    Text(
-                                      widget.jobSheetDetail!.createdAtDate
-                                          .toString(),
-                                      textAlign: TextAlign.left,
-                                      style: const TextStyle(
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 3,
-                                    ),
-                                    Text(
-                                      widget.jobSheetDetail!.createdAtTime
-                                          .toString(),
-                                      textAlign: TextAlign.left,
-                                      style: const TextStyle(
-                                          fontSize: 13, color: blackColorDark),
-                                    )
+                                    for (var mechanic in widget
+                                        .jobSheetDetail!.assignMechanics!) ...[
+                                      Container(
+                                        margin: const EdgeInsets.all(4),
+                                        decoration: BoxDecoration(
+                                            color: backgroundColor,
+                                            borderRadius:
+                                                BorderRadius.circular(20)),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 3),
+                                        child: Text(
+                                          mechanic['value'],
+                                          maxLines: 4,
+                                          style: const TextStyle(
+                                            fontSize: 13,
+                                            color: blackColorDark,
+                                          ),
+                                        ),
+                                      )
+                                    ]
                                   ],
                                 )
-                              : const SizedBox.shrink(),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          const Text(
-                            "Vehicle Name:",
-                            textAlign: TextAlign.left,
-                            style:
-                                TextStyle(fontSize: 12, color: blackColorLight),
-                          ),
-                          widget.jobSheetDetail!.vehicleName
-                                  .toString()
-                                  .isNotEmpty
-                              ? Text(
-                                  widget.jobSheetDetail!.vehicleName.toString(),
-                                  textAlign: TextAlign.left,
-                                  style: const TextStyle(
-                                      fontSize: 13, color: blackColorDark))
-                              : const SizedBox.shrink(),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            "Status:",
-                            style:
-                                TextStyle(fontSize: 12, color: blackColorLight),
-                          ),
-                          statusDropDown(widget.jobSheetDetail!.vehicleStatus!),
-                          const SizedBox(
-                            height: 30,
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      width: 60,
-                    ),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text(
-                            "Vehical Number:",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: blackColorLight,
+                              ],
                             ),
-                          ),
-                          widget.jobSheetDetail!.vehicleNumber
-                                  .toString()
-                                  .isNotEmpty
-                              ? Text(
-                                  widget.jobSheetDetail!.vehicleNumber
-                                      .toString()
-                                      .toUpperCase(),
-                                  style: const TextStyle(
-                                    fontSize: 13,
-                                    color: blackColorDark,
-                                  ),
-                                )
-                              : const SizedBox.shrink(),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          const Text(
-                            "Vehical Manufacturer:",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: blackColorLight,
-                            ),
-                          ),
-                          widget.jobSheetDetail!.vehicleManufacturers
-                                  .toString()
-                                  .isNotEmpty
-                              ? Text(
-                                  widget.jobSheetDetail!.vehicleManufacturers
-                                      .toString(),
-                                  style: const TextStyle(
-                                    fontSize: 13,
-                                    color: blackColorDark,
-                                  ),
-                                )
-                              : const SizedBox.shrink(),
-                          SizedBox(
-                            height: 4,
-                          ),
-                          Text(
-                            "Mechanics:",
-                            style:
-                                TextStyle(fontSize: 12, color: blackColorLight),
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Wrap(
-                                children: [
-                                  for (var mechanic in widget
-                                      .jobSheetDetail!.assignMechanics!) ...[
-                                    Container(
-                                      margin: const EdgeInsets.all(4),
-                                      decoration: BoxDecoration(
-                                          color: backgroundColor,
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 3),
-                                      child: Text(
-                                        mechanic['value'],
-                                        maxLines: 4,
-                                        style: const TextStyle(
-                                          fontSize: 13,
-                                          color: blackColorDark,
-                                        ),
-                                      ),
-                                    )
-                                  ]
-                                ],
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-              ],
+                            const SizedBox(
+                              height: 30,
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

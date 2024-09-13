@@ -18,16 +18,22 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const LoginScreen());
 
       case "/dashboard_page":
-        return MaterialPageRoute(builder: (_) =>  DashboardPage());
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider<JobSheetBloc>(
+            create: (context) => JobSheetBloc()
+              ..add(const FetchDashboard(status: jobSheetStatus.initial)),
+            child:  DashboardPage(),
+          ),
+        );
 
       case "/job_sheet_listing":
-        return MaterialPageRoute(
-            builder: (_) => BlocProvider<JobSheetBloc>(
+        return  MaterialPageRoute(
+          builder: (_) => BlocProvider<JobSheetBloc>(
             create: (context) => JobSheetBloc()
               ..add(const FetchJobSheets(status: jobSheetStatus.initial)),
             child:  JobSheetListing(),
           ),
-          );
+        );
 
         case "/estimate":
         return MaterialPageRoute(builder: (_) =>  EstimatePage());

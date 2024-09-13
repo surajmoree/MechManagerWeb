@@ -1,6 +1,18 @@
+import 'dart:async';
+
 import 'package:mech_manager/network/api/api.dart';
 
 class JobSheetApi extends Api{
+
+  Future<dynamic> addJobSheet(jsonData) async {
+    try {
+      final apiResponse =
+          await requestPOST(path: '/add_job_sheet', parameters: jsonData);
+      return apiResponse;
+    } catch (e, _) {
+      print(e);
+    }
+  }
   Future<dynamic> getJobSheets(Map<String, String> jsonData) async {
     try {
       final jobSheetList =
@@ -102,6 +114,19 @@ Future<dynamic> searchVehicleDetails(jsonData)async
 
   }
   catch (er) {
+      print("Error is---------$er");
+    }
+}
+
+
+//search customer
+Future<dynamic> searchCustomerDetails(jsonData)async
+{
+  try{
+    final response = await requestGET(path: '/get_customers', parameters: jsonData);
+    print(' customer response $response');
+    return response['customers'];
+  }catch (er) {
       print("Error is---------$er");
     }
 }
