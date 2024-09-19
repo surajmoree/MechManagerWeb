@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:mech_manager/config.dart';
 import 'package:mech_manager/config/constants.dart';
+import 'package:mech_manager/models/estimate_model.dart';
 import 'package:mech_manager/models/job_card_details_model.dart';
 import 'package:mech_manager/models/slider_image_model.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_details_bloc.dart/job_sheet_details_event.dart';
@@ -17,6 +18,9 @@ class JobSheetDetailsBloc
     on<GetJobSheetDetails>(_onGetJobSheetDetails);
     on<GetJobSheetImages>(_onGetJobSheetImages);
     on<UpdateJobSheet>(_onUpdateJobSheet);
+    on<UpdateJobSheetStatus>(_onUpdateJobSheetStatus);
+    on<UpdateCustomerComplaints>(_onUpdateCustomerComplaints);
+    on<GetEstimateDetailsByEstimate>(_onGetEstimateDetailsByEstimate);
   }
 
   Future<void> _onGetJobSheetDetails(
@@ -159,5 +163,58 @@ class JobSheetDetailsBloc
     dynamic timestamp = DateTime.now().microsecondsSinceEpoch;
     dynamic randomString = Random().nextInt(900000) + 100000;
     return "$timestamp-$randomString.jpg";
+  }
+ 
+
+ //update status of jobcard
+  _onUpdateJobSheetStatus(
+      UpdateJobSheetStatus event, Emitter<JobSheetDetailsState> emit) async {
+    dynamic jwtToken = await storage.read(key: "token");
+    Map<String, Object> jsonData = {
+      "token": jwtToken.toString(),
+      "formData": jsonEncode(event.formData),
+    };
+    await jobSheetRepository
+        .updateJobSheetStatus(jsonData, event.id.toString());
+  }
+
+  _onUpdateCustomerComplaints(UpdateCustomerComplaints event,
+      Emitter<JobSheetDetailsState> emit) async {
+    dynamic jwtToken = await storage.read(key: "token");
+    Map<String, Object> jsonData = {
+      "token": jwtToken.toString(),
+      "formData": jsonEncode(event.formData)
+    };
+    dynamic result = await jobSheetRepository
+        .updateCustomerComplaints(jsonData, event.id.toString());
+  }
+
+  Future<void> _onGetEstimateDetailsByEstimate(
+      GetEstimateDetailsByEstimate event,
+      Emitter<JobSheetDetailsState> emit) async {
+    emit(state.copyWith(
+      status: JobSheetDetailsStatus.loading,
+    ));
+    dynamic jwtToken = await storage.read(key: "token");
+
+    Map<String, Object> jsonData = {
+      "token": jwtToken.toString(),
+      "id": event.id.toString(),
+      "filter": 'Estimate',
+    };
+
+    final result =
+        await jobSheetRepository.getEstimateDetails(jsonData);
+    if (result != null && result.isNotEmpty) {
+      return emit(state.copyWith(
+          status: JobSheetDetailsStatus.success,
+          estimateModel: EstimateModel.fromJson(result)));
+    } else {
+      emit(
+        state.copyWith(
+          status: JobSheetDetailsStatus.failed,
+        ),
+      );
+    }
   }
 }

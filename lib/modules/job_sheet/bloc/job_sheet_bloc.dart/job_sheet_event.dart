@@ -9,42 +9,38 @@ class JobSheetEvent extends Equatable {
   List<Object> get props => [];
 }
 
-
 class FetchJobSheets extends JobSheetEvent {
-    final int? timestamp;
-    final String? searchKeyword;
-    final String? direction;
-    final String? fromDate;
-    final String? lastRecordUpdatedTime;
-    final String? toDate;
-    final jobSheetStatus? status;
-    const FetchJobSheets({
-      this.timestamp,
-      this.searchKeyword,
-      this.direction,
-      this.fromDate,
-      this.toDate,
-      this.lastRecordUpdatedTime,
-      required this.status,
-    });
-  }
+  final int? timestamp;
+  final String? searchKeyword;
+  final String? direction;
+  final String? fromDate;
+  final String? lastRecordUpdatedTime;
+  final String? toDate;
+  final jobSheetStatus? status;
+  const FetchJobSheets({
+    this.timestamp,
+    this.searchKeyword,
+    this.direction,
+    this.fromDate,
+    this.toDate,
+    this.lastRecordUpdatedTime,
+    required this.status,
+  });
+}
 
-  class FetchDashboard extends JobSheetEvent
-  {
-    final jobSheetStatus? status;
+class FetchDashboard extends JobSheetEvent {
+  final jobSheetStatus? status;
 
- const FetchDashboard({ this.status});
-  }
+  const FetchDashboard({this.status});
+}
 
 class DeleteJobSheet extends JobSheetEvent {
   final String id;
   const DeleteJobSheet({required this.id});
 }
 
-
-class AddJobSheet extends JobSheetEvent
-{
-  final Map<String,dynamic>? formData;
+class AddJobSheet extends JobSheetEvent {
+  final Map<String, dynamic>? formData;
   final XFile frontImage;
   final XFile rightHandSideImage;
   final XFile leftHandSideImage;
@@ -69,4 +65,28 @@ class AddJobSheet extends JobSheetEvent
     required this.image3,
     required this.image4,
   });
+}
+
+
+class FetchEstimateList extends JobSheetEvent {
+  final int? timestamp;
+  final String? direction;
+  final String? searchKeyword;
+  final jobSheetStatus status;
+  const FetchEstimateList(
+      {this.timestamp,
+      this.direction,
+      this.searchKeyword,
+      required this.status});
+}
+
+class DeleteEstimate extends JobSheetEvent {
+  final String id;
+  const DeleteEstimate({required this.id});
+}
+
+
+
+class ClearListingData extends JobSheetEvent {
+  const ClearListingData();
 }

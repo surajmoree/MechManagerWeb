@@ -248,8 +248,6 @@ class _EditJobSheetState extends State<EditJobSheet>
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
     return BlocConsumer<JobSheetDetailsBloc, JobSheetDetailsState>(
         listener: (context, state) {
       if (state.status == JobSheetDetailsStatus.jobcardUpdated) {
@@ -1049,7 +1047,11 @@ class _EditJobSheetState extends State<EditJobSheet>
                                           children: [
                                             Expanded(
                                               child: DropdownButtonFormField2(
-                                                value: statusListController.isNotEmpty ? statusListController.toString() : '',
+                                                value: statusListController
+                                                        .isNotEmpty
+                                                    ? statusListController
+                                                        .toString()
+                                                    : '',
                                                 decoration:
                                                     const InputDecoration(
                                                   contentPadding:
@@ -1327,9 +1329,6 @@ class _EditJobSheetState extends State<EditJobSheet>
                                                     ],
                                                   ),
                                                   Row(
-                                                    // mainAxisAlignment:
-                                                    //     MainAxisAlignment
-                                                    //         .spaceBetween,
                                                     children: [
                                                       Row(
                                                         children: [

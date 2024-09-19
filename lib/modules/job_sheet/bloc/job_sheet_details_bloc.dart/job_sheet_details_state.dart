@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:mech_manager/models/estimate_model.dart';
 import 'package:mech_manager/models/job_card_details_model.dart';
 import 'package:mech_manager/models/slider_image_model.dart';
 
@@ -26,11 +27,13 @@ class JobSheetDetailsState extends Equatable {
   JobSheetDetailsStatus? status;
   JobSheetDetailModel? jobSheetDetails;
   ImageSliderModel? imageSliderModel;
+  EstimateModel? estimateModel;
 
   JobSheetDetailsState({
     this.status = JobSheetDetailsStatus.initial,
     this.jobSheetDetails = JobSheetDetailModel.empty,
     this.imageSliderModel = ImageSliderModel.empty,
+     this.estimateModel = EstimateModel.empty,
   
   });
 
@@ -39,6 +42,7 @@ class JobSheetDetailsState extends Equatable {
         status!,
         jobSheetDetails!,
         imageSliderModel!,
+        estimateModel!,
         
       ];
 
@@ -46,12 +50,14 @@ class JobSheetDetailsState extends Equatable {
     JobSheetDetailsStatus? status,
     JobSheetDetailModel? jobSheetDetails,
     ImageSliderModel? imageSliderModel,
+    EstimateModel? estimateModel,
     
   }) {
     return JobSheetDetailsState(
         status: status ?? this.status,
         jobSheetDetails: jobSheetDetails ?? this.jobSheetDetails,
-        imageSliderModel: imageSliderModel?? this.imageSliderModel
+        imageSliderModel: imageSliderModel?? this.imageSliderModel,
+        estimateModel: estimateModel ?? this.estimateModel,
     );
   }
 }

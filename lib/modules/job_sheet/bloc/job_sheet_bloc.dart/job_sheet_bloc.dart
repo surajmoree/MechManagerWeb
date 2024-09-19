@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mech_manager/config.dart';
 import 'package:mech_manager/config/constants.dart';
 import 'package:mech_manager/models/dashboard_model.dart';
+import 'package:mech_manager/models/estimate_listiening_model.dart';
 import 'package:mech_manager/models/job_sheet.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_event.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_state.dart';
@@ -17,13 +18,14 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
   JobSheetBloc() : super(JobSheetState()) {
     on<FetchJobSheets>(_onFetchJobSheets);
     on<AddJobSheet>(_onAddJobSheet);
-    
+    on<FetchEstimateList>(_onFetchEstimateList);
     on<DeleteJobSheet>(_onDeleteJobSheet);
     on<FetchDashboard>(_onFetchDashboard);
+    on<DeleteEstimate>(_onDeleteEstimate);
   }
   final JobSheetRepository jobSheetRepository = JobSheetRepository();
 
-   Future<void> _onAddJobSheet(
+  Future<void> _onAddJobSheet(
       AddJobSheet event, Emitter<JobSheetState> emit) async {
     emit(state.copyWith(status: jobSheetStatus.sending));
     // create job sheet api call
@@ -84,8 +86,7 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
     }
   }
 
-
-   callApiForSend(
+  callApiForSend(
       XFile imageFile, String token, String id, String imageType) async {
     List<int> imageData =
         await imageFile.readAsBytes(); // Works for both web and mobile
@@ -120,8 +121,7 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
     }
   }
 
-
-        generateUniqueFileName(originalFileName) {
+  generateUniqueFileName(originalFileName) {
     dynamic timestamp = DateTime.now().microsecondsSinceEpoch;
     dynamic randomString = Random().nextInt(900000) + 100000;
     return "$timestamp-$randomString.jpg";
@@ -223,4 +223,78 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
           status: jobSheetStatus.success, jobSheetList: state.jobSheetList));
     }
   }
+
+  Future<void> _onFetchEstimateList(
+      FetchEstimateList event, Emitter<JobSheetState> emit) async {
+        // if (state.hasReachedMax! && event.timestamp != null) {
+    if (state.hasReachedMax!  && event.timestamp != null) {
+      return;
+    }
+    emit(
+      state.copyWith(
+          status: (event.status == jobSheetStatus.success)
+              ? jobSheetStatus.success
+              : jobSheetStatus.loading),
+    );
+    dynamic token = await storage.read(key: "token");
+
+    Map<String, String> jsonData = {
+      'token': token.toString(),
+      'timestamp': event.timestamp.toString(),
+      'direction': event.direction ?? 'down',
+      'search': event.searchKeyword ?? '',
+    };
+ print("time==================${event.timestamp.toString()}");
+    final result = await jobSheetRepository.getEstimate(jsonData);
+    print('estimate listning from bloc $result');
+
+    if (result != null && result.isNotEmpty) {
+      List<EstimateListingModel> estimateList = result
+          .map<EstimateListingModel>(
+              (jsonData) => EstimateListingModel.fromJson(jsonData))
+          .toList();
+
+      final bool hasReachedMax = estimateList.length < 10;
+
+      if (event.timestamp != null && event.timestamp.toString().isNotEmpty) {
+        estimateList = List.from(state.estimateListing)..addAll(estimateList);
+      }
+      return emit(state.copyWith(
+        status: jobSheetStatus.success,
+        estimateListing: estimateList,
+        lastTimestamp: estimateList.last.timestamp,
+        hasReachedMax: hasReachedMax,
+      ));
+    } else {
+      return emit(state.copyWith(
+        status: jobSheetStatus.failure,
+      ));
+    }
+  }
+
+
+  ////////////////////delete Estimate////////////deleteInvoice
+
+  _onDeleteEstimate(DeleteEstimate event, Emitter<JobSheetState> emit) async {
+    emit(state.copyWith(status: jobSheetStatus.updating));
+    dynamic token = await storage.read(key: "token");
+    Map<String, Object> jsonData = {
+      "token": token.toString(),
+      "id": event.id.toString(),
+    };
+
+    final result =
+        await jobSheetRepository.deleteEstimate(jsonData);
+
+    if (result['status'] == "Success") {
+      // state.jobSheetList
+      //     .removeWhere((element) => element.id.toString() == event.id);
+      emit(state.copyWith(
+          status: jobSheetStatus.success,
+          estimateListing: state.estimateListing));
+    }
+  }
+
+
+
 }

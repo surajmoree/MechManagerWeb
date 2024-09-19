@@ -384,6 +384,7 @@ class _DashboardPageState extends State<DashboardPage>
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return BaseLayout(
+      ctx: 2,
         activeRouteNotifier: activeRouteNotifier,
         title: 'MechManager Admin',
         closeDrawer: _toggleDrawer,
@@ -492,32 +493,41 @@ class _DashboardPageState extends State<DashboardPage>
                                                 ),
                                               );
                                             } else if (index == 1) {
-                                              return ResponsiveCard(
-                                                child: OverviewCard(
-                                                  title: 'Total Estimate',
-                                                  count:
-                                                     state.dashboardModel!.totalEstimate.toString(),
-                                                  //  icon: Icons.list_alt,
-                                                  container: Container(
-                                                    height: 44,
-                                                    width: 44,
-                                                    decoration: BoxDecoration(
-                                                      color: estimatecardColor,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  context.read<JobSheetBloc>().add(
+                                          const FetchEstimateList(
+                                              status: jobSheetStatus.success));
+                                      Navigator.pushNamed(
+                                          context, '/estimate_listing');
+                                                },
+                                                child: ResponsiveCard(
+                                                  child: OverviewCard(
+                                                    title: 'Total Estimate',
+                                                    count:
+                                                       state.dashboardModel!.totalEstimate.toString(),
+                                                    //  icon: Icons.list_alt,
+                                                    container: Container(
+                                                      height: 44,
+                                                      width: 44,
+                                                      decoration: BoxDecoration(
+                                                        color: estimatecardColor,
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                8),
+                                                      ),
+                                                      child: Center(
+                                                          child: Text(
+                                                        '',
+                                                        style: TextStyle(
+                                                            fontSize: 25,
+                                                            color:
+                                                                estimateIconColor),
+                                                      )),
                                                     ),
-                                                    child: Center(
-                                                        child: Text(
-                                                      '',
-                                                      style: TextStyle(
-                                                          fontSize: 25,
-                                                          color:
-                                                              estimateIconColor),
-                                                    )),
+                                                    backgroundColor: Colors.blue,
+                                                    iconColor: Colors.blue.shade800,
                                                   ),
-                                                  backgroundColor: Colors.blue,
-                                                  iconColor: Colors.blue.shade800,
                                                 ),
                                               );
                                             } else if (index == 2) {

@@ -26,6 +26,8 @@ class JobSheetApi extends Api{
   }
 
 
+
+
   Future<dynamic> deleteJobSheet(jsonData) async {
     try {
       final result = await requestDELETE(
@@ -130,6 +132,68 @@ Future<dynamic> searchCustomerDetails(jsonData)async
       print("Error is---------$er");
     }
 }
+
+
+ Future<dynamic> updateJobSheetStatus(jsonData, String id) async {
+    try {
+      final result =
+          await requestPUT(path: '/update_status/$id', parameters: jsonData);
+      return result;
+    } catch (er) {
+      print("Error is---------$er");
+    }
+  }
+
+    //update customer complaints
+   Future<dynamic> updateCustomerComplaints(jsonData, String id) async {
+    try {
+      final result = await requestPUT(
+          path: '/update_customer_complaints/$id', parameters: jsonData);
+      return result;
+    } catch (er) {
+      print("Error is------$er");
+    }
+  }
+  
+
+  //estimate list
+  Future<dynamic> getEstimate(jsonData)async
+  {
+    try
+    {
+      final response = await requestGET(path: '/get-estimates', parameters: jsonData).timeout(const Duration(seconds: 30));
+      print('estimate list $response');
+      return response['Estimates'];
+    }catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  ///////delete estimate///
+
+  Future<dynamic> deleteEstimate(jsonData) async {
+    try {
+      final result = await requestDELETE(
+          path: '/delete_estimate/${jsonData['id']}', parameters: jsonData);
+      return result;
+    } catch (er) {
+      print("Error is---------$er");
+    }
+  }
+
+
+  /////////get Estimate Details by estimate////
+
+  Future<dynamic> getEstimateDetails(jsonData) async {
+    try {
+      final getEstimateResponse = await requestGET(
+          path: 'get_estimate/${jsonData['id']}', parameters: jsonData);
+      return getEstimateResponse['Estimate'];
+    } catch (er) {
+      print("Error is---------$er");
+    }
+  }
 
 
 

@@ -55,4 +55,30 @@ class JobSheetRepository extends Repository
   {
     return jobSheetApi.searchCustomerDetails(jsonData);
   }
+
+
+   Future<dynamic> updateJobSheetStatus(jsonData, String id) {
+    return jobSheetApi.updateJobSheetStatus(jsonData, id);
+  }
+
+    //update customer complaints
+  Future<dynamic> updateCustomerComplaints(jsonData, String id) {
+    return jobSheetApi.updateCustomerComplaints(jsonData, id);
+  }
+
+  Future<dynamic> getEstimate(jsonData)async
+  {
+    return jobSheetApi.getEstimate(jsonData);
+  }
+
+   // delete estimate
+  Future<dynamic> deleteEstimate(jsonData) {
+    return jobSheetApi.deleteEstimate(jsonData);
+  }
+
+   // get estimate details
+  Future<dynamic> getEstimateDetails(jsonData) {
+    return jobSheetApi.getEstimateDetails(jsonData);
+  }
+
 }

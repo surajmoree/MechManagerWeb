@@ -49,3 +49,29 @@ class UpdateJobSheet extends JobSheetDetailsEvent {
     required this.image4,
   });
 }
+
+
+class UpdateJobSheetStatus extends JobSheetDetailsEvent {
+  final Map<String, dynamic>? formData;
+  final String id;
+  const UpdateJobSheetStatus({
+    this.formData,
+    required this.id,
+  });
+}
+
+class UpdateCustomerComplaints extends JobSheetDetailsEvent {
+  final List formData;
+  final String id;
+  const UpdateCustomerComplaints({required this.formData, required this.id});
+}
+
+
+class GetEstimateDetailsByEstimate extends JobSheetDetailsEvent {
+  final String id;
+  const GetEstimateDetailsByEstimate({
+    required this.id,
+  });
+}
+
+class ResetLastEstimateId extends JobSheetDetailsEvent {}

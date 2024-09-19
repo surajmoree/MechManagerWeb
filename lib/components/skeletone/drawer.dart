@@ -96,12 +96,12 @@ class _MyDrawerState extends State<MyDrawer> {
                             DrawerItem(
                               imageIcon: '',
                               title: 'Estimate',
-                              route: '/estimate',
-                              isSelected: selectedRoute == "/estimate",
+                              route: '/estimate_listing',
+                              isSelected: selectedRoute == "/estimate_listing",
                               onTap: () {
-                                selectedRouteNotifier.value = "/estimate";
+                                selectedRouteNotifier.value = "/estimate_listing";
                                 Navigator.of(context)
-                                    .pushReplacementNamed('/estimate');
+                                    .pushReplacementNamed('/estimate_listing');
                               },
                             ),
                             SizedBox(
@@ -229,6 +229,7 @@ class DrawerItem extends StatelessWidget {
   final String route;
   final bool isSelected;
   final VoidCallback onTap;
+  
 
   const DrawerItem({
     // required this.image,
@@ -253,6 +254,7 @@ class DrawerItem extends StatelessWidget {
       ),
       selected: isSelected,
       selectedTileColor: backgroundColor,
+      
       //selectedColor: Colors.grey[200],
       leading: Text(
         imageIcon,
@@ -275,9 +277,38 @@ class DrawerItem extends StatelessWidget {
             fontFamily: 'meck'),
       ),
       onTap: () {
-        onTap();
+    onTap();
+    switchDrawerItem(0,context);
         Navigator.pushNamed(context, route);
       },
     );
   }
+}
+
+
+switchDrawerItem(int value,BuildContext context)async
+{
+  int ctx =0;
+switch(value) 
+{
+  case 0:
+  if(ctx  != 0)
+  {
+     Navigator.pushNamed(context, '/dashboard_page');
+  }
+  break;
+
+  case 1 :
+  if(ctx != 1)
+  {
+     Navigator.pushNamed(context, '/job_sheet_listing');
+  }
+  break;
+
+  case 2 : 
+  if(ctx  != 2)
+  {
+     Navigator.pushNamed(context, '/estimate_listing');
+  }
+}
 }

@@ -159,7 +159,7 @@ class _CreateJobSheetState extends State<CreateJobSheet>
               return true;
             },
             child: BaseLayout(
-                title: 'MechMenager Admin',
+                title: 'MechManager Admin',
                 closeDrawer: _toggleDrawer,
                 isDrawerOpen: _isDrawerOpen,
                 showFloatingActionButton: false,
