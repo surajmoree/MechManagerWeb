@@ -21,6 +21,8 @@ class JobSheetDetailsBloc
     on<UpdateJobSheetStatus>(_onUpdateJobSheetStatus);
     on<UpdateCustomerComplaints>(_onUpdateCustomerComplaints);
     on<GetEstimateDetailsByEstimate>(_onGetEstimateDetailsByEstimate);
+    on<UpdateCustomer>(_onUpdateCustomer);
+     on<UpdateVehicle>(_onUpdateVehicle);
   }
 
   Future<void> _onGetJobSheetDetails(
@@ -215,6 +217,40 @@ class JobSheetDetailsBloc
           status: JobSheetDetailsStatus.failed,
         ),
       );
+    }
+  }
+
+
+   _onUpdateCustomer(
+      UpdateCustomer event, Emitter<JobSheetDetailsState> emit) async {
+    emit(state.copyWith(status: JobSheetDetailsStatus.updating));
+    dynamic jwtToken = await storage.read(key: "token");
+    Map<String, Object> jsonData = {
+      "token": jwtToken.toString(),
+      "formData": jsonEncode(event.formData)
+    };
+    dynamic result = await jobSheetRepository
+        .updateCustomer(jsonData, event.id.toString());
+    if (result['status'] == "Success") {
+      emit(state.copyWith(status: JobSheetDetailsStatus.updated));
+      emit(state.copyWith(status: JobSheetDetailsStatus.success));
+    }
+  }
+
+
+  _onUpdateVehicle(
+      UpdateVehicle event, Emitter<JobSheetDetailsState> emit) async {
+    emit(state.copyWith(status: JobSheetDetailsStatus.updating));
+    dynamic jwtToken = await storage.read(key: "token");
+    Map<String, Object> jsonData = {
+      "token": jwtToken.toString(),
+      "formData": jsonEncode(event.formData)
+    };
+    dynamic result = await jobSheetRepository
+        .updateVehicle(jsonData, event.id.toString());
+    if (result['status'] == "Success") {
+      emit(state.copyWith(status: JobSheetDetailsStatus.updated));
+      emit(state.copyWith(status: JobSheetDetailsStatus.success));
     }
   }
 }

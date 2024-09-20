@@ -75,3 +75,15 @@ class GetEstimateDetailsByEstimate extends JobSheetDetailsEvent {
 }
 
 class ResetLastEstimateId extends JobSheetDetailsEvent {}
+
+class UpdateCustomer extends JobSheetDetailsEvent {
+  final Map<String, dynamic>? formData;
+  final String id;
+  const UpdateCustomer({this.formData, required this.id});
+}
+
+class UpdateVehicle extends JobSheetDetailsEvent {
+  final Map<String, dynamic>? formData;
+  final String id;
+  const UpdateVehicle({this.formData, required this.id});
+}

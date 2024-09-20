@@ -81,4 +81,14 @@ class JobSheetRepository extends Repository
     return jobSheetApi.getEstimateDetails(jsonData);
   }
 
+  Future<dynamic> updateCustomer(jsonData, String id) {
+    return jobSheetApi.updateCustomer(jsonData, id);
+  }
+
+
+  // update vehicle
+  Future<dynamic> updateVehicle(jsonData, String id) {
+    return jobSheetApi.updateVehicle(jsonData, id);
+  }
+
 }

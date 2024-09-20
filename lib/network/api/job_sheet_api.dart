@@ -196,5 +196,26 @@ Future<dynamic> searchCustomerDetails(jsonData)async
   }
 
 
+ Future<dynamic> updateCustomer(jsonData, String id) async {
+    try {
+      final result =
+          await requestPUT(path: '/update_customer/$id', parameters: jsonData);
+      return result;
+    } catch (er) {
+      print("Error is------$er");
+    }
+  }
+
+
+   Future<dynamic> updateVehicle(jsonData, String id) async {
+    try {
+      final result =
+          await requestPUT(path: '/update_vehicle/$id', parameters: jsonData);
+      return result;
+    } catch (er) {
+      print("Error is------$er");
+    }
+  }
+
 
 }

@@ -2493,7 +2493,8 @@ class _EditJobSheetState extends State<EditJobSheet>
                             Padding(
                               padding: const EdgeInsets.only(
                                   left: 4, top: 15, bottom: 12),
-                              child: Row(
+                              child:
+                               Row(
                                 children: [
                                   SizedBox(
                                     height: 37,

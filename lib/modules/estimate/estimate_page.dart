@@ -4,9 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:mech_manager/components/skeletone/center_loader.dart';
 import 'package:mech_manager/config.dart';
-import 'package:mech_manager/config/app_icons.dart';
 import 'package:mech_manager/config/colors.dart';
 import 'package:mech_manager/models/job_sheet.dart';
+import 'package:mech_manager/modules/estimate/edit_customer_jobsheet.dart';
+import 'package:mech_manager/modules/estimate/edit_vehicle_box.dart';
 import 'package:mech_manager/modules/estimate/estimate_listening.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_bloc.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_event.dart';
@@ -76,6 +77,24 @@ class _EstimatePageState extends State<EstimatePage>
     _fullNameController.text = state.estimateModel!.fullName.toString();
     _estimateDateController.text = state.estimateModel!.tempDate.toString();
     sparePartsList = state.estimateModel!.invoiceProducts!.toList();
+  }
+
+  void addNewRow() {
+    setState(() {
+      sparePartsListNew.add({
+        'product_id': '',
+        'product_name': '',
+        'product_qty': '',
+        'product_unit': '',
+        'product_price': '',
+      });
+    });
+  }
+
+  void removeRow(int index) {
+    setState(() {
+      sparePartsListNew.removeAt(index);
+    });
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -378,19 +397,143 @@ class _EstimatePageState extends State<EstimatePage>
                                                   ],
                                                 ),
                                               ),
-                                              Container(
-                                                  width: 30,
-                                                  height: 30,
-                                                  decoration: BoxDecoration(
-                                                      color: textfieldColor,
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  3))),
-                                                  child: Icon(
-                                                    menuIcon,
-                                                    size: 14,
-                                                  ))
+                                              PopupMenuButton(
+                                                itemBuilder: (context) =>
+                                                    <PopupMenuEntry>[
+                                                  const PopupMenuItem(
+                                                    value: 'edit customer',
+                                                    child:
+                                                        Text('Edit Customer'),
+                                                  ),
+                                                  const PopupMenuItem(
+                                                    value: 'edit vehicle',
+                                                    child: Text('Edit Vehicle'),
+                                                  ),
+                                                ],
+                                                onSelected: (value) {
+                                                  if (value ==
+                                                      'edit customer') {
+                                                    setState(() {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext
+                                                              context) {
+                                                            return AlertDialog(
+                                                              shape: RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                          Radius.circular(
+                                                                              5.0))),
+                                                              contentPadding:
+                                                                  EdgeInsets.only(
+                                                                      top:
+                                                                          10.0),
+                                                              content:
+                                                                  EditCustomerByEstimate(
+                                                                id: state
+                                                                    .estimateModel!
+                                                                    .estimateId,
+                                                                fullname: state
+                                                                    .estimateModel!
+                                                                    .fullName
+                                                                    .toString(),
+                                                                address: state
+                                                                    .estimateModel!
+                                                                    .address
+                                                                    .toString(),
+                                                                email: state
+                                                                    .estimateModel!
+                                                                    .email
+                                                                    .toString(),
+                                                                phoneno: state
+                                                                    .estimateModel!
+                                                                    .mobileNumber
+                                                                    .toString(),
+                                                              ),
+                                                            );
+                                                          });
+                                                    });
+                                                  } else if (value ==
+                                                      'edit vehicle') {
+                                                    setState(() {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      showDialog(
+                                                          context: context,
+                                                          builder: (BuildContext
+                                                              context) {
+                                                            return AlertDialog(
+                                                              shape: RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                          Radius.circular(
+                                                                              5.0))),
+                                                              contentPadding:
+                                                                  EdgeInsets.only(
+                                                                      top:
+                                                                          10.0),
+                                                              content:
+                                                                  EditVehicleBox(
+                                                                id: state
+                                                                    .estimateModel!
+                                                                    .estimateId,
+                                                                vehicleName: state
+                                                                    .estimateModel!
+                                                                    .vehicleName
+                                                                    .toString(),
+                                                                vehicleNumber: state
+                                                                    .estimateModel!
+                                                                    .vehicleNumber
+                                                                    .toString(),
+                                                                manufacturers: state
+                                                                    .estimateModel!
+                                                                    .manufacturers
+                                                                    .toString(),
+                                                              ),
+                                                            );
+                                                          });
+                                                    });
+                                                  }
+                                                },
+                                                child: const Icon(
+                                                  Icons.more_vert,
+                                                  color: hintTextColor,
+                                                ),
+                                              ),
+                                              /*
+                                              GestureDetector(
+                                                onTap: () {
+                                                  print('tabbbbb');
+                                                  PopupMenuButton(itemBuilder: (context) =><PopupMenuEntry>[
+                                                            const PopupMenuItem(
+                                                              value: 'edit',
+                                                              child:
+                                                                  Text('Edit'),
+                                                            ),
+                                                            const PopupMenuItem(
+                                                              value: 'delete',
+                                                              child: Text(
+                                                                  'Delete'),
+                                                            ),
+                                                          ],);
+                                                },
+                                                child: Container(
+                                                    width: 30,
+                                                    height: 30,
+                                                    decoration: BoxDecoration(
+                                                        color: textfieldColor,
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    3))),
+                                                    child: Icon(
+                                                      menuIcon,
+                                                      size: 14,
+                                                    )),
+                                              )
+                                              */
                                             ],
                                           ),
                                           const Divider(
@@ -880,225 +1023,7 @@ class _EstimatePageState extends State<EstimatePage>
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w500),
                                           ),
-                                          if (sparePartsList.isNotEmpty) ...[
-                                            Table(
-                                              border: TableBorder.all(
-                                                  color: Colors
-                                                      .grey), // Border color and width
-                                              columnWidths: {
-                                                0: FlexColumnWidth(1),
-                                                1: FlexColumnWidth(
-                                                    3), // Increased width for the second column
-                                                2: FlexColumnWidth(2),
-                                                3: FlexColumnWidth(2),
-                                                4: FlexColumnWidth(2),
-                                                5: FlexColumnWidth(2),
-                                                6: FlexColumnWidth(2),
-                                              },
-                                              children: [
-                                                // Header Row
-                                                TableRow(
-                                                  decoration: BoxDecoration(
-                                                      color: tablerowcolor),
-                                                  children: [
-                                                    TableCell(
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsets.all(8.0),
-                                                        child: Text('Sr no',
-                                                            style: TextStyle(
-                                                                color:
-                                                                    whiteColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                      ),
-                                                    ),
-                                                    TableCell(
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsets.all(8.0),
-                                                        child: Text(
-                                                            'Spare Part Name',
-                                                            style: TextStyle(
-                                                                color:
-                                                                    whiteColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                      ),
-                                                    ),
-                                                    TableCell(
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsets.all(8.0),
-                                                        child: Text('Quantity',
-                                                            style: TextStyle(
-                                                              color:
-                                                                    whiteColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                      ),
-                                                    ),
-                                                    TableCell(
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsets.all(8.0),
-                                                        child: Text('Unit',
-                                                            style: TextStyle(
-                                                              color:
-                                                                    whiteColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                      ),
-                                                    ),
-                                                    TableCell(
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsets.all(8.0),
-                                                        child: Text('Rate',
-                                                            style: TextStyle(
-                                                              color:
-                                                                    whiteColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                      ),
-                                                    ),
-                                                    TableCell(
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsets.all(8.0),
-                                                        child: Text('Amount',
-                                                            style: TextStyle(
-                                                              color:
-                                                                    whiteColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                      ),
-                                                    ),
-                                                    TableCell(
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsets.all(8.0),
-                                                        child: Text('Action',
-                                                            style: TextStyle(
-                                                              color:
-                                                                    whiteColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                // Data Rows
-                                                for (var spareParts
-                                                    in sparePartsList)
-                                                  TableRow(
-                                                    children: [
-                                                      TableCell(
-                                                        child: Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  8.0),
-                                                          child: Text(spareParts[
-                                                                  'product_id']
-                                                              .toString()),
-                                                        ),
-                                                      ),
-                                                      TableCell(
-                                                        child: Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  8.0),
-                                                          child: Text(spareParts[
-                                                                  'product_name']
-                                                              .toString()),
-                                                        ),
-                                                      ),
-                                                      TableCell(
-                                                        child: Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  8.0),
-                                                          child: Text(spareParts[
-                                                                  'product_qty']
-                                                              .toString()),
-                                                        ),
-                                                      ),
-                                                      TableCell(
-                                                        child: Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  8.0),
-                                                          child: Text(spareParts[
-                                                                  'product_unit']
-                                                              .toString()),
-                                                        ),
-                                                      ),
-                                                      TableCell(
-                                                        child: Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  8.0),
-                                                          child: Text(spareParts[
-                                                                  'product_price']
-                                                              .toString()),
-                                                        ),
-                                                      ),
-                                                      TableCell(
-                                                        child: Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  8.0),
-                                                          child: Text(
-                                                            ((double.tryParse(spareParts['product_price']
-                                                                            .toString()) ??
-                                                                        0.0) *
-                                                                    (double.tryParse(spareParts['product_qty']
-                                                                            .toString()) ??
-                                                                        0.0))
-                                                                .toStringAsFixed(
-                                                                    2),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      TableCell(
-                                                          child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: Container(
-                                                          width: 20,
-                                                          height: 20,
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            5)),
-                                                            color: primaryColor,
-                                                          ),
-                                                          child: const Icon(
-                                                              Icons.add),
-                                                        ),
-                                                        //  Text(
-                                                        //   '',
-                                                        //   style: TextStyle(
-                                                        //       color: redColor),
-                                                        // ),
-                                                      )),
-                                                    ],
-                                                  ),
-                                              ],
-                                            ),
-                                          ],
-                                          if (sparePartsListNew.isNotEmpty) ...[
+                                          if (sparePartsList.isNotEmpty)
                                             Table(
                                               border: TableBorder.all(
                                                   color: Colors.grey),
@@ -1114,200 +1039,165 @@ class _EstimatePageState extends State<EstimatePage>
                                               children: [
                                                 // Header Row
                                                 TableRow(
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.blueGrey),
                                                   children: [
-                                                    TableCell(
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsets.all(8.0),
-                                                        child: Text('Sr no',
-                                                            style: TextStyle(
-                                                              color:
-                                                                    whiteColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                      ),
-                                                    ),
-                                                    TableCell(
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsets.all(8.0),
-                                                        child: Text(
-                                                            'Spare Part Name',
-                                                            style: TextStyle(
-                                                              color:
-                                                                    whiteColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                      ),
-                                                    ),
-                                                    TableCell(
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsets.all(8.0),
-                                                        child: Text('Quantity',
-                                                            style: TextStyle(
-                                                              color:
-                                                                    whiteColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                      ),
-                                                    ),
-                                                    TableCell(
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsets.all(8.0),
-                                                        child: Text('Unit',
-                                                            style: TextStyle(
-                                                              color:
-                                                                    whiteColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                      ),
-                                                    ),
-                                                    TableCell(
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsets.all(8.0),
-                                                        child: Text('Rate',
-                                                            style: TextStyle(
-                                                              color:
-                                                                    whiteColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                      ),
-                                                    ),
-                                                    TableCell(
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsets.all(8.0),
-                                                        child: Text('Amount',
-                                                            style: TextStyle(
-                                                              color:
-                                                                    whiteColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                      ),
-                                                    ),
-                                                    TableCell(
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsets.all(8.0),
-                                                        child: Text('Action',
-                                                            style: TextStyle(
-                                                              color:
-                                                                    whiteColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold)),
-                                                      ),
-                                                    ),
+                                                    headerCell('Sr no'),
+                                                    headerCell(
+                                                        'Spare Part Name'),
+                                                    headerCell('Quantity'),
+                                                    headerCell('Unit'),
+                                                    headerCell('Rate'),
+                                                    headerCell('Amount'),
+                                                    headerCell('Action'),
                                                   ],
                                                 ),
-                                                // Data Rows
-                                                for (var spareParts
-                                                    in sparePartsListNew)
+                                                // Data Rows for existing parts
+                                                for (int i = 0;
+                                                    i < sparePartsList.length;
+                                                    i++)
                                                   TableRow(
                                                     children: [
-                                                      TableCell(
-                                                        child: Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  8.0),
-                                                          child: Text(spareParts[
-                                                                  'product_id']
+                                                      tableCell(
+                                                          sparePartsList[i]
+                                                                  ['product_id']
                                                               .toString()),
-                                                        ),
+                                                      tableCell(sparePartsList[
+                                                              i]['product_name']
+                                                          .toString()),
+                                                      tableCell(sparePartsList[
+                                                              i]['product_qty']
+                                                          .toString()),
+                                                      tableCell(sparePartsList[
+                                                              i]['product_unit']
+                                                          .toString()),
+                                                      tableCell(sparePartsList[
+                                                                  i]
+                                                              ['product_price']
+                                                          .toString()),
+                                                      tableCell(
+                                                        ((double.tryParse(sparePartsList[i]
+                                                                            [
+                                                                            'product_price']
+                                                                        .toString()) ??
+                                                                    0.0) *
+                                                                (double.tryParse(sparePartsList[i]
+                                                                            [
+                                                                            'product_qty']
+                                                                        .toString()) ??
+                                                                    0.0))
+                                                            .toStringAsFixed(2),
                                                       ),
-                                                      TableCell(
-                                                        child: Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  8.0),
-                                                          child: Text(spareParts[
-                                                                  'product_name']
-                                                              .toString()),
-                                                        ),
-                                                      ),
-                                                      TableCell(
-                                                        child: Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  8.0),
-                                                          child: Text(spareParts[
-                                                                  'product_qty']
-                                                              .toString()),
-                                                        ),
-                                                      ),
-                                                      TableCell(
-                                                        child: Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  8.0),
-                                                          child: Text(spareParts[
-                                                                  'product_unit']
-                                                              .toString()),
-                                                        ),
-                                                      ),
-                                                      TableCell(
-                                                        child: Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  8.0),
-                                                          child: Text(spareParts[
-                                                                  'product_price']
-                                                              .toString()),
-                                                        ),
-                                                      ),
-                                                      TableCell(
-                                                        child: Padding(
-                                                          padding:
-                                                              EdgeInsets.all(
-                                                                  8.0),
-                                                          child: Text(
-                                                            ((double.tryParse(spareParts['product_price']
-                                                                            .toString()) ??
-                                                                        0.0) *
-                                                                    (double.tryParse(spareParts['product_qty']
-                                                                            .toString()) ??
-                                                                        0.0))
-                                                                .toStringAsFixed(
-                                                                    2),
-                                                          ),
-                                                        ),
-                                                      ),
+                                                      // Action button (add for last row, delete for others)
                                                       TableCell(
                                                         child: ElevatedButton(
-                                                            onPressed: () {},
-                                                            child: Icon(
-                                                                Icons.add)),
-                                                        //                             Container(
-                                                        //   width: 50,
-                                                        //   height: 60,
-                                                        //   decoration: const BoxDecoration(
-                                                        //     borderRadius:
-                                                        //         BorderRadius.all(Radius.circular(5)),
-                                                        //     color: primaryColor,
-                                                        //   ),
-                                                        //   child: const Icon(Icons.search),
-                                                        // ),
-                                                        //  Text(
-                                                        //   '',
-                                                        //   style: TextStyle(
-                                                        //       color: redColor),
-                                                        // ),
+                                                          onPressed: () {
+                                                            if (i ==
+                                                                    sparePartsList
+                                                                            .length -
+                                                                        1 &&
+                                                                sparePartsListNew
+                                                                    .isEmpty) {
+                                                              addNewRow();
+                                                            }
+                                                          },
+                                                          child: Icon(
+                                                            sparePartsListNew
+                                                                        .isEmpty &&
+                                                                    i ==
+                                                                        sparePartsList.length -
+                                                                            1
+                                                                ? Icons.add
+                                                                : Icons.delete,
+                                                          ),
+                                                        ),
                                                       ),
                                                     ],
                                                   ),
                                               ],
                                             ),
-                                          ] else
-                                            const SizedBox.shrink(),
+                                          if (sparePartsListNew.isNotEmpty)
+                                            Table(
+                                              border: TableBorder.all(
+                                                  color: Colors.grey),
+                                              columnWidths: {
+                                                0: FlexColumnWidth(1),
+                                                1: FlexColumnWidth(3),
+                                                2: FlexColumnWidth(2),
+                                                3: FlexColumnWidth(2),
+                                                4: FlexColumnWidth(2),
+                                                5: FlexColumnWidth(2),
+                                                6: FlexColumnWidth(2),
+                                              },
+                                              children: [
+                                                // Data Rows for new parts
+                                                for (int i = 0;
+                                                    i <
+                                                        sparePartsListNew
+                                                            .length;
+                                                    i++)
+                                                  TableRow(
+                                                    children: [
+                                                      tableCell(
+                                                          sparePartsListNew[i]
+                                                                  ['product_id']
+                                                              .toString()),
+                                                      tableCell(
+                                                          sparePartsListNew[i][
+                                                                  'product_name']
+                                                              .toString()),
+                                                      tableCell(
+                                                          sparePartsListNew[i][
+                                                                  'product_qty']
+                                                              .toString()),
+                                                      tableCell(
+                                                          sparePartsListNew[i][
+                                                                  'product_unit']
+                                                              .toString()),
+                                                      tableCell(sparePartsListNew[
+                                                                  i]
+                                                              ['product_price']
+                                                          .toString()),
+                                                      tableCell(
+                                                        ((double.tryParse(sparePartsListNew[i]
+                                                                            [
+                                                                            'product_price']
+                                                                        .toString()) ??
+                                                                    0.0) *
+                                                                (double.tryParse(sparePartsListNew[i]
+                                                                            [
+                                                                            'product_qty']
+                                                                        .toString()) ??
+                                                                    0.0))
+                                                            .toStringAsFixed(2),
+                                                      ),
+                                                      // Action button (delete for previous rows, add for last row)
+                                                      TableCell(
+                                                        child: ElevatedButton(
+                                                          onPressed: () {
+                                                            if (i ==
+                                                                sparePartsListNew
+                                                                        .length -
+                                                                    1) {
+                                                              addNewRow();
+                                                            } else {
+                                                              removeRow(i);
+                                                            }
+                                                          },
+                                                          child: Icon(
+                                                            i ==
+                                                                    sparePartsListNew
+                                                                            .length -
+                                                                        1
+                                                                ? Icons.add
+                                                                : Icons.delete,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                              ],
+                                            ),
                                         ],
                                       ),
                                     )
@@ -1319,5 +1209,25 @@ class _EstimatePageState extends State<EstimatePage>
                         ),
                       ))));
     });
+  }
+
+  Widget headerCell(String text) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        text,
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  Widget tableCell(String text) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(text),
+    );
   }
 }
