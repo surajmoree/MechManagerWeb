@@ -218,4 +218,24 @@ Future<dynamic> searchCustomerDetails(jsonData)async
   }
 
 
+   Future<dynamic> searchSparePart(jsonData) async {
+    try {
+      final apiResponse =
+          await requestGET(path: '/get_spare_parts', parameters: jsonData);
+      return apiResponse['spare_parts'];
+    } catch (er, _) {
+      print(er);
+    }
+  }
+
+   Future<dynamic> searchProduct(jsonData) async {
+    try {
+      final apiResponse =
+          await requestGET(path: '/get_products', parameters: jsonData);
+      return apiResponse['products'];
+    } catch (er, _) {
+      print(er);
+    }
+  }
+
 }

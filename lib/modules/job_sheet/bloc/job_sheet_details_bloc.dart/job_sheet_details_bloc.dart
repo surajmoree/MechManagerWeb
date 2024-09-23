@@ -8,7 +8,9 @@ import 'package:mech_manager/config.dart';
 import 'package:mech_manager/config/constants.dart';
 import 'package:mech_manager/models/estimate_model.dart';
 import 'package:mech_manager/models/job_card_details_model.dart';
+import 'package:mech_manager/models/product_model.dart';
 import 'package:mech_manager/models/slider_image_model.dart';
+import 'package:mech_manager/models/spare_part_model.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_details_bloc.dart/job_sheet_details_event.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_details_bloc.dart/job_sheet_details_state.dart';
 
@@ -23,6 +25,8 @@ class JobSheetDetailsBloc
     on<GetEstimateDetailsByEstimate>(_onGetEstimateDetailsByEstimate);
     on<UpdateCustomer>(_onUpdateCustomer);
      on<UpdateVehicle>(_onUpdateVehicle);
+     on<SearchSparePart>(_onSearchSparePart);
+     on<SearchProduct>(_onSearchProduct);
   }
 
   Future<void> _onGetJobSheetDetails(
@@ -253,4 +257,43 @@ class JobSheetDetailsBloc
       emit(state.copyWith(status: JobSheetDetailsStatus.success));
     }
   }
+
+
+   Future<void> _onSearchSparePart(
+      SearchSparePart event, Emitter<JobSheetDetailsState> emit) async {
+    dynamic token = await storage.read(key: "token");
+    Map<String, Object> jsonData = {
+      "token": token.toString(),
+      "search": event.searchKeyword.toString()
+    };
+    final result =
+        await jobSheetRepository.searchSparePart(jsonData);
+    if (result != null && result.isNotEmpty) {
+      return emit(state.copyWith(
+          status: JobSheetDetailsStatus.success,
+          sparePartList: result
+              .map<SparePartModel>(
+                  (jsonData) => SparePartModel.fromJson(jsonData))
+              .toList()));
+    }
+  }
+
+
+  _onSearchProduct(
+      SearchProduct event, Emitter<JobSheetDetailsState> emit) async {
+    dynamic token = await storage.read(key: "token");
+    Map<String, Object> jsonData = {
+      "token": token.toString(),
+      "search": event.searchKeyword.toString()
+    };
+    final result = await jobSheetRepository.searchProduct(jsonData);
+    if (result != null && result.isNotEmpty) {
+      return emit(state.copyWith(
+          status: JobSheetDetailsStatus.success,
+          productList: result
+              .map<ProductModel>((jsonData) => ProductModel.fromJson(jsonData))
+              .toList()));
+    }
+  }
+
 }

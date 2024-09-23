@@ -70,7 +70,7 @@ class _MyDrawerState extends State<MyDrawer> {
                               onTap: () {
                                 selectedRouteNotifier.value = "/dashboard_page";
                                 Navigator.of(context)
-                                    .pushReplacementNamed('/dashboard_page');
+                                    .pushNamed('/dashboard_page');
                                 widget.closeDrawer();
                               },
                             ),
@@ -99,7 +99,8 @@ class _MyDrawerState extends State<MyDrawer> {
                               route: '/estimate_listing',
                               isSelected: selectedRoute == "/estimate_listing",
                               onTap: () {
-                                selectedRouteNotifier.value = "/estimate_listing";
+                                selectedRouteNotifier.value =
+                                    "/estimate_listing";
                                 Navigator.of(context)
                                     .pushReplacementNamed('/estimate_listing');
                               },
@@ -124,36 +125,55 @@ class _MyDrawerState extends State<MyDrawer> {
                             DrawerItem(
                                 imageIcon: '',
                                 title: 'Staff',
-                                route: 'dashboard_page',
-                                isSelected: selectedRoute == "/invoice",
-                                onTap: widget.closeDrawer),
+                                route: '/staff_page',
+                                isSelected: selectedRoute == "/staff_page",
+                                onTap: () {
+                                  selectedRouteNotifier.value = "/staff_page";
+                                  Navigator.of(context)
+                                      .pushNamed('/staff_page');
+                                }),
                             SizedBox(
                               height: 3,
                             ),
                             DrawerItem(
                                 imageIcon: '',
                                 title: 'Customers',
-                                route: '/job_sheet_listing',
-                                isSelected: selectedRoute == "/invoice",
-                                onTap: widget.closeDrawer),
+                                route: '/customer_page',
+                                isSelected: selectedRoute == "/customer_page",
+                                onTap: () {
+                                  selectedRouteNotifier.value =
+                                      ('/customer_page');
+                                  Navigator.of(context)
+                                      .pushNamed('/customer_page');
+                                }),
                             SizedBox(
                               height: 3,
                             ),
                             DrawerItem(
                                 imageIcon: '',
                                 title: 'Spare parts',
-                                route: '/estimate',
-                                isSelected: selectedRoute == "/invoice",
-                                onTap: widget.closeDrawer),
+                                route: '/spare_parts_page',
+                                isSelected:
+                                    selectedRoute == "/spare_parts_page",
+                                onTap: () {
+                                  selectedRouteNotifier.value =
+                                      "/spare_parts_page";
+                                  Navigator.of(context)
+                                      .pushNamed('/spare_parts_page');
+                                }),
                             SizedBox(
                               height: 3,
                             ),
                             DrawerItem(
                                 imageIcon: '',
                                 title: 'Stocks',
-                                route: '/estimate',
-                                isSelected: selectedRoute == "/invoice",
-                                onTap: widget.closeDrawer),
+                                route: '/stock_page',
+                                isSelected: selectedRoute == "/stock_page",
+                                onTap: () {
+                                  selectedRouteNotifier.value = '/stock_page';
+                                  Navigator.of(context)
+                                      .pushNamed('/stock_page');
+                                }),
                             SizedBox(
                               height: 3,
                             ),
@@ -229,7 +249,6 @@ class DrawerItem extends StatelessWidget {
   final String route;
   final bool isSelected;
   final VoidCallback onTap;
-  
 
   const DrawerItem({
     // required this.image,
@@ -254,7 +273,7 @@ class DrawerItem extends StatelessWidget {
       ),
       selected: isSelected,
       selectedTileColor: backgroundColor,
-      
+
       //selectedColor: Colors.grey[200],
       leading: Text(
         imageIcon,
@@ -277,38 +296,32 @@ class DrawerItem extends StatelessWidget {
             fontFamily: 'meck'),
       ),
       onTap: () {
-    onTap();
-    switchDrawerItem(0,context);
+        onTap();
+        switchDrawerItem(0, context);
         Navigator.pushNamed(context, route);
       },
     );
   }
 }
 
+switchDrawerItem(int value, BuildContext context) async {
+  int ctx = 0;
+  switch (value) {
+    case 0:
+      if (ctx != 0) {
+        Navigator.pushNamed(context, '/dashboard_page');
+      }
+      break;
 
-switchDrawerItem(int value,BuildContext context)async
-{
-  int ctx =0;
-switch(value) 
-{
-  case 0:
-  if(ctx  != 0)
-  {
-     Navigator.pushNamed(context, '/dashboard_page');
-  }
-  break;
+    case 1:
+      if (ctx != 1) {
+        Navigator.pushNamed(context, '/job_sheet_listing');
+      }
+      break;
 
-  case 1 :
-  if(ctx != 1)
-  {
-     Navigator.pushNamed(context, '/job_sheet_listing');
+    case 2:
+      if (ctx != 2) {
+        Navigator.pushNamed(context, '/estimate_listing');
+      }
   }
-  break;
-
-  case 2 : 
-  if(ctx  != 2)
-  {
-     Navigator.pushNamed(context, '/estimate_listing');
-  }
-}
 }

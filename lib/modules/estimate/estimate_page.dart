@@ -72,6 +72,7 @@ class _EstimatePageState extends State<EstimatePage>
   TextEditingController _estimateDateController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
   String? estimateTotalValue;
+   List<Map<String, TextEditingController>> sparePartsListNewControllers = [];
 
   assignValue(JobSheetDetailsState state) {
     _fullNameController.text = state.estimateModel!.fullName.toString();
@@ -81,19 +82,24 @@ class _EstimatePageState extends State<EstimatePage>
 
   void addNewRow() {
     setState(() {
-      sparePartsListNew.add({
-        'product_id': '',
-        'product_name': '',
-        'product_qty': '',
-        'product_unit': '',
-        'product_price': '',
+       sparePartsListNew.add({
+        'product_id': TextEditingController(),
+        'product_name': TextEditingController(),
+        'product_qty': TextEditingController(),
+        'product_unit': TextEditingController(),
+        'product_price': TextEditingController(),
       });
     });
   }
 
-  void removeRow(int index) {
+  // Function to remove a row from sparePartsList or sparePartsListNew
+  void removeRow(int index, bool isNewRow) {
     setState(() {
-      sparePartsListNew.removeAt(index);
+      if (isNewRow) {
+        sparePartsListNew.removeAt(index);
+      } else {
+        sparePartsList.removeAt(index);
+      }
     });
   }
 
@@ -1099,6 +1105,9 @@ class _EstimatePageState extends State<EstimatePage>
                                                                 sparePartsListNew
                                                                     .isEmpty) {
                                                               addNewRow();
+                                                            } else {
+                                                              removeRow(i,
+                                                                  false); // Delete from sparePartsList
                                                             }
                                                           },
                                                           child: Icon(
@@ -1181,7 +1190,8 @@ class _EstimatePageState extends State<EstimatePage>
                                                                     1) {
                                                               addNewRow();
                                                             } else {
-                                                              removeRow(i);
+                                                              removeRow(i,
+                                                                  true); // Delete from sparePartsListNew
                                                             }
                                                           },
                                                           child: Icon(
