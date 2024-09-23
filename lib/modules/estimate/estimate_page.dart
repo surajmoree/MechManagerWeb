@@ -171,9 +171,7 @@ class _EstimatePageState extends State<EstimatePage>
       vsync: this,
       duration: const Duration(milliseconds: 250),
     );
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _animationController.forward();
-    });
+    _animationController.forward();
   }
 
   @override

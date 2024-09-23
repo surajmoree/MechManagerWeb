@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../base_layout.dart';
-
+import '../../config/colors.dart';
 
 class InvoicePage extends StatefulWidget {
   @override
@@ -12,8 +12,10 @@ class InvoicePage extends StatefulWidget {
 class _InvoicePageState extends State<InvoicePage>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
+  final _formKey = GlobalKey<FormState>();
   bool _isDrawerOpen = true;
-  final ValueNotifier<String> activeRouteNotifier = ValueNotifier<String>('/job_sheet_listing');
+  final ValueNotifier<String> activeRouteNotifier =
+      ValueNotifier<String>('/invoice');
 
   @override
   void initState() {
@@ -46,15 +48,49 @@ class _InvoicePageState extends State<InvoicePage>
 
   Widget build(BuildContext context) {
     return BaseLayout(
-      activeRouteNotifier: activeRouteNotifier,
-    //  activeRouteNotifier: activeRouteNotifier,
-      title: 'MechManager Admin',
-      closeDrawer: _toggleDrawer,
-      isDrawerOpen: _isDrawerOpen,
-      body: Center(
-        child: Text('Invoice page'),
-      ),
-    );
+        activeRouteNotifier: activeRouteNotifier,
+        //  activeRouteNotifier: activeRouteNotifier,
+        title: 'MechManager Admin',
+        closeDrawer: _toggleDrawer,
+        isDrawerOpen: _isDrawerOpen,
+        showFloatingActionButton: true,
+        body: Form(
+            key: _formKey,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: SingleChildScrollView(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: Text(
+                          'Create Invoice',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: textColor,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      Card(
+                        shadowColor: whiteColor,
+                        color: whiteColor,
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                            // borderRadius: BorderRadius.circular(5),
+                            side: BorderSide(color: Colors.grey.shade300)),
+                        child: const Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [],
+                        ),
+                      ),
+                    ]),
+              ),
+            )));
   }
 }
-

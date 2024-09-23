@@ -357,9 +357,7 @@ class _DashboardPageState extends State<DashboardPage>
       vsync: this,
       duration: const Duration(milliseconds: 250),
     );
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _animationController.forward();
-    });
+    _animationController.forward();
   }
 
   @override
@@ -543,45 +541,29 @@ class _DashboardPageState extends State<DashboardPage>
                                                 ),
                                               );
                                             } else if (index == 2) {
-                                              return GestureDetector(
-                                                onTap: () {
-                                                  //InvoiceListening
-                                                   context.read<JobSheetBloc>().add(
-                                                      const FetchInvoiceList(
-                                                          status: jobSheetStatus
-                                                              .success));
-                                                  Navigator.pushNamed(context,
-                                                      '/invoice');
-                                                },
-                                                child: ResponsiveCard(
-                                                  child: OverviewCard(
-                                                    title: 'Total Invoices',
-                                                    count: state.dashboardModel!
-                                                        .totalInvoice
-                                                        .toString(),
-                                                    //  icon: Icons.list_alt,
-                                                    container: Container(
-                                                      height: 44,
-                                                      width: 44,
-                                                      decoration: BoxDecoration(
-                                                        color: invoicecardColor,
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                8),
-                                                      ),
-                                                      child: Center(
-                                                          child: Text(
-                                                        '',
-                                                        style: TextStyle(
-                                                            fontSize: 25,
-                                                            color:
-                                                                invoiceIconColor),
-                                                      )),
+                                              return ResponsiveCard(
+                                                child: OverviewCard(
+                                                  title: 'Total Invoices',
+                                                  count: state.dashboardModel!
+                                                      .totalInvoice
+                                                      .toString(),
+                                                  //  icon: Icons.list_alt,
+                                                  container: Container(
+                                                    height: 44,
+                                                    width: 44,
+                                                    decoration: BoxDecoration(
+                                                      color: invoicecardColor,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
                                                     ),
-                                                    backgroundColor: Colors.blue,
-                                                    iconColor:
-                                                        Colors.blue.shade800,
+                                                    // backgroundColor: Colors.blue,
+                                                    // iconColor:
+                                                    //     Colors.blue.shade800,
                                                   ),
+                                                  backgroundColor: Colors.blue,
+                                                  iconColor:
+                                                      Colors.blue.shade800,
                                                 ),
                                               );
                                             } else if (index == 3) {
