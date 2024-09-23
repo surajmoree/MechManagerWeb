@@ -91,4 +91,26 @@ class JobSheetRepository extends Repository
     return jobSheetApi.updateVehicle(jsonData, id);
   }
 
+    // search spare part
+  Future<dynamic> searchSparePart(jsonData) async {
+    return jobSheetApi.searchSparePart(jsonData);
+  }
+
+    // search product
+  Future<dynamic> searchProduct(jsonData) async {
+    return jobSheetApi.searchProduct(jsonData);
+  }
+
+
+ ////fetch invoice list/////
+  Future<dynamic> getInvoice(jsonData) async {
+    return jobSheetApi.getInvoice(jsonData);
+  }
+
+
+  // delete inoice
+  Future<dynamic> deleteInvoice(jsonData) {
+    return jobSheetApi.deleteInvoice(jsonData);
+  }
+
 }

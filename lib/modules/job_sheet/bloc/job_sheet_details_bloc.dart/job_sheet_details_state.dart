@@ -1,7 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:mech_manager/models/estimate_model.dart';
 import 'package:mech_manager/models/job_card_details_model.dart';
+import 'package:mech_manager/models/product_model.dart';
 import 'package:mech_manager/models/slider_image_model.dart';
+import 'package:mech_manager/models/spare_part_model.dart';
 
 enum JobSheetDetailsStatus {
   initial,
@@ -28,12 +30,17 @@ class JobSheetDetailsState extends Equatable {
   JobSheetDetailModel? jobSheetDetails;
   ImageSliderModel? imageSliderModel;
   EstimateModel? estimateModel;
+  List<SparePartModel>? sparePartList;
+  List<ProductModel>? productList;
+ 
 
   JobSheetDetailsState({
     this.status = JobSheetDetailsStatus.initial,
     this.jobSheetDetails = JobSheetDetailModel.empty,
     this.imageSliderModel = ImageSliderModel.empty,
      this.estimateModel = EstimateModel.empty,
+     this.sparePartList = const [],
+      this.productList = const [],
   
   });
 
@@ -43,6 +50,8 @@ class JobSheetDetailsState extends Equatable {
         jobSheetDetails!,
         imageSliderModel!,
         estimateModel!,
+        sparePartList!,
+         productList!,
         
       ];
 
@@ -51,6 +60,8 @@ class JobSheetDetailsState extends Equatable {
     JobSheetDetailModel? jobSheetDetails,
     ImageSliderModel? imageSliderModel,
     EstimateModel? estimateModel,
+    List<SparePartModel>? sparePartList,
+     List<ProductModel>? productList,
     
   }) {
     return JobSheetDetailsState(
@@ -58,6 +69,8 @@ class JobSheetDetailsState extends Equatable {
         jobSheetDetails: jobSheetDetails ?? this.jobSheetDetails,
         imageSliderModel: imageSliderModel?? this.imageSliderModel,
         estimateModel: estimateModel ?? this.estimateModel,
+        sparePartList: sparePartList ?? this.sparePartList,
+        productList: productList ?? this.productList,
     );
   }
 }

@@ -218,4 +218,50 @@ Future<dynamic> searchCustomerDetails(jsonData)async
   }
 
 
+   Future<dynamic> searchSparePart(jsonData) async {
+    try {
+      final apiResponse =
+          await requestGET(path: '/get_spare_parts', parameters: jsonData);
+      return apiResponse['spare_parts'];
+    } catch (er, _) {
+      print(er);
+    }
+  }
+
+   Future<dynamic> searchProduct(jsonData) async {
+    try {
+      final apiResponse =
+          await requestGET(path: '/get_products', parameters: jsonData);
+      return apiResponse['products'];
+    } catch (er, _) {
+      print(er);
+    }
+  }
+
+  Future<dynamic> getInvoice(Map<String, String> jsonData) async {
+    try {
+      final invoiceList =
+          await requestGET(path: '/get-invoices', parameters: jsonData)
+              .timeout(const Duration(seconds: 30));
+      return invoiceList['Invoice'];
+    } catch (e, _) {
+      print(e);
+      return null;
+    }
+  }
+
+
+
+  ///////delete invoice///
+
+  Future<dynamic> deleteInvoice(jsonData) async {
+    try {
+      final result = await requestDELETE(
+          path: '/delete_invoice/${jsonData['id']}', parameters: jsonData);
+      return result;
+    } catch (er) {
+      print("Error is---------$er");
+    }
+  }
+
 }

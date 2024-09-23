@@ -90,3 +90,22 @@ class DeleteEstimate extends JobSheetEvent {
 class ClearListingData extends JobSheetEvent {
   const ClearListingData();
 }
+
+
+class FetchInvoiceList extends JobSheetEvent {
+  final int? timestamp;
+  final String? direction;
+  final String? searchKeyword;
+  final jobSheetStatus? status;
+  const FetchInvoiceList({
+    this.timestamp,
+    this.direction,
+    this.searchKeyword,
+    required this.status,
+  });
+}
+
+class DeleteInvoice extends JobSheetEvent {
+  final String id;
+  const DeleteInvoice({required this.id});
+}

@@ -23,7 +23,7 @@ class EstimateListRow extends StatefulWidget {
 
 class _EstimateListRowState extends State<EstimateListRow> {
   final _formKey = GlobalKey<FormState>();
-  
+
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     return GestureDetector(

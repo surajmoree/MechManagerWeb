@@ -125,7 +125,7 @@ class _MyDrawerState extends State<MyDrawer> {
                                 imageIcon: '',
                                 title: 'Staff',
                                 route: 'dashboard_page',
-                                isSelected: selectedRoute == "/invoice",
+                                isSelected: selectedRoute == "/invoicee",
                                 onTap: widget.closeDrawer),
                             SizedBox(
                               height: 3,
@@ -134,7 +134,7 @@ class _MyDrawerState extends State<MyDrawer> {
                                 imageIcon: '',
                                 title: 'Customers',
                                 route: '/job_sheet_listing',
-                                isSelected: selectedRoute == "/invoice",
+                                isSelected: selectedRoute == "/invoicee",
                                 onTap: widget.closeDrawer),
                             SizedBox(
                               height: 3,
@@ -143,7 +143,7 @@ class _MyDrawerState extends State<MyDrawer> {
                                 imageIcon: '',
                                 title: 'Spare parts',
                                 route: '/estimate',
-                                isSelected: selectedRoute == "/invoice",
+                                isSelected: selectedRoute == "/invoicee",
                                 onTap: widget.closeDrawer),
                             SizedBox(
                               height: 3,
@@ -152,7 +152,7 @@ class _MyDrawerState extends State<MyDrawer> {
                                 imageIcon: '',
                                 title: 'Stocks',
                                 route: '/estimate',
-                                isSelected: selectedRoute == "/invoice",
+                                isSelected: selectedRoute == "/invoicee",
                                 onTap: widget.closeDrawer),
                             SizedBox(
                               height: 3,
@@ -161,7 +161,7 @@ class _MyDrawerState extends State<MyDrawer> {
                                 imageIcon: '',
                                 title: 'Mechanics',
                                 route: '/job_sheet_listing',
-                                isSelected: selectedRoute == "/invoice",
+                                isSelected: selectedRoute == "/invoicee",
                                 onTap: widget.closeDrawer),
                             SizedBox(
                               height: 3,
@@ -170,7 +170,7 @@ class _MyDrawerState extends State<MyDrawer> {
                                 imageIcon: '',
                                 title: 'Laboures',
                                 route: '/estimate',
-                                isSelected: selectedRoute == "/invoice",
+                                isSelected: selectedRoute == "/invoicee",
                                 onTap: widget.closeDrawer),
                             SizedBox(
                               height: 3,
@@ -179,7 +179,7 @@ class _MyDrawerState extends State<MyDrawer> {
                                 imageIcon: '',
                                 title: 'Settings',
                                 route: '/estimate',
-                                isSelected: selectedRoute == "/invoice",
+                                isSelected: selectedRoute == "/invoicee",
                                 onTap: widget.closeDrawer),
                             SizedBox(
                               height: 3,
