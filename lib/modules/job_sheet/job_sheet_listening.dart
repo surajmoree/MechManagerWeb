@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:mech_manager/components/skeletone/center_loader.dart';
 import 'package:mech_manager/components/skeletone/job_sheet_row.dart';
 import 'package:mech_manager/config.dart' as appInstance;
+import 'package:mech_manager/config.dart';
 import 'package:mech_manager/config/data.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_bloc.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_event.dart';
@@ -36,9 +37,8 @@ class _JobSheetListingState extends State<JobSheetListing>
       vsync: this,
       duration: const Duration(milliseconds: 250),
     );
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _animationController.forward();
-    });
+
+    _animationController.forward();
   }
 
   void _fetchInitialJobSheets() {
@@ -83,7 +83,6 @@ class _JobSheetListingState extends State<JobSheetListing>
     final screenHeight = MediaQuery.of(context).size.height;
 
     return BaseLayout(
-      
         activeRouteNotifier: activeRouteNotifier,
         title: 'MechManager Admin',
         closeDrawer: _toggleDrawer,
@@ -91,9 +90,12 @@ class _JobSheetListingState extends State<JobSheetListing>
         routeWidgets: [
           GestureDetector(
             onTap: () {
-              activeRouteNotifier.value = "/dashboard_page";
-              //  Navigator.pushNamed(context, '/dashboard_page');
-              Navigator.of(context).pushReplacementNamed('/dashboard_page');
+              setState(() {
+                activeRouteNotifier.value = "/dashboard_page";
+                selectedRouteNotifier.value = '/dashboard_page';
+                //  Navigator.pushNamed(context, '/dashboard_page');
+                Navigator.of(context).pushReplacementNamed('/dashboard_page');
+              });
             },
             child: const Text(
               "Home",
@@ -167,8 +169,6 @@ class _JobSheetListingState extends State<JobSheetListing>
                       ),
                     ),
                   ),
-
-                 
                   isMobile
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -400,7 +400,6 @@ class _JobSheetListingState extends State<JobSheetListing>
                             ),
                           ),
                         ),
-
                   BlocConsumer<JobSheetBloc, JobSheetState>(
                     listener: (context, state) {},
                     builder: (context, state) {

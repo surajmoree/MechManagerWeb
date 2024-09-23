@@ -357,9 +357,7 @@ class _DashboardPageState extends State<DashboardPage>
       vsync: this,
       duration: const Duration(milliseconds: 250),
     );
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _animationController.forward();
-    });
+    _animationController.forward();
   }
 
   @override
@@ -384,7 +382,7 @@ class _DashboardPageState extends State<DashboardPage>
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return BaseLayout(
-      ctx: 2,
+        ctx: 2,
         activeRouteNotifier: activeRouteNotifier,
         title: 'MechManager Admin',
         closeDrawer: _toggleDrawer,
@@ -425,7 +423,8 @@ class _DashboardPageState extends State<DashboardPage>
                                   color: whiteColor,
                                   elevation: 0,
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Padding(
                                           padding: const EdgeInsets.only(
@@ -458,24 +457,28 @@ class _DashboardPageState extends State<DashboardPage>
                                             if (index == 0) {
                                               return GestureDetector(
                                                 onTap: () {
-                                                  context.read<JobSheetBloc>().add(
-                                            const FetchJobSheets(
-                                                status: jobSheetStatus.success));
-                                        Navigator.pushNamed(
-                                            context, '/job_sheet_listing');
+                                                  context
+                                                      .read<JobSheetBloc>()
+                                                      .add(const FetchJobSheets(
+                                                          status: jobSheetStatus
+                                                              .success));
+                                                  Navigator.pushNamed(context,
+                                                      '/job_sheet_listing');
                                                 },
                                                 child: ResponsiveCard(
                                                   child: OverviewCard(
                                                     title: 'Total Job Card',
-                                                    count: state.dashboardModel!.totalRepair.toString(),
+                                                    count: state.dashboardModel!
+                                                        .totalRepair
+                                                        .toString(),
                                                     container: Container(
                                                       height: 44,
                                                       width: 44,
                                                       decoration: BoxDecoration(
                                                         color: jobcardColor,
                                                         borderRadius:
-                                                            BorderRadius.circular(
-                                                                8),
+                                                            BorderRadius
+                                                                .circular(8),
                                                       ),
                                                       child: Center(
                                                           child: Text(
@@ -487,8 +490,10 @@ class _DashboardPageState extends State<DashboardPage>
                                                       )),
                                                     ),
                                                     // icon: Icons.work_outline,
-                                                    backgroundColor: Colors.green,
-                                                    iconColor: Colors.greenAccent,
+                                                    backgroundColor:
+                                                        Colors.green,
+                                                    iconColor:
+                                                        Colors.greenAccent,
                                                   ),
                                                 ),
                                               );
@@ -496,25 +501,28 @@ class _DashboardPageState extends State<DashboardPage>
                                               return GestureDetector(
                                                 onTap: () {
                                                   context.read<JobSheetBloc>().add(
-                                          const FetchEstimateList(
-                                              status: jobSheetStatus.success));
-                                      Navigator.pushNamed(
-                                          context, '/estimate_listing');
+                                                      const FetchEstimateList(
+                                                          status: jobSheetStatus
+                                                              .success));
+                                                  Navigator.pushNamed(context,
+                                                      '/estimate_listing');
                                                 },
                                                 child: ResponsiveCard(
                                                   child: OverviewCard(
                                                     title: 'Total Estimate',
-                                                    count:
-                                                       state.dashboardModel!.totalEstimate.toString(),
+                                                    count: state.dashboardModel!
+                                                        .totalEstimate
+                                                        .toString(),
                                                     //  icon: Icons.list_alt,
                                                     container: Container(
                                                       height: 44,
                                                       width: 44,
                                                       decoration: BoxDecoration(
-                                                        color: estimatecardColor,
+                                                        color:
+                                                            estimatecardColor,
                                                         borderRadius:
-                                                            BorderRadius.circular(
-                                                                8),
+                                                            BorderRadius
+                                                                .circular(8),
                                                       ),
                                                       child: Center(
                                                           child: Text(
@@ -525,8 +533,10 @@ class _DashboardPageState extends State<DashboardPage>
                                                                 estimateIconColor),
                                                       )),
                                                     ),
-                                                    backgroundColor: Colors.blue,
-                                                    iconColor: Colors.blue.shade800,
+                                                    backgroundColor:
+                                                        Colors.blue,
+                                                    iconColor:
+                                                        Colors.blue.shade800,
                                                   ),
                                                 ),
                                               );
@@ -534,8 +544,9 @@ class _DashboardPageState extends State<DashboardPage>
                                               return ResponsiveCard(
                                                 child: OverviewCard(
                                                   title: 'Total Invoices',
-                                                  count:
-                                                      state.dashboardModel!.totalInvoice.toString(),
+                                                  count: state.dashboardModel!
+                                                      .totalInvoice
+                                                      .toString(),
                                                   //  icon: Icons.list_alt,
                                                   container: Container(
                                                     height: 44,
@@ -556,15 +567,17 @@ class _DashboardPageState extends State<DashboardPage>
                                                     )),
                                                   ),
                                                   backgroundColor: Colors.blue,
-                                                  iconColor: Colors.blue.shade800,
+                                                  iconColor:
+                                                      Colors.blue.shade800,
                                                 ),
                                               );
                                             } else if (index == 3) {
                                               return ResponsiveCard(
                                                 child: OverviewCard(
                                                   title: 'Total Staff',
-                                                  count:
-                                                      state.dashboardModel!.userCount.toString(),
+                                                  count: state
+                                                      .dashboardModel!.userCount
+                                                      .toString(),
                                                   //  icon: Icons.list_alt,
                                                   container: Container(
                                                     height: 44,
@@ -580,19 +593,22 @@ class _DashboardPageState extends State<DashboardPage>
                                                       '',
                                                       style: TextStyle(
                                                           fontSize: 25,
-                                                          color: staffIconColor),
+                                                          color:
+                                                              staffIconColor),
                                                     )),
                                                   ),
                                                   backgroundColor: Colors.blue,
-                                                  iconColor: Colors.blue.shade800,
+                                                  iconColor:
+                                                      Colors.blue.shade800,
                                                 ),
                                               );
                                             } else if (index == 4) {
                                               return ResponsiveCard(
                                                 child: OverviewCard(
                                                   title: 'Total Customers',
-                                                  count:
-                                                      state.dashboardModel!.totalCustomer.toString(),
+                                                  count: state.dashboardModel!
+                                                      .totalCustomer
+                                                      .toString(),
                                                   //  icon: Icons.list_alt,
                                                   container: Container(
                                                     height: 44,
@@ -613,15 +629,17 @@ class _DashboardPageState extends State<DashboardPage>
                                                     )),
                                                   ),
                                                   backgroundColor: Colors.blue,
-                                                  iconColor: Colors.blue.shade800,
+                                                  iconColor:
+                                                      Colors.blue.shade800,
                                                 ),
                                               );
                                             } else if (index == 5) {
                                               return ResponsiveCard(
                                                 child: OverviewCard(
                                                   title: 'Total Stocks',
-                                                  count:
-                                                      state.dashboardModel!.totalProduct.toString(),
+                                                  count: state.dashboardModel!
+                                                      .totalProduct
+                                                      .toString(),
                                                   // icon: Icons.list_alt,
                                                   container: Container(
                                                     height: 44,
@@ -637,19 +655,22 @@ class _DashboardPageState extends State<DashboardPage>
                                                       '',
                                                       style: TextStyle(
                                                           fontSize: 25,
-                                                          color: stockIconColor),
+                                                          color:
+                                                              stockIconColor),
                                                     )),
                                                   ),
                                                   backgroundColor: Colors.blue,
-                                                  iconColor: Colors.blue.shade800,
+                                                  iconColor:
+                                                      Colors.blue.shade800,
                                                 ),
                                               );
                                             } else if (index == 6) {
                                               return ResponsiveCard(
                                                 child: OverviewCard(
                                                   title: 'Total Mechanics',
-                                                  count:
-                                                     state.dashboardModel!.totalMechanic.toString(),
+                                                  count: state.dashboardModel!
+                                                      .totalMechanic
+                                                      .toString(),
                                                   //  icon: Icons.list_alt,
                                                   container: Container(
                                                     height: 44,
@@ -670,15 +691,17 @@ class _DashboardPageState extends State<DashboardPage>
                                                     )),
                                                   ),
                                                   backgroundColor: Colors.blue,
-                                                  iconColor: Colors.blue.shade800,
+                                                  iconColor:
+                                                      Colors.blue.shade800,
                                                 ),
                                               );
                                             } else if (index == 7) {
                                               return ResponsiveCard(
                                                 child: OverviewCard(
                                                   title: 'Total Labours',
-                                                  count:
-                                                      state.dashboardModel!.totalLabour.toString(),
+                                                  count: state.dashboardModel!
+                                                      .totalLabour
+                                                      .toString(),
                                                   // icon: Icons.list_alt,
                                                   container: Container(
                                                     height: 44,
@@ -699,7 +722,8 @@ class _DashboardPageState extends State<DashboardPage>
                                                     )),
                                                   ),
                                                   backgroundColor: Colors.blue,
-                                                  iconColor: Colors.blue.shade800,
+                                                  iconColor:
+                                                      Colors.blue.shade800,
                                                 ),
                                               );
                                             } else {

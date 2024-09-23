@@ -72,6 +72,7 @@ class _EstimatePageState extends State<EstimatePage>
   TextEditingController _estimateDateController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
   String? estimateTotalValue;
+  List<Map<String, TextEditingController>> sparePartsListNewControllers = [];
 
   assignValue(JobSheetDetailsState state) {
     _fullNameController.text = state.estimateModel!.fullName.toString();
@@ -81,19 +82,43 @@ class _EstimatePageState extends State<EstimatePage>
 
   void addNewRow() {
     setState(() {
-      sparePartsListNew.add({
-        'product_id': '',
-        'product_name': '',
-        'product_qty': '',
-        'product_unit': '',
-        'product_price': '',
+      sparePartsListNewControllers.add({
+        'product_id': TextEditingController(),
+        'product_name': TextEditingController(),
+        'product_qty': TextEditingController(),
+        'product_unit': TextEditingController(),
+        'product_price': TextEditingController(),
       });
     });
   }
 
-  void removeRow(int index) {
+  // Function to remove a row from sparePartsList or sparePartsListNew
+  void removeRow(int index, bool isNewRow) {
     setState(() {
-      sparePartsListNew.removeAt(index);
+      if (isNewRow) {
+        sparePartsListNewControllers.removeAt(index);
+      } else {
+        sparePartsList.removeAt(index);
+      }
+    });
+  }
+
+  void saveNewRow(int index) {
+    setState(() {
+      final newRow = {
+        'product_id': sparePartsListNewControllers[index]['product_id']!.text,
+        'product_name':
+            sparePartsListNewControllers[index]['product_name']!.text,
+        'product_qty': sparePartsListNewControllers[index]['product_qty']!.text,
+        'product_unit':
+            sparePartsListNewControllers[index]['product_unit']!.text,
+        'product_price':
+            sparePartsListNewControllers[index]['product_price']!.text,
+      };
+
+      sparePartsList.add(newRow); // Add to the existing list
+      sparePartsListNewControllers.removeAt(index); // Remove from new row list
+      addNewRow();
     });
   }
 
@@ -138,40 +163,6 @@ class _EstimatePageState extends State<EstimatePage>
       });
     }
   }
-/*
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: _selectedDate,
-      firstDate: DateTime(2015, 8),
-      lastDate: DateTime(2101),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
-              primary: primaryColor,
-              onPrimary: blackColor,
-              onSurface: blackColor,
-            ),
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                foregroundColor: blackColor,
-              ),
-            ),
-          ),
-          child: child!,
-        );
-      },
-    );
-    if (picked != null && picked != _selectedDate) {
-      setState(() {
-        _selectedDate = picked;
-        _estimateDateController.text =
-            DateFormat('yyyy-MM-dd').format(_selectedDate);
-      });
-    }
-  }
-  */
 
   @override
   void initState() {
@@ -180,9 +171,7 @@ class _EstimatePageState extends State<EstimatePage>
       vsync: this,
       duration: const Duration(milliseconds: 250),
     );
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _animationController.forward();
-    });
+    _animationController.forward();
   }
 
   @override
@@ -502,38 +491,6 @@ class _EstimatePageState extends State<EstimatePage>
                                                   color: hintTextColor,
                                                 ),
                                               ),
-                                              /*
-                                              GestureDetector(
-                                                onTap: () {
-                                                  print('tabbbbb');
-                                                  PopupMenuButton(itemBuilder: (context) =><PopupMenuEntry>[
-                                                            const PopupMenuItem(
-                                                              value: 'edit',
-                                                              child:
-                                                                  Text('Edit'),
-                                                            ),
-                                                            const PopupMenuItem(
-                                                              value: 'delete',
-                                                              child: Text(
-                                                                  'Delete'),
-                                                            ),
-                                                          ],);
-                                                },
-                                                child: Container(
-                                                    width: 30,
-                                                    height: 30,
-                                                    decoration: BoxDecoration(
-                                                        color: textfieldColor,
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    3))),
-                                                    child: Icon(
-                                                      menuIcon,
-                                                      size: 14,
-                                                    )),
-                                              )
-                                              */
                                             ],
                                           ),
                                           const Divider(
@@ -936,56 +893,9 @@ class _EstimatePageState extends State<EstimatePage>
                                                         fillColor:
                                                             lightGreyColor,
                                                       ),
-
-                                                      /*
-                                                    
-                                                      decoration: InputDecoration(
-                                                        labelText:
-                                                            'Estimate Date',
-                                                        suffixIcon: IconButton(
-                                                          icon: const Icon(Icons
-                                                              .calendar_month_sharp),
-                                                          onPressed: () =>
-                                                              _selectDate(
-                                                                  context),
-                                                        ),
-                                                      ),
-                                                      */
-                                                      // readOnly: true,
                                                       onTap: () =>
                                                           _selectDate(context),
                                                     ),
-
-                                                    /*
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        //   _selectDate(context);
-                                                      },
-                                                      child: Container(
-                                                        padding:
-                                                            EdgeInsets.symmetric(
-                                                                horizontal: 12,
-                                                                vertical: 8),
-                                                        decoration: BoxDecoration(
-                                                          color: Colors.grey[200],
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                  8),
-                                                        ),
-                                                        child: Row(
-                                                          children: [
-                                                            // Text('05-Sep-2024'),
-                                                            // Spacer(),
-                                                            // Icon(
-                                                            //     Icons
-                                                            //         .calendar_today,
-                                                            //     size: 16),
-                                    
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    */
                                                   ],
                                                 ),
                                               ),
@@ -1052,7 +962,7 @@ class _EstimatePageState extends State<EstimatePage>
                                                     headerCell('Action'),
                                                   ],
                                                 ),
-                                                // Data Rows for existing parts
+
                                                 for (int i = 0;
                                                     i < sparePartsList.length;
                                                     i++)
@@ -1099,6 +1009,9 @@ class _EstimatePageState extends State<EstimatePage>
                                                                 sparePartsListNew
                                                                     .isEmpty) {
                                                               addNewRow();
+                                                            } else {
+                                                              removeRow(i,
+                                                                  false); // Delete from sparePartsList
                                                             }
                                                           },
                                                           child: Icon(
@@ -1116,7 +1029,9 @@ class _EstimatePageState extends State<EstimatePage>
                                                   ),
                                               ],
                                             ),
-                                          if (sparePartsListNew.isNotEmpty)
+                                          // if (sparePartsListNew.isNotEmpty)
+                                          if (sparePartsListNewControllers
+                                              .isNotEmpty)
                                             Table(
                                               border: TableBorder.all(
                                                   color: Colors.grey),
@@ -1133,60 +1048,61 @@ class _EstimatePageState extends State<EstimatePage>
                                                 // Data Rows for new parts
                                                 for (int i = 0;
                                                     i <
-                                                        sparePartsListNew
+                                                        sparePartsListNewControllers
                                                             .length;
                                                     i++)
                                                   TableRow(
                                                     children: [
-                                                      tableCell(
-                                                          sparePartsListNew[i]
-                                                                  ['product_id']
-                                                              .toString()),
-                                                      tableCell(
-                                                          sparePartsListNew[i][
-                                                                  'product_name']
-                                                              .toString()),
-                                                      tableCell(
-                                                          sparePartsListNew[i][
-                                                                  'product_qty']
-                                                              .toString()),
-                                                      tableCell(
-                                                          sparePartsListNew[i][
-                                                                  'product_unit']
-                                                              .toString()),
-                                                      tableCell(sparePartsListNew[
+                                                      tableCellInput(
+                                                          sparePartsListNewControllers[
                                                                   i]
-                                                              ['product_price']
-                                                          .toString()),
+                                                              ['product_id']!),
+                                                      tableCellInput(
+                                                          sparePartsListNewControllers[
+                                                                  i][
+                                                              'product_name']!),
+                                                      tableCellInput(
+                                                          sparePartsListNewControllers[
+                                                                  i]
+                                                              ['product_qty']!),
+                                                      tableCellInput(
+                                                          sparePartsListNewControllers[
+                                                                  i][
+                                                              'product_unit']!),
+                                                      tableCellInput(
+                                                          sparePartsListNewControllers[
+                                                                  i][
+                                                              'product_price']!),
                                                       tableCell(
-                                                        ((double.tryParse(sparePartsListNew[i]
+                                                        ((double.tryParse(sparePartsListNewControllers[i]
                                                                             [
-                                                                            'product_price']
-                                                                        .toString()) ??
+                                                                            'product_price']!
+                                                                        .text) ??
                                                                     0.0) *
-                                                                (double.tryParse(sparePartsListNew[i]
+                                                                (double.tryParse(sparePartsListNewControllers[i]
                                                                             [
-                                                                            'product_qty']
-                                                                        .toString()) ??
+                                                                            'product_qty']!
+                                                                        .text) ??
                                                                     0.0))
                                                             .toStringAsFixed(2),
                                                       ),
-                                                      // Action button (delete for previous rows, add for last row)
                                                       TableCell(
                                                         child: ElevatedButton(
                                                           onPressed: () {
                                                             if (i ==
-                                                                sparePartsListNew
+                                                                sparePartsListNewControllers
                                                                         .length -
                                                                     1) {
-                                                              addNewRow();
+                                                              saveNewRow(
+                                                                  i); // Save new row into sparePartsList
                                                             } else {
-                                                              removeRow(i);
+                                                              removeRow(i,
+                                                                  true); // Delete from sparePartsListNewControllers
                                                             }
                                                           },
                                                           child: Icon(
                                                             i ==
-                                                                    sparePartsListNew
+                                                                    sparePartsListNewControllers
                                                                             .length -
                                                                         1
                                                                 ? Icons.add
@@ -1228,6 +1144,18 @@ class _EstimatePageState extends State<EstimatePage>
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Text(text),
+    );
+  }
+
+  Widget tableCellInput(TextEditingController controller) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(),
+        ),
+      ),
     );
   }
 }

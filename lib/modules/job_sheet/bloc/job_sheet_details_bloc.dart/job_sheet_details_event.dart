@@ -87,3 +87,18 @@ class UpdateVehicle extends JobSheetDetailsEvent {
   final String id;
   const UpdateVehicle({this.formData, required this.id});
 }
+
+
+class SearchSparePart extends JobSheetDetailsEvent {
+  final String? searchKeyword;
+  const SearchSparePart({required this.searchKeyword});
+}
+
+class SearchProduct extends JobSheetDetailsEvent {
+  final String? searchKeyword;
+  const SearchProduct({required this.searchKeyword});
+}
+
+
+
+

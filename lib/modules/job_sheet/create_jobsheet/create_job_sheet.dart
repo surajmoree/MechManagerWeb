@@ -105,9 +105,7 @@ class _CreateJobSheetState extends State<CreateJobSheet>
       vsync: this,
       duration: const Duration(milliseconds: 250),
     );
-    WidgetsBinding.instance.addPostFrameCallback((_) {
       _animationController.forward();
-    });
   }
 
   @override
