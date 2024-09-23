@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:mech_manager/models/dashboard_model.dart';
 import 'package:mech_manager/models/estimate_listiening_model.dart';
+import 'package:mech_manager/models/invoice_listening_model.dart';
 import 'package:mech_manager/models/job_sheet.dart';
 
 enum jobSheetStatus {
@@ -23,6 +24,7 @@ class JobSheetState extends Equatable {
   List<JobSheetModel> jobSheetList;
   DashboardModel? dashboardModel;
   List<EstimateListingModel> estimateListing;
+  List<InvoiceListingModel> invoiceListing;
 
   int? lastTimestamp;
   int? currentEstimateId;
@@ -37,6 +39,7 @@ class JobSheetState extends Equatable {
     this.status = jobSheetStatus.initial,
     this.jobSheetList = const [],
     this.estimateListing = const [],
+    this.invoiceListing = const [],
     this.dashboardModel = DashboardModel.empty,
     this.lastTimestamp,
     this.page = 1,
@@ -54,6 +57,7 @@ class JobSheetState extends Equatable {
         status!,
         jobSheetList,
        dashboardModel!,
+       invoiceListing,
         page!,
         hasReachedMax!,
         loadShow!,
@@ -72,7 +76,7 @@ class JobSheetState extends Equatable {
       int? lastTimestamp,
       List<EstimateListingModel>? estimateListing,
       int? currentEstimateId,
-     
+      List<InvoiceListingModel>? invoiceListing,
       int? currentInvoiceId,
       int? page,
       bool? hasReachedMax,
@@ -84,7 +88,7 @@ class JobSheetState extends Equatable {
         dashboardModel: dashboardModel ?? this.dashboardModel,
         currentEstimateId: currentEstimateId ?? this.currentEstimateId,
         estimateListing: estimateListing ?? this.estimateListing,
-        
+        invoiceListing: invoiceListing ?? this.invoiceListing,
         lastTimestamp: lastTimestamp ?? this.lastTimestamp,
     
         currentInvoiceId: currentInvoiceId ?? this.currentInvoiceId,

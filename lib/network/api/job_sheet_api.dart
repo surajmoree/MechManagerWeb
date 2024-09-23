@@ -238,4 +238,30 @@ Future<dynamic> searchCustomerDetails(jsonData)async
     }
   }
 
+  Future<dynamic> getInvoice(Map<String, String> jsonData) async {
+    try {
+      final invoiceList =
+          await requestGET(path: '/get-invoices', parameters: jsonData)
+              .timeout(const Duration(seconds: 30));
+      return invoiceList['Invoice'];
+    } catch (e, _) {
+      print(e);
+      return null;
+    }
+  }
+
+
+
+  ///////delete invoice///
+
+  Future<dynamic> deleteInvoice(jsonData) async {
+    try {
+      final result = await requestDELETE(
+          path: '/delete_invoice/${jsonData['id']}', parameters: jsonData);
+      return result;
+    } catch (er) {
+      print("Error is---------$er");
+    }
+  }
+
 }

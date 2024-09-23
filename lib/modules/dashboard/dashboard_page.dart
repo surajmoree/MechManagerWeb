@@ -557,14 +557,9 @@ class _DashboardPageState extends State<DashboardPage>
                                                           BorderRadius.circular(
                                                               8),
                                                     ),
-                                                    child: Center(
-                                                        child: Text(
-                                                      '',
-                                                      style: TextStyle(
-                                                          fontSize: 25,
-                                                          color:
-                                                              invoiceIconColor),
-                                                    )),
+                                                    // backgroundColor: Colors.blue,
+                                                    // iconColor:
+                                                    //     Colors.blue.shade800,
                                                   ),
                                                   backgroundColor: Colors.blue,
                                                   iconColor:

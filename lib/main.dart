@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
                 ..add(const FetchDashboard(status: jobSheetStatus.initial))
                 ..add(const FetchJobSheets(status: jobSheetStatus.initial))
                 ..add(const FetchEstimateList(status: jobSheetStatus.initial))
-                // ..add(const FetchInvoiceList(status: jobSheetStatus.initial))
+                ..add(const FetchInvoiceList(status: jobSheetStatus.initial))
               //  ..add(const FetchDashboard(status: jobSheetStatus.initial))
               // ..add(const FetchServiceList(status: jobSheetStatus.initial)),
               ),

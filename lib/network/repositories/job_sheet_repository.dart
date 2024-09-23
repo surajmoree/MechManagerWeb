@@ -101,4 +101,16 @@ class JobSheetRepository extends Repository
     return jobSheetApi.searchProduct(jsonData);
   }
 
+
+ ////fetch invoice list/////
+  Future<dynamic> getInvoice(jsonData) async {
+    return jobSheetApi.getInvoice(jsonData);
+  }
+
+
+  // delete inoice
+  Future<dynamic> deleteInvoice(jsonData) {
+    return jobSheetApi.deleteInvoice(jsonData);
+  }
+
 }

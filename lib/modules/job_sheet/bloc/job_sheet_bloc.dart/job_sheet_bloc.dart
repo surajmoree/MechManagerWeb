@@ -9,6 +9,7 @@ import 'package:mech_manager/config.dart';
 import 'package:mech_manager/config/constants.dart';
 import 'package:mech_manager/models/dashboard_model.dart';
 import 'package:mech_manager/models/estimate_listiening_model.dart';
+import 'package:mech_manager/models/invoice_listening_model.dart';
 import 'package:mech_manager/models/job_sheet.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_event.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_state.dart';
@@ -22,6 +23,8 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
     on<DeleteJobSheet>(_onDeleteJobSheet);
     on<FetchDashboard>(_onFetchDashboard);
     on<DeleteEstimate>(_onDeleteEstimate);
+    on<FetchInvoiceList>(_onFetchInvoiceList);
+    on<DeleteInvoice>(_onDeleteInvoice);
   }
   final JobSheetRepository jobSheetRepository = JobSheetRepository();
 
@@ -292,6 +295,73 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
       emit(state.copyWith(
           status: jobSheetStatus.success,
           estimateListing: state.estimateListing));
+    }
+  }
+
+
+
+   _onFetchInvoiceList(
+      FetchInvoiceList event, Emitter<JobSheetState> emit) async {
+    if (state.hasReachedMax! && event.timestamp != null) {
+      return;
+    }
+    emit(
+      state.copyWith(
+          status: (event.status == jobSheetStatus.success)
+              ? jobSheetStatus.success
+              : jobSheetStatus.loading),
+    );
+    dynamic token = await storage.read(key: "token");
+
+    Map<String, String> jsonData = {
+      'token': token!.toString(),
+      'timestamp': event.timestamp.toString(),
+      'direction': event.direction ?? 'down',
+      'search': event.searchKeyword ?? '',
+    };
+
+    final result = await jobSheetRepository.getInvoice(jsonData);
+
+    if (result != null && result.isNotEmpty) {
+      List<InvoiceListingModel> invoiceList = result
+          .map<InvoiceListingModel>(
+              (jsonData) => InvoiceListingModel.fromJson(jsonData))
+          .toList();
+
+      final bool hasReachedMax = invoiceList.length < 10;
+
+      if (event.timestamp != null && event.timestamp.toString().isNotEmpty) {
+        invoiceList = List.from(state.invoiceListing)..addAll(invoiceList);
+      }
+      // Save the new invoice list to the Isar database
+      
+
+      return emit(state.copyWith(
+          status: jobSheetStatus.success,
+          invoiceListing: invoiceList,
+          lastTimestamp: invoiceList.last.timestamp,
+          hasReachedMax: hasReachedMax));
+    } else {
+      return emit(state.copyWith(
+        status: jobSheetStatus.failure,
+      ));
+    }
+  }
+
+
+  FutureOr<void> _onDeleteInvoice(
+      DeleteInvoice event, Emitter<JobSheetState> emit) async {
+    emit(state.copyWith(status: jobSheetStatus.updating));
+    dynamic token = await storage.read(key: "token");
+    Map<String, Object> jsonData = {
+      "token": token.toString(),
+      "id": event.id.toString()
+    };
+    final result = await jobSheetRepository.deleteInvoice(jsonData);
+    if (result['status'] == "Success") {
+      emit(state.copyWith(
+          status: jobSheetStatus.success,
+          invoiceListing: state.invoiceListing));
     }
   }
 

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mech_manager/config/colors.dart';
 import 'package:mech_manager/modules/Settings/settings_page.dart';
 import 'package:mech_manager/modules/customer/customer_page.dart';
 import 'package:mech_manager/modules/estimate/estimate_listening.dart';
-import 'package:mech_manager/modules/invoice/create_invoice.dart';
+import 'package:mech_manager/modules/invoice/invoice_listening.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_bloc.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_event.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_state.dart';
@@ -17,7 +16,6 @@ import 'package:mech_manager/modules/staff/staff_page.dart';
 import 'package:mech_manager/modules/stocks/stocks_page.dart';
 
 import '../modules/dashboard/dashboard_page.dart';
-import '../modules/invoice/invoice.dart';
 import '../modules/job_sheet/job_sheet_listening.dart';
 import '../modules/login/login_screen.dart';
 
@@ -60,10 +58,15 @@ class AppRouter {
                   child: EstimateListing(),
                 ));
 
-      case "/invoice":
-        return MaterialPageRoute(builder: (_) => InvoicePage());
-      case '/invoice_listing':
-        return MaterialPageRoute(builder: (_) => const CreateInvoicePage());
+      case "/invoice_listing":
+          return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+                  create: (context) => JobSheetBloc()
+                    ..add(
+                        const FetchInvoiceList(status: jobSheetStatus.initial)),
+                  child: const InvoiceListening(),
+                ));
+
       case "/editjobcard":
         return MaterialPageRoute(builder: (_) => EditJobSheet());
 
