@@ -59,9 +59,7 @@ class _JobSheetDetailsState extends State<JobSheetDetails>
       vsync: this,
       duration: const Duration(milliseconds: 250),
     );
-    WidgetsBinding.instance.addPostFrameCallback((_) {
       _animationController.forward();
-    });
   }
 
   @override

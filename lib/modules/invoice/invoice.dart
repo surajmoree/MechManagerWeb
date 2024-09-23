@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 
 import '../../base_layout.dart';
 
-
 class InvoicePage extends StatefulWidget {
   @override
   State<InvoicePage> createState() => _InvoicePageState();
@@ -13,7 +12,8 @@ class _InvoicePageState extends State<InvoicePage>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   bool _isDrawerOpen = true;
-  final ValueNotifier<String> activeRouteNotifier = ValueNotifier<String>('/job_sheet_listing');
+  final ValueNotifier<String> activeRouteNotifier =
+      ValueNotifier<String>('/job_sheet_listing');
 
   @override
   void initState() {
@@ -22,9 +22,10 @@ class _InvoicePageState extends State<InvoicePage>
       vsync: this,
       duration: const Duration(milliseconds: 250),
     );
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _animationController.forward();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _animationController.forward();
+    // });
+    _animationController.forward();
   }
 
   @override
@@ -47,7 +48,7 @@ class _InvoicePageState extends State<InvoicePage>
   Widget build(BuildContext context) {
     return BaseLayout(
       activeRouteNotifier: activeRouteNotifier,
-    //  activeRouteNotifier: activeRouteNotifier,
+      //  activeRouteNotifier: activeRouteNotifier,
       title: 'MechManager Admin',
       closeDrawer: _toggleDrawer,
       isDrawerOpen: _isDrawerOpen,
@@ -57,4 +58,3 @@ class _InvoicePageState extends State<InvoicePage>
     );
   }
 }
-

@@ -37,9 +37,8 @@ class _JobSheetListingState extends State<JobSheetListing>
       vsync: this,
       duration: const Duration(milliseconds: 250),
     );
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _animationController.forward();
-    });
+
+    _animationController.forward();
   }
 
   void _fetchInitialJobSheets() {

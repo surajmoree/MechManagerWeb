@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mech_manager/config/colors.dart';
+import 'package:mech_manager/modules/Settings/settings_page.dart';
 import 'package:mech_manager/modules/customer/customer_page.dart';
 import 'package:mech_manager/modules/estimate/estimate_listening.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_bloc.dart';
@@ -8,6 +9,8 @@ import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_shee
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_state.dart';
 import 'package:mech_manager/modules/job_sheet/edit_jobsheet/edit_job_sheet.dart';
 import 'package:mech_manager/modules/job_sheet/pages/job_sheet_details.dart';
+import 'package:mech_manager/modules/labours/labours_page.dart';
+import 'package:mech_manager/modules/mechanics/mechanics_page.dart';
 import 'package:mech_manager/modules/spare_Parts/spare_parts.dart';
 import 'package:mech_manager/modules/staff/staff_page.dart';
 import 'package:mech_manager/modules/stocks/stocks_page.dart';
@@ -73,6 +76,15 @@ class AppRouter {
       
       case "/stock_page":
        return MaterialPageRoute(builder: (_)=>StockPage());
+
+      case "/mechanics_page":
+       return MaterialPageRoute(builder: (_)=>MechanicsPage());
+
+      case "/labours_page":
+       return MaterialPageRoute(builder: (_)=>LaboursPage());
+
+      case "/setting_page":
+        return MaterialPageRoute(builder: (_)=>SettingsPage());
 
       default:
         return MaterialPageRoute(

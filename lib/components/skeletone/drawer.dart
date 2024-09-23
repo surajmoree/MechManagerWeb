@@ -86,7 +86,7 @@ class _MyDrawerState extends State<MyDrawer> {
                                 selectedRouteNotifier.value =
                                     "/job_sheet_listing";
                                 Navigator.of(context)
-                                    .pushReplacementNamed('/job_sheet_listing');
+                                    .pushNamed('/job_sheet_listing');
                                 widget.closeDrawer();
                               },
                             ),
@@ -102,7 +102,7 @@ class _MyDrawerState extends State<MyDrawer> {
                                 selectedRouteNotifier.value =
                                     "/estimate_listing";
                                 Navigator.of(context)
-                                    .pushReplacementNamed('/estimate_listing');
+                                    .pushNamed('/estimate_listing');
                               },
                             ),
                             SizedBox(
@@ -116,7 +116,7 @@ class _MyDrawerState extends State<MyDrawer> {
                               onTap: () {
                                 selectedRouteNotifier.value = "/invoice";
                                 Navigator.of(context)
-                                    .pushReplacementNamed('/invoice');
+                                    .pushNamed('/invoice');
                               },
                             ),
                             SizedBox(
@@ -180,27 +180,36 @@ class _MyDrawerState extends State<MyDrawer> {
                             DrawerItem(
                                 imageIcon: '',
                                 title: 'Mechanics',
-                                route: '/job_sheet_listing',
-                                isSelected: selectedRoute == "/invoice",
-                                onTap: widget.closeDrawer),
+                                route: '/mechanics_page',
+                                isSelected: selectedRoute == "/mechanics_page",
+                                onTap:(){
+                                  selectedRouteNotifier.value="/mechanics_page";
+                                  Navigator.of(context).pushNamed("/mechanics_page");
+                                }),
                             SizedBox(
                               height: 3,
                             ),
                             DrawerItem(
                                 imageIcon: '',
-                                title: 'Laboures',
-                                route: '/estimate',
-                                isSelected: selectedRoute == "/invoice",
-                                onTap: widget.closeDrawer),
+                                title: 'Labours',
+                                route: '/labours_page',
+                                isSelected: selectedRoute == "/labours_page",
+                                onTap:(){
+                                  selectedRouteNotifier.value="/labours_page";
+                                  Navigator.of(context).pushNamed("/labours_page");
+                                }),
                             SizedBox(
                               height: 3,
                             ),
                             DrawerItem(
                                 imageIcon: '',
                                 title: 'Settings',
-                                route: '/estimate',
-                                isSelected: selectedRoute == "/invoice",
-                                onTap: widget.closeDrawer),
+                                route: '/setting_page',
+                                isSelected: selectedRoute == "/setting_page",
+                                onTap: (){
+                                  selectedRouteNotifier.value="/setting_page";
+                                  Navigator.of(context).pushNamed("/setting_page");
+                                }),
                             SizedBox(
                               height: 3,
                             ),
