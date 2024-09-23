@@ -83,6 +83,7 @@ class _JobSheetListingState extends State<JobSheetListing>
     final screenHeight = MediaQuery.of(context).size.height;
 
     return BaseLayout(
+        showFloatingActionButton: true,
         activeRouteNotifier: activeRouteNotifier,
         title: 'MechManager Admin',
         closeDrawer: _toggleDrawer,

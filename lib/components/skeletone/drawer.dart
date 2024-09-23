@@ -111,12 +111,12 @@ class _MyDrawerState extends State<MyDrawer> {
                             DrawerItem(
                               imageIcon: '',
                               title: 'Invoice',
-                              route: '/invoice',
-                              isSelected: selectedRoute == "/invoice",
+                              route: '/invoice_listing',
+                              isSelected: selectedRoute == "/invoice_listing",
                               onTap: () {
-                                selectedRouteNotifier.value = "/invoice";
+                                selectedRouteNotifier.value = "/invoice_listing";
                                 Navigator.of(context)
-                                    .pushNamed('/invoice');
+                                    .pushNamed('/invoice_listing');
                               },
                             ),
                             SizedBox(
