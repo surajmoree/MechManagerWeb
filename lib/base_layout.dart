@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mech_manager/components/skeletone/mobile_drawer.dart';
 import 'package:mech_manager/config/colors.dart';
+import 'package:mech_manager/modules/estimate/create_estimate.dart';
+import 'package:mech_manager/modules/invoice/invoice.dart';
 import 'package:mech_manager/modules/job_sheet/create_jobsheet/create_job_sheet.dart';
 
 import 'components/skeletone/drawer.dart';
-//final ValueNotifier<String> activeRouteNotifier = ValueNotifier<String>('/dashboard_page');
 
 class BaseLayout extends StatelessWidget {
   final Widget body;
@@ -31,7 +32,8 @@ class BaseLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
-
+    // String currentRoute = activeRouteNotifier.value;
+    // print("current rout==========$currentRoute");
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: Scaffold(
@@ -45,23 +47,17 @@ class BaseLayout extends StatelessWidget {
             children: [
               if (isDrawerOpen)
                 LayoutBuilder(builder: (context, constraints) {
-                  // final screenWidth = constraints.maxWidth;
-                  // final isMobile = screenWidth < 600;
                   return isMobile
                       ? Container()
                       : SizedBox(
                           width: isMobile ? 180 : 211,
                           child: MyDrawer(
                             closeDrawer: closeDrawer,
-                            //activeRouteNotifier: activeRouteNotifier,
                           ),
-                          // child: isMobile?
-                          //  null: MyDrawer(closeDrawer: closeDrawer),
                         );
                 }),
               Expanded(
                 child: Column(
-                  // crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     PreferredSize(
@@ -71,7 +67,7 @@ class BaseLayout extends StatelessWidget {
                         backgroundColor: Colors.white,
                         title: Text(
                           title,
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: textColor,
                               fontSize: 17,
                               fontWeight: FontWeight.w500),
@@ -88,7 +84,6 @@ class BaseLayout extends StatelessWidget {
                               print('mobile view');
                             } else {
                               closeDrawer();
-                              // Implement behavior for non-mobile screens if needed
                             }
                           },
                           color: Colors.grey,
@@ -113,27 +108,137 @@ class BaseLayout extends StatelessWidget {
         }),
         floatingActionButton: (showFloatingActionButton != true)
             ? null
-            : FloatingActionButton(
-                backgroundColor: primaryColor, // successColor
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(
-                      50), // Adjust this value for more or less rounding
-                ),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CreateJobSheet()));
-                },
-                child: const Icon(
-                  Icons.add,
-                  color: Colors.black,
-                  size: 35,
-                ), // blackColor
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  if (activeRouteNotifier.value ==
+                      '/job_sheet_listing') // Correct route comparison
+                    FloatingActionButton(
+                      backgroundColor: primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CreateJobSheet(),
+                          ),
+                        );
+                      },
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.black,
+                        size: 35,
+                      ),
+                    ),
+                  if (activeRouteNotifier.value == '/estimate_listing')
+                    FloatingActionButton(
+                      backgroundColor: primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CreateEstimatePage(),
+                          ),
+                        );
+                      },
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.black,
+                        size: 35,
+                      ),
+                    ),
+                  if (activeRouteNotifier.value ==
+                      '/invoice_listing') // Correct the route string
+                    FloatingActionButton(
+                      backgroundColor: primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => InvoicePage(),
+                          ),
+                        );
+                      },
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.black,
+                        size: 35,
+                      ),
+                    ),
+                ],
               ),
       ),
     );
   }
+
+  // Widget? _buildFloatingActionButton(
+  //     BuildContext context, String currentRoute) {
+  //   if (currentRoute == '/job_sheet_listing') {
+  //     return FloatingActionButton(
+  //       backgroundColor: primaryColor,
+  //       shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.circular(50),
+  //       ),
+  //       onPressed: () {
+  //         Navigator.push(
+  //           context,
+  //           MaterialPageRoute(builder: (context) => const CreateJobSheet()),
+  //         );
+  //       },
+  //       child: const Icon(
+  //         Icons.add,
+  //         color: Colors.black,
+  //         size: 35,
+  //       ),
+  //     );
+  //   } else if (currentRoute == '/estimate_listing') {
+  //     return FloatingActionButton(
+  //       backgroundColor: primaryColor,
+  //       shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.circular(50),
+  //       ),
+  //       onPressed: () {
+  //         Navigator.push(
+  //           context,
+  //           MaterialPageRoute(builder: (context) => const CreateEstimatePage()),
+  //         );
+  //       },
+  //       child: const Icon(
+  //         Icons.add,
+  //         color: Colors.black,
+  //         size: 35,
+  //       ),
+  //     );
+  //   } else if (currentRoute == '/invoice_listing') {
+  //     return FloatingActionButton(
+  //       backgroundColor: primaryColor,
+  //       shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.circular(50),
+  //       ),
+  //       onPressed: () {
+  //         Navigator.push(
+  //           context,
+  //           MaterialPageRoute(builder: (context) => const CreateInvoicePage()),
+  //         );
+  //       },
+  //       child: const Icon(
+  //         Icons.add,
+  //         color: Colors.black,
+  //         size: 35,
+  //       ),
+  //     );
+  //   }
+
+  //   return null;
+  // }
 }
 
 class HumbergerIconButton extends StatelessWidget {
@@ -141,26 +246,26 @@ class HumbergerIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return Builder(builder: (context) {
     return Padding(
-        padding: const EdgeInsets.only(right: 18),
-        child: GestureDetector(
-          onTap: () {},
-          child: CircleAvatar(
-            backgroundColor: blackColor,
-            radius: 16,
-            child: ClipOval(
-                child: SizedBox.fromSize(
+      padding: const EdgeInsets.only(right: 18),
+      child: GestureDetector(
+        onTap: () {},
+        child: CircleAvatar(
+          backgroundColor: blackColor,
+          radius: 16,
+          child: ClipOval(
+            child: SizedBox.fromSize(
               size: const Size.fromRadius(16),
-              child: Center(
+              child: const Center(
                 child: Text(
                   "",
                   style: TextStyle(color: whiteColor),
                 ),
               ),
-            )),
+            ),
           ),
-        ));
-    //   });
+        ),
+      ),
+    );
   }
 }

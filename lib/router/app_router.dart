@@ -4,6 +4,7 @@ import 'package:mech_manager/config/colors.dart';
 import 'package:mech_manager/modules/Settings/settings_page.dart';
 import 'package:mech_manager/modules/customer/customer_page.dart';
 import 'package:mech_manager/modules/estimate/estimate_listening.dart';
+import 'package:mech_manager/modules/invoice/create_invoice.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_bloc.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_event.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_state.dart';
@@ -61,7 +62,8 @@ class AppRouter {
 
       case "/invoice":
         return MaterialPageRoute(builder: (_) => InvoicePage());
-
+      case '/invoice_listing':
+        return MaterialPageRoute(builder: (_) => const CreateInvoicePage());
       case "/editjobcard":
         return MaterialPageRoute(builder: (_) => EditJobSheet());
 
@@ -70,21 +72,21 @@ class AppRouter {
 
       case "/customer_page":
         return MaterialPageRoute(builder: (_) => CustomerPage());
-      
+
       case "/spare_parts_page":
-       return MaterialPageRoute(builder: (_)=>SparePartsPage());
-      
+        return MaterialPageRoute(builder: (_) => SparePartsPage());
+
       case "/stock_page":
-       return MaterialPageRoute(builder: (_)=>StockPage());
+        return MaterialPageRoute(builder: (_) => StockPage());
 
       case "/mechanics_page":
-       return MaterialPageRoute(builder: (_)=>MechanicsPage());
+        return MaterialPageRoute(builder: (_) => MechanicsPage());
 
       case "/labours_page":
-       return MaterialPageRoute(builder: (_)=>LaboursPage());
+        return MaterialPageRoute(builder: (_) => LaboursPage());
 
       case "/setting_page":
-        return MaterialPageRoute(builder: (_)=>SettingsPage());
+        return MaterialPageRoute(builder: (_) => SettingsPage());
 
       default:
         return MaterialPageRoute(
