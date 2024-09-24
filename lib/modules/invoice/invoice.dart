@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import '../../base_layout.dart';
 import '../../config/colors.dart';
@@ -15,7 +14,7 @@ class _InvoicePageState extends State<InvoicePage>
   final _formKey = GlobalKey<FormState>();
   bool _isDrawerOpen = true;
   final ValueNotifier<String> activeRouteNotifier =
-      ValueNotifier<String>('/invoice');
+      ValueNotifier<String>('/invoice_listing');
 
   @override
   void initState() {
