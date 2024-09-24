@@ -264,4 +264,27 @@ Future<dynamic> searchCustomerDetails(jsonData)async
     }
   }
 
+
+  //  Future<dynamic> getInvoiceByInvoiceId(jsonData)async
+  //  {
+  //   try{
+  //     final response = await requestGET(path:  'get_invoice_by_id/${jsonData['id']}', parameters: jsonData);
+  //     print('result if invoice api ===== $response');
+  //     return response['Invoice'];
+  //   }catch (er) {
+  //     print("Error is---------$er");
+  //   }
+  //  }
+
+  Future<dynamic> getInvoiceByInvoiceId(jsonData) async {
+    try {
+      final getEstimateResponse = await requestGET(
+          path: 'get_invoice_by_id/${jsonData['id']}', parameters: jsonData);
+         print('result if invoice api ===== $getEstimateResponse');
+      return getEstimateResponse['Invoice'];
+    } catch (er) {
+      print("Error is---------$er");
+    }
+  }
+
 }

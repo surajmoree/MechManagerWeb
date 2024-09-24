@@ -198,7 +198,7 @@ class _EstimatePageState extends State<EstimatePage>
         assignValue(state);
       }
     }, builder: (context, state) {
-      tasksList = state.estimateModel!.customerComplaints!;
+      // tasksList = state.estimateModel!.customerComplaints!;
       return WillPopScope(
           onWillPop: () async {
             context.read<JobSheetDetailsBloc>().add(ResetLastEstimateId());
