@@ -100,5 +100,12 @@ class SearchProduct extends JobSheetDetailsEvent {
 }
 
 
+class GetInvoiceByInvoice extends JobSheetDetailsEvent {
+  final String id;
+  const GetInvoiceByInvoice({
+    required this.id,
+  });
+}
+
 
 

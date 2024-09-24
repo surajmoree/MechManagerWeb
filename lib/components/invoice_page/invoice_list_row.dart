@@ -6,9 +6,12 @@ import 'package:mech_manager/config/app_icons.dart';
 import 'package:mech_manager/config/colors.dart';
 import 'package:mech_manager/models/invoice_listening_model.dart';
 import 'package:mech_manager/modules/invoice/invoice_listening.dart';
+import 'package:mech_manager/modules/invoice/invoice_page.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_bloc.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_event.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_state.dart';
+import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_details_bloc.dart/job_sheet_details_bloc.dart';
+import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_details_bloc.dart/job_sheet_details_event.dart';
 
 class InvoiceListRow extends StatefulWidget {
   final InvoiceListingModel? invoiceList;
@@ -23,6 +26,15 @@ class _InvoiceListRowState extends State<InvoiceListRow> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     return GestureDetector(
+      onTap: () {
+         context
+            .read<JobSheetDetailsBloc>()
+            .add(GetInvoiceByInvoice(id: widget.invoiceList!.id.toString()));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>  InvoicePage()));
+      },
       child: Form(
           key: _formKey,
           child: Card(

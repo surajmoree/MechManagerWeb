@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mech_manager/config.dart';
 import 'package:mech_manager/config/constants.dart';
 import 'package:mech_manager/models/estimate_model.dart';
+import 'package:mech_manager/models/invoice_model.dart';
 import 'package:mech_manager/models/job_card_details_model.dart';
 import 'package:mech_manager/models/product_model.dart';
 import 'package:mech_manager/models/slider_image_model.dart';
@@ -27,6 +28,8 @@ class JobSheetDetailsBloc
      on<UpdateVehicle>(_onUpdateVehicle);
      on<SearchSparePart>(_onSearchSparePart);
      on<SearchProduct>(_onSearchProduct);
+     on<GetInvoiceByInvoice>(_onGetInvoiceByInvoice);
+    
   }
 
   Future<void> _onGetJobSheetDetails(
@@ -294,6 +297,35 @@ class JobSheetDetailsBloc
               .map<ProductModel>((jsonData) => ProductModel.fromJson(jsonData))
               .toList()));
     }
+  }
+
+  Future<void> _onGetInvoiceByInvoice(GetInvoiceByInvoice event, Emitter<JobSheetDetailsState> emit) async
+  {
+    emit(state.copyWith(status: JobSheetDetailsStatus.loading));
+    dynamic token = await storage.read(key: 'token');
+
+     Map<String, Object> jsonData = {
+      "token": token.toString(),
+      "id": event.id.toString(),
+      "filter": 'Invoice',
+    };
+
+    final result = await jobSheetRepository.getInvoiceByInvoiceId(jsonData);
+    print('result if invoice bloc ===== $result');
+
+    if(result != null && result.isNotEmpty)
+    {
+      return emit(state.copyWith(status: JobSheetDetailsStatus.success,invoiceModel: InvoiceModel.fromJson(result)));
+    }else {
+      emit(
+        state.copyWith(
+          status: JobSheetDetailsStatus.failed,
+        ),
+      );
+    }
+
+
+
   }
 
 }

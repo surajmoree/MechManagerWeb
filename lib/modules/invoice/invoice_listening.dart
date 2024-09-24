@@ -31,6 +31,7 @@ class _InvoiceListeningState extends State<InvoiceListening>
   @override
   void initState() {
     super.initState();
+    _fetchInitialInvoice();
     _scrollController.addListener(_onScroll);
     _animationController = AnimationController(
       vsync: this,
@@ -61,7 +62,11 @@ class _InvoiceListeningState extends State<InvoiceListening>
       _searchInvoice();
     });
   }
-
+ void _fetchInitialInvoice() {
+    context.read<JobSheetBloc>().add(const FetchInvoiceList(
+          status: jobSheetStatus.loading,
+        ));
+  }
   @override
   void dispose() {
     _animationController.dispose();
@@ -121,13 +126,9 @@ class _InvoiceListeningState extends State<InvoiceListening>
                         ),
                         GestureDetector(
                           onTap: () {
-                            // context
-                            //     .read<JobSheetBloc>()
-                            //     .add(const FetchEstimateList(
-                            //       status: jobSheetStatus.success,
-                            //     ));
-                            //      _fetchInitialEstimate();
-                            // searchController.clear();
+                            _fetchInitialInvoice();
+                        searchController.clear();
+       
                           },
                           child: const SizedBox(
                             height: 40,

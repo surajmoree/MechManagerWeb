@@ -9,12 +9,12 @@ class Api {
   final _protocol = Constants.protocol;
   final stringToBase64Url = utf8.fuse(base64Url);
 
-   Future<Map> requestPOST({required String? path, dynamic parameters}) async {
+  Future<Map> requestPOST({required String? path, dynamic parameters}) async {
     bool chk = parameters!.containsKey("token");
     var headersData = _headers;
     dynamic res = jsonEncode(parameters);
     if (chk) {
-       headersData['Authorization'] = 'Bearer ${parameters['token']}';
+      headersData['Authorization'] = 'Bearer ${parameters['token']}';
     }
     dynamic uri;
     if (_protocol == 'https') {
@@ -32,6 +32,29 @@ class Api {
     }
   }
 
+  // Future<dynamic> requestGET(
+  //     {required String path, Map<String, Object>? parameters}) async {
+  //   bool chk = parameters!.containsKey('token');
+  //   var headersData = _headers;
+  //   if (chk) {
+  //     headersData['Authorization'] = 'Bearer ${parameters['token']}';
+  //   }
+  //   dynamic uri;
+  //   if (_protocol == 'https') {
+  //     uri = Uri.https(_host, path, parameters);
+  //   } else {
+  //     uri = Uri.http(_host, path, parameters);
+  //   }
+
+  //   final result = await http.get(uri, headers: headersData);
+
+  //   if (result.body.isNotEmpty) {
+  //     final jsonObject = json.decode(result.body);
+  //     return jsonObject;
+  //   } else {
+  //     return {};
+  //   }
+  // }
   Future<dynamic> requestGET(
       {required String path, Map<String, Object>? parameters}) async {
     bool chk = parameters!.containsKey('token');
@@ -45,7 +68,7 @@ class Api {
     } else {
       uri = Uri.http(_host, path, parameters);
     }
-  
+
     final result = await http.get(uri, headers: headersData);
 
     if (result.body.isNotEmpty) {
@@ -56,8 +79,7 @@ class Api {
     }
   }
 
-
-   Future<Map> requestDELETE(
+  Future<Map> requestDELETE(
       {required String? path, Map<String, Object>? parameters}) async {
     bool chk = parameters!.containsKey("token");
     var headersData = {
@@ -95,7 +117,7 @@ class Api {
     } else {
       uri = Uri.http(_host, path!);
     }
-  
+
     final results =
         await http.put(uri, headers: headersData, body: jsonEncode(parameters));
 
@@ -106,9 +128,6 @@ class Api {
       return {};
     }
   }
-
-
-
 
   dynamic stringToBase64(data) {
     return stringToBase64Url.decode(data);

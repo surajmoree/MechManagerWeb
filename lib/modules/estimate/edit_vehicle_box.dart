@@ -75,7 +75,6 @@ class _EditVehicleBoxState extends State<EditVehicleBox> {
             key: _formKey,
             child: Column(
               children: [
-
                 Padding(
                   padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
                   child: Column(
@@ -100,7 +99,7 @@ class _EditVehicleBoxState extends State<EditVehicleBox> {
                       const SizedBox(
                         height: 6,
                       ),
-                       const Row(
+                      const Row(
                         children: [
                           Text(
                             "Vehicle Number:",
@@ -109,47 +108,41 @@ class _EditVehicleBoxState extends State<EditVehicleBox> {
                           Icon(Icons.star, color: redColor, size: 8)
                         ],
                       ),
-
-                            TextField(
-                        controller:vehicleNumberController,
+                      TextField(
+                        controller: vehicleNumberController,
                         // focusNode: fieldFocusNode,
                         style: TextStyle(fontSize: 13),
-                        decoration:  InputDecoration(
-                          hintStyle: TextStyle(
-                              color: hintTextColor,
-                              fontFamily: 'Mulish',
-                              fontSize: 14),
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 12, horizontal: 16),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            borderSide: BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
+                        decoration: InputDecoration(
+                            hintStyle: TextStyle(
+                                color: hintTextColor,
+                                fontFamily: 'Mulish',
+                                fontSize: 14),
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 16),
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              borderSide: BorderSide(
+                                width: 0,
+                                style: BorderStyle.none,
+                              ),
                             ),
-                          ),
-                          errorText: validate
+                            errorText: validate
                                 ? "The Vehicle Number field is reqired"
                                 : null,
-                          isDense: true,
-                          hintText: "Enter vehicle number",
-                          filled: true,
-                          fillColor: lightGreyColor
-                        ),
+                            isDense: true,
+                            hintText: "Enter vehicle number",
+                            filled: true,
+                            fillColor: lightGreyColor),
                       ),
-
-                    
                       const SizedBox(
                         height: 10,
                       ),
-
-
                       const Text(
                         'Vehicle Name:',
-                         style: TextStyle(fontSize: 12.5, color: blackColor),
+                        style: TextStyle(fontSize: 12.5, color: blackColor),
                       ),
-
-                          TextField(
+                      TextField(
                         controller: vehicleNameController,
                         // focusNode: fieldFocusNode,
                         style: TextStyle(fontSize: 13),
@@ -168,12 +161,10 @@ class _EditVehicleBoxState extends State<EditVehicleBox> {
                             ),
                           ),
                           isDense: true,
-                         
                           filled: true,
                           fillColor: textfieldColor,
                         ),
                       ),
-                      
                       const SizedBox(
                         height: 10,
                       ),
@@ -181,210 +172,124 @@ class _EditVehicleBoxState extends State<EditVehicleBox> {
                         'Manufacturers:',
                         style: TextStyle(fontSize: 12.5, color: blackColor),
                       ),
-                 
-                   DropdownButtonFormField2(
-                                                    value: manufacturerController
-                                                            .isNotEmpty
-                                                        ? manufacturerController
-                                                        : null,
-                                                    decoration:
-                                                        const InputDecoration(
-                                                      contentPadding:
-                                                          EdgeInsets.symmetric(
-                                                              vertical: 10.5,
-                                                              horizontal: 10),
-                                                      isDense: true,
-                                                      border:
-                                                          OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    5)),
-                                                        borderSide: BorderSide(
-                                                          width: 0,
-                                                          style:
-                                                              BorderStyle.none,
-                                                        ),
-                                                      ),
-                                                      filled: true,
-                                                      fillColor: textfieldColor,
-                                                    ),
-                                                    hint: const Text(""),
-
-                                                    // dropdownMaxHeight: 450,
-                                                    isExpanded: true,
-                                                    items: manufacturerCompaniesList
-                                                        .map<
-                                                                DropdownMenuItem<
-                                                                    String>>(
-                                                            (value) {
-                                                      return DropdownMenuItem<
-                                                          String>(
-                                                        value: value.toString(),
-                                                        child: Text(
-                                                          value,
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 13,
-                                                            // wordSpacing: 3,
-                                                          ),
-                                                        ),
-                                                      );
-                                                    }).toList(),
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        manufacturerController =
-                                                            value!.toString();
-                                                      });
-                                                    },
-                                                  ),
-                      /*
-
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 0, right: 10, bottom: 5, top: 3),
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: DropdownButtonFormField(
-                            menuMaxHeight: 450,
-                            isExpanded: true,
-                            value: manufacturerController.isNotEmpty
-                                ? manufacturerController
-                                : null,
-                            decoration: const InputDecoration(
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                                borderSide: BorderSide(
-                                    width: 1,
-                                    color: Color.fromARGB(26, 233, 229, 212)),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                                borderSide: BorderSide(
-                                    width: 1,
-                                    color: Color.fromARGB(26, 233, 229, 212)),
-                              ),
-                              filled: true,
-                              fillColor: lightGreyColor,
+                      DropdownButtonFormField2(
+                        value: manufacturerController.isNotEmpty
+                            ? manufacturerController
+                            : null,
+                        decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 10.5, horizontal: 10),
+                          isDense: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            borderSide: BorderSide(
+                              width: 0,
+                              style: BorderStyle.none,
                             ),
-                            dropdownColor: whiteColor,
-                            hint: const Text(""),
-                            items: manufacturerCompaniesList
-                                .map<DropdownMenuItem<String>>((value) {
-                              return DropdownMenuItem<String>(
-                                value: value.toString(),
-                                child: Text(
-                                  value,
-                                  style: const TextStyle(
-                                      color: greyColor,
-                                      fontFamily: 'Mulish',
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 16,
-                                      wordSpacing: 3),
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                manufacturerController = value!.toString();
-                              });
-                            },
                           ),
+                          filled: true,
+                          fillColor: textfieldColor,
                         ),
-                      ),
+                        hint: const Text(""),
 
-                      */
-                     const SizedBox(
+                        // dropdownMaxHeight: 450,
+                        isExpanded: true,
+                        items: manufacturerCompaniesList
+                            .map<DropdownMenuItem<String>>((value) {
+                          return DropdownMenuItem<String>(
+                            value: value.toString(),
+                            child: Text(
+                              value,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                // wordSpacing: 3,
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            manufacturerController = value!.toString();
+                          });
+                        },
+                      ),
+                      const SizedBox(
                         height: 35,
                       ),
-                      
                     ],
                   ),
                 ),
-
-                 const Divider(
+                const Divider(
                   color: Color.fromARGB(255, 207, 207, 207),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-
-
-
- Padding(
+                Padding(
                   padding: const EdgeInsets.only(right: 30),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                  
-                                      GestureDetector(
-                                        onTap: () {
-                                            Navigator.pop(context);
-                                        },
-                                        child: Text(
-                                          'Cancel',
-                                          style: TextStyle(color: blueColor),
-                                        )),
-                                    SizedBox(
-                                      width: 20,
-                                    ),
-                                    SizedBox(
-                                      height: 37,
-                                      width: 100,
-                                      child: ElevatedButton(
-                                        onPressed: () {
-                                setState(() {
-                                  validate = vehicleNumberController.text.isEmpty;
-                                });
-                                if (_formKey.currentState!.validate()) {
-                                  Map<String, dynamic> formData = {
-                                    "vehicle_number":
-                                        vehicleNumberController.text.toString(),
-                                    "vehicle_name":
-                                        vehicleNameController.text.toString(),
-                                    "manufacturers":
-                                        manufacturerController.toString(),
-                                    "filter": "Estimate",
-                                    "id_flag": flagId
-                                  };
-                                  context.read<JobSheetDetailsBloc>().add(
-                                      UpdateVehicle(
-                                          id: state.estimateModel!.vehicleId
-                                              .toString(),
-                                          formData: formData));
-                                }
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: savebuttoncolor,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                          ),
-                                        ),
-                                        child: const Text(
-                                          'Save',
-                                          style: TextStyle(
-                                            fontFamily: 'meck',
-                                            fontSize: 14,
-                                            color: whiteColor,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                   
-                                   
-                                  ],
-                                ),
+                    children: [
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            'Cancel',
+                            style: TextStyle(color: blueColor),
+                          )),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      SizedBox(
+                        height: 37,
+                        width: 100,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              validate = vehicleNumberController.text.isEmpty;
+                            });
+                            if (_formKey.currentState!.validate()) {
+                              Map<String, dynamic> formData = {
+                                "vehicle_number":
+                                    vehicleNumberController.text.toString(),
+                                "vehicle_name":
+                                    vehicleNameController.text.toString(),
+                                "manufacturers":
+                                    manufacturerController.toString(),
+                                "filter": "Estimate",
+                                "id_flag": flagId
+                              };
+                              context.read<JobSheetDetailsBloc>().add(
+                                  UpdateVehicle(
+                                      id: state.estimateModel!.vehicleId
+                                          .toString(),
+                                      formData: formData));
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: savebuttoncolor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                          child: const Text(
+                            'Save',
+                            style: TextStyle(
+                              fontFamily: 'meck',
+                              fontSize: 14,
+                              color: whiteColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-
                 const SizedBox(
                   height: 10,
                 ),
-
-                      
               ],
             ),
           ),

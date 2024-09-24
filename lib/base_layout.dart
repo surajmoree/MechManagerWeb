@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mech_manager/components/skeletone/mobile_drawer.dart';
 import 'package:mech_manager/config/colors.dart';
 import 'package:mech_manager/modules/estimate/create_estimate.dart';
-import 'package:mech_manager/modules/invoice/invoice.dart';
+import 'package:mech_manager/modules/invoice/create_invoice.dart';
 import 'package:mech_manager/modules/job_sheet/create_jobsheet/create_job_sheet.dart';
 
 import 'components/skeletone/drawer.dart';
@@ -163,7 +163,7 @@ class BaseLayout extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => InvoicePage(),
+                            builder: (context) => CreateInvoicePage(),
                           ),
                         );
                       },
