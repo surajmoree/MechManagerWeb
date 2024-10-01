@@ -204,6 +204,9 @@ class _InvoiceListeningState extends State<InvoiceListening>
                           state.status == jobSheetStatus.loading) {
                         return const CenterLoader();
                       }
+                        if (state.invoiceListing.isEmpty) {
+                    return const Text('No record found');
+                  }
                       return ListView.builder(
                          shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),

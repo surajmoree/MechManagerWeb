@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mech_manager/config.dart';
-import 'package:mech_manager/models/mechanic_model.dart';
+import 'package:mech_manager/models/mechanic_listeningmodel.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/search_mechanic_bloc/search_mechanic_event.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/search_mechanic_bloc/search_mechanic_state.dart';
 
@@ -25,8 +25,8 @@ _onSearchMechanic(SearchMechanic event, Emitter<SearchMechanicState>emit)async
  if(result != null && result.isNotEmpty)
  {
   emit(state.copyWith(status: MechanicStatus.success,mechanicList: result
-              .map<MechanicModel>(
-                  (jsonData) => MechanicModel.fromJson(jsonData))
+              .map<MechanicListingModel>(
+                  (jsonData) => MechanicListingModel.fromJson(jsonData))
               .toList()));
  }
 }

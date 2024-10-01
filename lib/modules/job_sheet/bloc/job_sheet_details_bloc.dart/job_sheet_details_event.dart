@@ -1,4 +1,3 @@
-
 import 'package:equatable/equatable.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -50,7 +49,6 @@ class UpdateJobSheet extends JobSheetDetailsEvent {
   });
 }
 
-
 class UpdateJobSheetStatus extends JobSheetDetailsEvent {
   final Map<String, dynamic>? formData;
   final String id;
@@ -66,6 +64,20 @@ class UpdateCustomerComplaints extends JobSheetDetailsEvent {
   const UpdateCustomerComplaints({required this.formData, required this.id});
 }
 
+class UpdateMechanic extends JobSheetDetailsEvent {
+  final Map<String, dynamic>? formData;
+  final String id;
+
+  const UpdateMechanic({required this.formData, required this.id});
+}
+
+class UpdateLabour extends JobSheetDetailsEvent {
+  final Map<String, dynamic>? formData;
+  final String id;
+  
+
+  const UpdateLabour({required this.id, required this.formData});
+}
 
 class GetEstimateDetailsByEstimate extends JobSheetDetailsEvent {
   final String id;
@@ -88,7 +100,6 @@ class UpdateVehicle extends JobSheetDetailsEvent {
   const UpdateVehicle({this.formData, required this.id});
 }
 
-
 class SearchSparePart extends JobSheetDetailsEvent {
   final String? searchKeyword;
   const SearchSparePart({required this.searchKeyword});
@@ -99,7 +110,6 @@ class SearchProduct extends JobSheetDetailsEvent {
   const SearchProduct({required this.searchKeyword});
 }
 
-
 class GetInvoiceByInvoice extends JobSheetDetailsEvent {
   final String id;
   const GetInvoiceByInvoice({
@@ -107,5 +117,27 @@ class GetInvoiceByInvoice extends JobSheetDetailsEvent {
   });
 }
 
+class GetMechanicById extends JobSheetDetailsEvent {
+  final String id;
 
+  const GetMechanicById({required this.id});
+}
 
+class GetLabourById extends JobSheetDetailsEvent {
+  final String id;
+
+  const GetLabourById({required this.id});
+}
+
+// class GetProfileDetail extends JobSheetDetailsEvent
+// {
+//   final String id;
+
+//   const GetProfileDetail({required this.id});
+// }
+
+class GetProfileDetail extends JobSheetDetailsEvent {
+  final String id;
+
+  const GetProfileDetail({required this.id});
+}

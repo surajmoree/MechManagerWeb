@@ -118,7 +118,7 @@ class _InvoiceListRowState extends State<InvoiceListRow> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    showExitConfirmation(context);
+                                    deleteConfirmation(context);
                                   },
                                   child: Text(
                                     '',
@@ -200,7 +200,7 @@ class _InvoiceListRowState extends State<InvoiceListRow> {
   }
 
 
-  Future<void> showExitConfirmation(BuildContext context) async {
+  Future<void> deleteConfirmation(BuildContext context) async {
     await showDialog(
         context: context,
         builder: (context) {
@@ -256,7 +256,7 @@ class _InvoiceListRowState extends State<InvoiceListRow> {
                         });
                         Fluttertoast.showToast(
                             toastLength: Toast.LENGTH_LONG,
-                            msg: "Estimate deleted succesfully",
+                            msg: "Invoice deleted succesfully",
                             backgroundColor: successDarkColor);
                         CenterLoader.hide();
                         setState(() {

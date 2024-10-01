@@ -11,6 +11,9 @@ import 'package:mech_manager/models/dashboard_model.dart';
 import 'package:mech_manager/models/estimate_listiening_model.dart';
 import 'package:mech_manager/models/invoice_listening_model.dart';
 import 'package:mech_manager/models/job_sheet.dart';
+import 'package:mech_manager/models/labour_listeningmodel.dart';
+import 'package:mech_manager/models/mechanic_listeningmodel.dart';
+import 'package:mech_manager/models/spare_part_model.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_event.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_state.dart';
 import 'package:mech_manager/network/repositories/job_sheet_repository.dart';
@@ -25,6 +28,15 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
     on<DeleteEstimate>(_onDeleteEstimate);
     on<FetchInvoiceList>(_onFetchInvoiceList);
     on<DeleteInvoice>(_onDeleteInvoice);
+    on<CreateAddInvoice>(_onCreateAddInvoice);
+    on<AddEstimate>(_onAddEstimate);
+    on<FetchSparePartList>(_onFetchSparePartList);
+    on<FetchMechanics>(_onFetchMechanicList);
+    on<DeleteMechanic>(_onDeleteMechanic);
+    on<CreateMechanicEvent>(_onCreateMechanics);
+    on<FetchLabour>(_onFetchLabourList);
+    on<DeleteLabour>(_onDeleteLabour);
+    on<CreateLabourEvent>(_onCreateLabour);
   }
   final JobSheetRepository jobSheetRepository = JobSheetRepository();
 
@@ -229,8 +241,8 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
 
   Future<void> _onFetchEstimateList(
       FetchEstimateList event, Emitter<JobSheetState> emit) async {
-        // if (state.hasReachedMax! && event.timestamp != null) {
-    if (state.hasReachedMax!  && event.timestamp != null) {
+    // if (state.hasReachedMax! && event.timestamp != null) {
+    if (state.hasReachedMax! && event.timestamp != null) {
       return;
     }
     emit(
@@ -247,7 +259,7 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
       'direction': event.direction ?? 'down',
       'search': event.searchKeyword ?? '',
     };
- print("time==================${event.timestamp.toString()}");
+    print("time==================${event.timestamp.toString()}");
     final result = await jobSheetRepository.getEstimate(jsonData);
     print('estimate listning from bloc $result');
 
@@ -275,7 +287,6 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
     }
   }
 
-
   ////////////////////delete Estimate////////////deleteInvoice
 
   _onDeleteEstimate(DeleteEstimate event, Emitter<JobSheetState> emit) async {
@@ -286,8 +297,7 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
       "id": event.id.toString(),
     };
 
-    final result =
-        await jobSheetRepository.deleteEstimate(jsonData);
+    final result = await jobSheetRepository.deleteEstimate(jsonData);
 
     if (result['status'] == "Success") {
       // state.jobSheetList
@@ -298,9 +308,7 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
     }
   }
 
-
-
-   _onFetchInvoiceList(
+  _onFetchInvoiceList(
       FetchInvoiceList event, Emitter<JobSheetState> emit) async {
     if (state.hasReachedMax! && event.timestamp != null) {
       return;
@@ -334,7 +342,6 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
         invoiceList = List.from(state.invoiceListing)..addAll(invoiceList);
       }
       // Save the new invoice list to the Isar database
-      
 
       return emit(state.copyWith(
           status: jobSheetStatus.success,
@@ -348,6 +355,135 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
     }
   }
 
+  _onFetchLabourList(FetchLabour event, Emitter<JobSheetState> emit) async {
+    if (state.hasReachedMax! && event.timestamp != null) {
+      return;
+    }
+
+    emit(state.copyWith(
+        status: (event.status == jobSheetStatus.success)
+            ? jobSheetStatus.success
+            : jobSheetStatus.loading));
+
+    dynamic token = await storage.read(key: "token");
+
+    Map<String, String> jsonData = {
+      'token': token!.toString(),
+      'timestamp': event.timestamp.toString(),
+      'direction': event.direction ?? 'down',
+      'search': event.searchKeyword ?? '',
+    };
+
+    final result = await jobSheetRepository.getLabour(jsonData);
+
+    if (result != null && result.isNotEmpty) {
+      List<LabourModelListingModel> labourList = result
+          .map<LabourModelListingModel>((jsonData) => LabourModelListingModel.fromJson(jsonData))
+          .toList();
+
+      final bool hasReachedMax = labourList.length < 10;
+
+      if (event.timestamp != null && event.timestamp.toString().isNotEmpty) {
+        labourList = List.from(state.labourListing)..addAll(labourList);
+      }
+      return emit(state.copyWith(
+          status: jobSheetStatus.success,
+          labourListing: labourList,
+          lastTimestamp: labourList.last.timestamp,
+          hasReachedMax: hasReachedMax));
+    } else {
+      emit(state.copyWith(status: jobSheetStatus.failure));
+    }
+  }
+
+  _onFetchSparePartList(
+      FetchSparePartList event, Emitter<JobSheetState> emit) async {
+    if (state.hasReachedMax! && event.timestamp != null) {
+      return;
+    }
+
+    emit(
+      state.copyWith(
+          status: (event.status == jobSheetStatus.success)
+              ? jobSheetStatus.success
+              : jobSheetStatus.loading),
+    );
+
+    dynamic token = await storage.read(key: "token");
+
+    Map<String, String> jsonData = {
+      'token': token!.toString(),
+      'timestamp': event.timestamp.toString(),
+      'direction': event.direction ?? 'down',
+      'search': event.searchKeyword ?? '',
+    };
+    final result = await jobSheetRepository.getSpareParts(jsonData);
+
+    if (result != null && result.isNotEmpty) {
+      List<SparePartModel> sparePartList = result
+          .map<SparePartModel>((jsonData) => SparePartModel.fromJson(jsonData))
+          .toList();
+      final bool hasReachedMax = sparePartList.length < 10;
+
+      if (event.timestamp != null && event.timestamp.toString().isNotEmpty) {
+        sparePartList = List.from(state.sparePartListing)
+          ..addAll(sparePartList);
+      }
+
+      return emit(state.copyWith(
+          status: jobSheetStatus.success,
+          sparePartListing: sparePartList,
+          lastTimestamp: sparePartList.last.timestamp,
+          hasReachedMax: hasReachedMax));
+    } else {
+      return emit(state.copyWith(
+          status: jobSheetStatus.success,
+          sparePartListing: [],
+          hasReachedMax: true));
+    }
+  }
+
+  Future<void> _onFetchMechanicList(
+      FetchMechanics event, Emitter<JobSheetState> emit) async {
+    if (state.hasReachedMax! && event.timestamp != null) {
+      return;
+    }
+
+    emit(state.copyWith(
+        status: (event.status == jobSheetStatus.success)
+            ? jobSheetStatus.success
+            : jobSheetStatus.loading));
+
+    dynamic token = await storage.read(key: 'token');
+    Map<String, String> jsonData = {
+      'token': token.toString(),
+      'timestamp': event.timestamp.toString(),
+      'direction': event.direction.toString(),
+      'search': event.searchKeyword ?? '',
+    };
+
+    final result = await jobSheetRepository.getMechanics(jsonData);
+
+    if (result != null && result.isNotEmpty) {
+      List<MechanicListingModel> mechanicList = result
+          .map<MechanicListingModel>((jsonData) => MechanicListingModel.fromJson(jsonData))
+          .toList();
+      final bool hasReachedMax = mechanicList.length < 10;
+      if (event.timestamp != null && event.timestamp.toString().isNotEmpty) {
+        mechanicList = List.from(state.mechanicListing)..addAll(mechanicList);
+      }
+
+      return emit(state.copyWith(
+          status: jobSheetStatus.success,
+          mechanicListing: mechanicList,
+          lastTimestamp: mechanicList.last.timestamp,
+          hasReachedMax: hasReachedMax));
+    } else {
+      return emit(state.copyWith(
+        status: jobSheetStatus.failure,
+      ));
+    }
+  }
 
   FutureOr<void> _onDeleteInvoice(
       DeleteInvoice event, Emitter<JobSheetState> emit) async {
@@ -365,6 +501,123 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
     }
   }
 
+  Future<void> _onDeleteMechanic(
+      DeleteMechanic event, Emitter<JobSheetState> emit) async {
+    emit(state.copyWith(status: jobSheetStatus.updating));
+    dynamic token = await storage.read(key: 'token');
+
+    Map<String, Object> jsonData = {
+      "token": token.toString(),
+      "id": event.id.toString()
+    };
+    final result = await jobSheetRepository.deleteMechanic(jsonData);
+
+    if (result['status'] == 'Success') {
+      emit(state.copyWith(
+          status: jobSheetStatus.success,
+          mechanicListing: state.mechanicListing));
+    }
+  }
+
+  Future<void> _onDeleteLabour(
+      DeleteLabour event, Emitter<JobSheetState> emit) async {
+    emit(state.copyWith(status: jobSheetStatus.updating));
+
+    dynamic token = await storage.read(key: 'token');
+
+    Map<String, Object> jsonData = {
+      "token": token.toString(),
+      "id": event.id.toString(),
+    };
+
+    final result = await jobSheetRepository.deleteLabour(jsonData);
+
+    if (result['status'] == 'Success') {
+      emit(state.copyWith(
+          status: jobSheetStatus.success, labourListing: state.labourListing));
+    }
+  }
+
+  Future<void> _onCreateAddInvoice(
+      CreateAddInvoice event, Emitter<JobSheetState> emit) async {
+    emit(state.copyWith(status: jobSheetStatus.sending));
+    dynamic token = await storage.read(key: 'token');
+
+    Map<String, dynamic> jsonData = {
+      "token": token.toString(),
+      "formData": jsonEncode(event.formData),
+    };
+
+    dynamic result = await jobSheetRepository.createAddInvoice(jsonData);
+    if (result['last_id'].runtimeType != Null) {
+      emit(state.copyWith(
+          status: jobSheetStatus.invoiceSuccess,
+          currentInvoiceId: result['last_id']));
+    } else {
+      emit(state.copyWith(status: jobSheetStatus.submitFailure));
+    }
+  }
+
+  //create mechanics
+
+  Future<void> _onCreateMechanics(
+      CreateMechanicEvent event, Emitter<JobSheetState> emit) async {
+    emit(state.copyWith(status: jobSheetStatus.sending));
+    dynamic token = await storage.read(key: 'token');
+    Map<String, dynamic> jsonData = {
+      "token": token.toString(),
+      "formData": jsonEncode(event.formData),
+    };
+
+    dynamic result = await jobSheetRepository.createMechanic(jsonData);
+    print('mechanic data bloc $result');
+
+    if (result['status'] == 'Success') {
+      emit(state.copyWith(status: jobSheetStatus.mechanicSuccess));
+    } else {
+      emit(state.copyWith(status: jobSheetStatus.submitFailure));
+    }
+  }
+
+  Future<void> _onCreateLabour(CreateLabourEvent event, Emitter<JobSheetState> emit)async
+  {
+    emit(state.copyWith(status: jobSheetStatus.sending));
+     dynamic token = await storage.read(key: 'token');
+
+     Map<String,dynamic> jsonData =
+     {
+      "token": token.toString(),
+      "formData": jsonEncode(event.formData),
+     };
 
 
+     final result=  await jobSheetRepository.createLabour(jsonData);
+     if(result['status'] == 'Success')
+     {
+      emit(state.copyWith(status: jobSheetStatus.labourSuccess));
+     } else {
+      emit(state.copyWith(status: jobSheetStatus.submitFailure));
+    }
+
+  }
+
+  Future<void> _onAddEstimate(
+      AddEstimate event, Emitter<JobSheetState> emit) async {
+    emit(state.copyWith(status: jobSheetStatus.sending));
+    dynamic token = await storage.read(key: 'token');
+
+    Map<String, dynamic> jsonData = {
+      "token": token.toString(),
+      "formData": jsonEncode(event.formData),
+    };
+
+    dynamic result = await jobSheetRepository.addEstimate(jsonData);
+    if (result['last_id'].runtimeType != Null) {
+      emit(state.copyWith(
+          status: jobSheetStatus.estimateSuccess,
+          currentEstimateId: result['last_id']));
+    } else {
+      emit(state.copyWith(status: jobSheetStatus.submitFailure));
+    }
+  }
 }

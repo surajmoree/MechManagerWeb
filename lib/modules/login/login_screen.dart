@@ -5,6 +5,8 @@ import 'package:formz/formz.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_bloc.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_event.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_state.dart';
+import 'package:mech_manager/modules/job_sheet/bloc/profile_bloc/profile_section_bloc.dart';
+import 'package:mech_manager/modules/job_sheet/bloc/profile_bloc/profile_section_event.dart';
 
 import '../../components/skeletone/center_loader.dart';
 import '../../config/colors.dart';
@@ -320,6 +322,7 @@ class LoginScreenState extends State<LoginScreen> {
               context
               .read<JobSheetBloc>()
               .add(const FetchJobSheets(status: jobSheetStatus.initial));
+              context.read<ProfileSectionBloc>().add(const FetchProfileInfo());
          Navigator.pushNamed(context, '/dashboard_page');
       } else if (state.status.isSubmissionInProgress) {
         CenterLoader.show(context);

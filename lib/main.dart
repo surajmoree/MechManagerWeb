@@ -4,6 +4,8 @@ import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_shee
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_event.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_state.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_details_bloc.dart/job_sheet_details_bloc.dart';
+import 'package:mech_manager/modules/job_sheet/bloc/profile_bloc/profile_section_bloc.dart';
+import 'package:mech_manager/modules/job_sheet/bloc/profile_bloc/profile_section_event.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/search_bloc/search_bloc.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/search_mechanic_bloc/search_mechanic_bloc.dart';
 import 'package:mech_manager/router/app_router.dart';
@@ -45,15 +47,23 @@ class MyApp extends StatelessWidget {
                 ..add(const FetchJobSheets(status: jobSheetStatus.initial))
                 ..add(const FetchEstimateList(status: jobSheetStatus.initial))
                 ..add(const FetchInvoiceList(status: jobSheetStatus.initial))
+                ..add(const FetchSparePartList(status: jobSheetStatus.initial))
+                ..add(const FetchMechanics(status: jobSheetStatus.initial))
+                ..add(const FetchLabour(status: jobSheetStatus.initial))
+                
               //  ..add(const FetchDashboard(status: jobSheetStatus.initial))
               // ..add(const FetchServiceList(status: jobSheetStatus.initial)),
               ),
-          // SearchMechanicBloc
+          // FetchMechanics
           BlocProvider<JobSheetDetailsBloc>(
               create: (context) => JobSheetDetailsBloc()),
           BlocProvider<SearchBloc>(create: (context) => SearchBloc()),
           BlocProvider<SearchMechanicBloc>(
-              create: (context) => SearchMechanicBloc())
+              create: (context) => SearchMechanicBloc()),
+
+              BlocProvider<ProfileSectionBloc>(
+            create: (context) =>
+                ProfileSectionBloc()..add(const FetchProfileInfo())),
         ],
         child: MaterialApp(
           theme: ThemeData(

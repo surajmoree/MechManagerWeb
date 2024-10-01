@@ -9,9 +9,9 @@ import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_shee
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_state.dart';
 import 'package:mech_manager/modules/job_sheet/edit_jobsheet/edit_job_sheet.dart';
 import 'package:mech_manager/modules/job_sheet/pages/job_sheet_details.dart';
-import 'package:mech_manager/modules/labours/labours_page.dart';
-import 'package:mech_manager/modules/mechanics/mechanics_page.dart';
-import 'package:mech_manager/modules/spare_Parts/spare_parts.dart';
+import 'package:mech_manager/modules/labours/labours_listening.dart';
+import 'package:mech_manager/modules/mechanics/mechanics_listening.dart';
+import 'package:mech_manager/modules/spare_Parts/spare_parts_listening.dart';
 import 'package:mech_manager/modules/staff/staff_page.dart';
 import 'package:mech_manager/modules/stocks/stocks_page.dart';
 
@@ -82,12 +82,24 @@ class AppRouter {
       case "/stock_page":
         return MaterialPageRoute(builder: (_) => StockPage());
 
-      case "/mechanics_page":
-        return MaterialPageRoute(builder: (_) => MechanicsPage());
+      case "/mechanics_listing":
+      //  return MaterialPageRoute(builder: (_) => MechanicsPage());
+      return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+                  create: (context) => JobSheetBloc()
+                    ..add(
+                        const FetchMechanics(status: jobSheetStatus.initial)),
+                  child: const MechanicsPage(),
+                ));
 
-      case "/labours_page":
-        return MaterialPageRoute(builder: (_) => LaboursPage());
-
+      case "/labours_listing":
+        return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+                  create: (context) => JobSheetBloc()
+                    ..add(
+                        const FetchLabour(status: jobSheetStatus.initial)),
+                  child: const LaboursPage(),
+                ));
       case "/setting_page":
         return MaterialPageRoute(builder: (_) => SettingsPage());
 

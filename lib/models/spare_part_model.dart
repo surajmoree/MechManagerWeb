@@ -8,6 +8,7 @@ class SparePartModel extends Equatable {
   final String? productPrice;
   final String? productQuantity;
   final String? productUnit;
+  final int? timestamp;
   final String? updatedAt;
   const SparePartModel(
       {this.createdAt,
@@ -17,10 +18,11 @@ class SparePartModel extends Equatable {
       this.productPrice,
       this.productQuantity,
       this.productUnit,
-      this.updatedAt});
+      this.updatedAt,
+      this.timestamp});
 
   @override
-  List<Object?> get props => [
+  List<Object> get props => [
         createdAt!,
         deletedAt!,
         productId!,
@@ -28,7 +30,8 @@ class SparePartModel extends Equatable {
         productPrice!,
         productQuantity!,
         productUnit!,
-        updatedAt!
+        updatedAt!,
+        timestamp!
       ];
   SparePartModel copyWith({
     String? createdAt,
@@ -39,16 +42,19 @@ class SparePartModel extends Equatable {
     String? productQuantity,
     String? productUnit,
     String? updatedAt,
+    int? timestamp,
   }) {
     SparePartModel sparePartModel = SparePartModel(
-        createdAt: createdAt ?? this.createdAt,
-        deletedAt: deletedAt ?? this.deletedAt,
-        productId: productId ?? this.productId,
-        productName: productName ?? this.productName,
-        productPrice: productPrice ?? this.productPrice,
-        productQuantity: productQuantity ?? this.productQuantity,
-        productUnit: productUnit ?? this.productUnit,
-        updatedAt: updatedAt ?? this.updatedAt);
+      createdAt: createdAt ?? this.createdAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+      productId: productId ?? this.productId,
+      productName: productName ?? this.productName,
+      productPrice: productPrice ?? this.productPrice,
+      productQuantity: productQuantity ?? this.productQuantity,
+      productUnit: productUnit ?? this.productUnit,
+      updatedAt: updatedAt ?? this.updatedAt,
+      timestamp: timestamp ?? this.timestamp,
+    );
     return sparePartModel;
   }
 
@@ -61,6 +67,7 @@ class SparePartModel extends Equatable {
         productPrice: json['product_price'] ?? "",
         productQuantity: json['product_qty'] ?? "",
         productUnit: json['product_unit'] ?? "",
+        timestamp: int.parse(json['timestamp'].toString()),
         updatedAt: json['updated_at'] ?? "");
   }
   @override

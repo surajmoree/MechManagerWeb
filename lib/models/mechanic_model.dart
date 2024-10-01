@@ -9,15 +9,14 @@ class MechanicModel extends Equatable {
   final String? taskDescription;
   final String? updatedAt;
 
-  const MechanicModel({
-    this.id,
-    this.createdAt,
-    this.deletedAt,
-    this.mechanicName,
-    this.mechanicRate,
-    this.taskDescription,
-    this.updatedAt,
-  });
+  const MechanicModel(
+      {this.id,
+      this.createdAt,
+      this.deletedAt,
+      this.mechanicName,
+      this.mechanicRate,
+      this.taskDescription,
+      this.updatedAt});
 
   @override
   List<Object> get props => [
@@ -30,14 +29,15 @@ class MechanicModel extends Equatable {
         updatedAt!,
       ];
 
-  MechanicModel copyWith(
-      {int? id,
-      String? createdAt,
-      String? deletedAt,
-      String? mechanicName,
-      String? mechanicRate,
-      String? taskDescription,
-      String? updatedAt}) {
+  MechanicModel copyWith({
+    int? id,
+    String? createdAt,
+    String? deletedAt,
+    String? mechanicName,
+    String? mechanicRate,
+    String? taskDescription,
+    String? updatedAt,
+  }) {
     MechanicModel mechanicModel = MechanicModel(
       id: id ?? this.id,
       createdAt: createdAt ?? this.createdAt,
@@ -62,7 +62,12 @@ class MechanicModel extends Equatable {
     );
   }
 
-  @override
-  String toString() =>
-      '{id: $id, createdAt: $createdAt, deletedAt: $deletedAt, labourName: $mechanicName, labourRate: $mechanicRate, taskDescription: $taskDescription, updatedAt: $updatedAt}';
+  static const empty = MechanicModel(
+      id: 0,
+      createdAt: "",
+      deletedAt: "",
+      mechanicName: "",
+      mechanicRate: "",
+      taskDescription: "",
+      updatedAt: "");
 }
