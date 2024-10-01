@@ -3,6 +3,9 @@ import 'package:mech_manager/models/dashboard_model.dart';
 import 'package:mech_manager/models/estimate_listiening_model.dart';
 import 'package:mech_manager/models/invoice_listening_model.dart';
 import 'package:mech_manager/models/job_sheet.dart';
+import 'package:mech_manager/models/labour_listeningmodel.dart';
+import 'package:mech_manager/models/mechanic_listeningmodel.dart';
+import 'package:mech_manager/models/spare_part_model.dart';
 
 enum jobSheetStatus {
   initial,
@@ -12,6 +15,8 @@ enum jobSheetStatus {
   submitSuccess,
   invoiceSuccess,
   estimateSuccess,
+  mechanicSuccess,
+  labourSuccess,
   invoiceSubmitSuccess,
   submitFailure,
   sending,
@@ -25,6 +30,9 @@ class JobSheetState extends Equatable {
   DashboardModel? dashboardModel;
   List<EstimateListingModel> estimateListing;
   List<InvoiceListingModel> invoiceListing;
+  List<SparePartModel> sparePartListing;
+  List<MechanicListingModel> mechanicListing;
+  List<LabourModelListingModel> labourListing;
 
   int? lastTimestamp;
   int? currentEstimateId;
@@ -40,6 +48,9 @@ class JobSheetState extends Equatable {
     this.jobSheetList = const [],
     this.estimateListing = const [],
     this.invoiceListing = const [],
+    this.sparePartListing = const [],
+    this.mechanicListing = const [],
+    this.labourListing = const [],
     this.dashboardModel = DashboardModel.empty,
     this.lastTimestamp,
     this.page = 1,
@@ -58,6 +69,9 @@ class JobSheetState extends Equatable {
         jobSheetList,
        dashboardModel!,
        invoiceListing,
+       sparePartListing,
+       mechanicListing,
+       labourListing,
         page!,
         hasReachedMax!,
         loadShow!,
@@ -76,7 +90,10 @@ class JobSheetState extends Equatable {
       int? lastTimestamp,
       List<EstimateListingModel>? estimateListing,
       int? currentEstimateId,
+      List<LabourModelListingModel>? labourListing,
       List<InvoiceListingModel>? invoiceListing,
+       List<SparePartModel>? sparePartListing,
+       List<MechanicListingModel>? mechanicListing,
       int? currentInvoiceId,
       int? page,
       bool? hasReachedMax,
@@ -89,6 +106,9 @@ class JobSheetState extends Equatable {
         currentEstimateId: currentEstimateId ?? this.currentEstimateId,
         estimateListing: estimateListing ?? this.estimateListing,
         invoiceListing: invoiceListing ?? this.invoiceListing,
+        sparePartListing: sparePartListing?? this.sparePartListing,
+        mechanicListing : mechanicListing?? this.mechanicListing,
+        labourListing: labourListing?? this.labourListing,
         lastTimestamp: lastTimestamp ?? this.lastTimestamp,
     
         currentInvoiceId: currentInvoiceId ?? this.currentInvoiceId,

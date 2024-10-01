@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mech_manager/base_layout.dart';
-import 'package:mech_manager/components/estimate_page.dart/estimate_row_list.dart';
+import 'package:mech_manager/components/estimate_page/estimate_row_list.dart';
 import 'package:mech_manager/components/skeletone/center_loader.dart';
 import 'package:mech_manager/config/colors.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_bloc.dart';
@@ -40,6 +40,7 @@ class _EstimateListingState extends State<EstimateListing>
       _animationController.forward();
     });
   }
+
   void _fetchInitialEstimate() {
     context.read<JobSheetBloc>().add(const FetchEstimateList(
           status: jobSheetStatus.loading,
@@ -137,7 +138,7 @@ class _EstimateListingState extends State<EstimateListing>
                           //     .add(const FetchEstimateList(
                           //       status: jobSheetStatus.success,
                           //     ));
-                               _fetchInitialEstimate();
+                          _fetchInitialEstimate();
                           searchController.clear();
                         },
                         child: const SizedBox(
@@ -212,6 +213,9 @@ class _EstimateListingState extends State<EstimateListing>
                     if (state.status == jobSheetStatus.initial ||
                         state.status == jobSheetStatus.loading) {
                       return const CenterLoader();
+                    }
+                    if (state.estimateListing.isEmpty) {
+                      return const Text('No record found');
                     }
 
                     return ListView.builder(

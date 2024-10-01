@@ -5,340 +5,11 @@ import 'package:mech_manager/config/colors.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_bloc.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_event.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_state.dart';
+import 'package:mech_manager/modules/job_sheet/bloc/profile_bloc/profile_section_bloc.dart';
+import 'package:mech_manager/modules/job_sheet/bloc/profile_bloc/profile_section_event.dart';
 
 import '../../base_layout.dart';
 import 'jobcards.dart';
-
-/*
-class DashboardPage extends StatefulWidget {
-  @override
-  State<DashboardPage> createState() => _DashboardPageState();
-}
-
-class _DashboardPageState extends State<DashboardPage>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  bool _isDrawerOpen = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 250),
-    );
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _animationController.forward();
-    });
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  void _toggleDrawer() {
-    setState(() {
-      if (_isDrawerOpen) {
-        _animationController.reverse();
-      } else {
-        _animationController.forward();
-      }
-      _isDrawerOpen = !_isDrawerOpen;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BaseLayout(
-      title: 'MechManager Admin',
-      closeDrawer: _toggleDrawer,
-      isDrawerOpen: _isDrawerOpen,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(left: 20, top: 20),
-            child: Text(
-              'Welcome back, Motors',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20,right: 20,bottom: 20),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  bool isVertical = constraints.maxWidth <
-                      800; // Change this threshold as needed
-
-                  return Card(
-                  color: whiteColor,
-                    elevation: 5,
-                    child: FractionallySizedBox(
-                      heightFactor: isVertical
-                          ? 1
-                          : null, // Occupy full height in vertical mode
-                      child: Container(
-                 
-                        margin: EdgeInsets.all(20),
-                        child: isVertical
-                            ? Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    'Overview',
-                                    style: TextStyle(color: blackColor),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                  Expanded(
-                                    child: GridView.builder(
-                                      scrollDirection: Axis.vertical,
-                                      gridDelegate:
-                                          SliverGridDelegateWithMaxCrossAxisExtent(
-                                        maxCrossAxisExtent:
-                                            constraints.maxWidth,
-                                        mainAxisExtent: 100,
-                                        crossAxisSpacing: 16,
-                                        mainAxisSpacing: 16,
-                                        childAspectRatio: 3 / 2,
-                                      ),
-                                      itemCount: 8,
-                                      shrinkWrap: true,
-                                      itemBuilder: (context, index) {
-                                        if (index == 0) {
-                                          return ResponsiveCard(
-                                            child: OverviewCard(
-                                              title: 'Total Job Card',
-                                              count: 14,
-                                              icon: Icons.work_outline,
-                                              backgroundColor: Colors.green,
-                                              iconColor: Colors.green.shade800,
-                                            ),
-                                          );
-                                        } else if (index == 1) {
-                                          return ResponsiveCard(
-                                            child: OverviewCard(
-                                              title: 'Total Estimate',
-                                              count:
-                                                  0, // Replace with actual data
-                                              icon: Icons.list_alt,
-                                              backgroundColor: Colors.blue,
-                                              iconColor: Colors.blue.shade800,
-                                            ),
-                                          );
-                                        } else if (index == 2) {
-                                          return ResponsiveCard(
-                                            child: OverviewCard(
-                                              title: 'Total Invoices',
-                                              count:
-                                                  0, // Replace with actual data
-                                              icon: Icons.list_alt,
-                                              backgroundColor: Colors.blue,
-                                              iconColor: Colors.blue.shade800,
-                                            ),
-                                          );
-                                        } else if (index == 3) {
-                                          return ResponsiveCard(
-                                            child: OverviewCard(
-                                              title: 'Total Staff',
-                                              count:
-                                                  0, // Replace with actual data
-                                              icon: Icons.list_alt,
-                                              backgroundColor: Colors.blue,
-                                              iconColor: Colors.blue.shade800,
-                                            ),
-                                          );
-                                        } else if (index == 4) {
-                                          return ResponsiveCard(
-                                            child: OverviewCard(
-                                              title: 'Total Customers',
-                                              count:
-                                                  0, // Replace with actual data
-                                              icon: Icons.list_alt,
-                                              backgroundColor: Colors.blue,
-                                              iconColor: Colors.blue.shade800,
-                                            ),
-                                          );
-                                        } else if (index == 5) {
-                                          return ResponsiveCard(
-                                            child: OverviewCard(
-                                              title: 'Total Stocks',
-                                              count:
-                                                  0, // Replace with actual data
-                                              icon: Icons.list_alt,
-                                              backgroundColor: Colors.blue,
-                                              iconColor: Colors.blue.shade800,
-                                            ),
-                                          );
-                                        } else if (index == 6) {
-                                          return ResponsiveCard(
-                                            child: OverviewCard(
-                                              title: 'Total Mechanics',
-                                              count:
-                                                  0, // Replace with actual data
-                                              icon: Icons.list_alt,
-                                              backgroundColor: Colors.blue,
-                                              iconColor: Colors.blue.shade800,
-                                            ),
-                                          );
-                                        } else if (index == 7) {
-                                          return ResponsiveCard(
-                                            child: OverviewCard(
-                                              title: 'JTotal Labours',
-                                              count:
-                                                  0, // Replace with actual data
-                                              icon: Icons.list_alt,
-                                              backgroundColor: Colors.blue,
-                                              iconColor: Colors.blue.shade800,
-                                            ),
-                                          );
-                                        } else {
-                                          return Container();
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Overview',
-                                    style: TextStyle(color: blackColor),
-                                  ),
-                                  GridView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    gridDelegate:
-                                        SliverGridDelegateWithMaxCrossAxisExtent(
-                                      maxCrossAxisExtent: 280.0,
-                                      mainAxisExtent: 100,
-                                      crossAxisSpacing: 16,
-                                      mainAxisSpacing: 16,
-                                      childAspectRatio:
-                                          constraints.maxWidth > 800
-                                              ? 3 / 2
-                                              : 1,
-                                    ),
-                                    itemCount: 8,
-                                    shrinkWrap: true,
-                                    itemBuilder: (context, index) {
-                                      if (index == 0) {
-                                        return ResponsiveCard(
-                                          child: OverviewCard(
-                                            title: 'Total Job Card',
-                                            count: 14,
-                                            icon: Icons.work_outline,
-                                            backgroundColor: Colors.green,
-                                            iconColor: Colors.green.shade800,
-                                          ),
-                                        );
-                                      } else if (index == 1) {
-                                        return ResponsiveCard(
-                                          child: OverviewCard(
-                                            title: 'Total Estimate',
-                                            count:
-                                                0, // Replace with actual data
-                                            icon: Icons.list_alt,
-                                            backgroundColor: Colors.blue,
-                                            iconColor: Colors.blue.shade800,
-                                          ),
-                                        );
-                                      } else if (index == 2) {
-                                        return ResponsiveCard(
-                                          child: OverviewCard(
-                                            title: 'Total Invoices',
-                                            count:
-                                                0, // Replace with actual data
-                                            icon: Icons.list_alt,
-                                            backgroundColor: Colors.blue,
-                                            iconColor: Colors.blue.shade800,
-                                          ),
-                                        );
-                                      } else if (index == 3) {
-                                        return ResponsiveCard(
-                                          child: OverviewCard(
-                                            title: 'Total Staff',
-                                            count:
-                                                0, // Replace with actual data
-                                            icon: Icons.list_alt,
-                                            backgroundColor: Colors.blue,
-                                            iconColor: Colors.blue.shade800,
-                                          ),
-                                        );
-                                      } else if (index == 4) {
-                                        return ResponsiveCard(
-                                          child: OverviewCard(
-                                            title: 'Total Customers',
-                                            count:
-                                                0, // Replace with actual data
-                                            icon: Icons.list_alt,
-                                            backgroundColor: Colors.blue,
-                                            iconColor: Colors.blue.shade800,
-                                          ),
-                                        );
-                                      } else if (index == 5) {
-                                        return ResponsiveCard(
-                                          child: OverviewCard(
-                                            title: 'Total Stocks',
-                                            count:
-                                                0, // Replace with actual data
-                                            icon: Icons.list_alt,
-                                            backgroundColor: Colors.blue,
-                                            iconColor: Colors.blue.shade800,
-                                          ),
-                                        );
-                                      } else if (index == 6) {
-                                        return ResponsiveCard(
-                                          child: OverviewCard(
-                                            title: 'Total Mechanics',
-                                            count:
-                                                0, // Replace with actual data
-                                            icon: Icons.list_alt,
-                                            backgroundColor: Colors.blue,
-                                            iconColor: Colors.blue.shade800,
-                                          ),
-                                        );
-                                      } else if (index == 7) {
-                                        return ResponsiveCard(
-                                          child: OverviewCard(
-                                            title: 'Total Labours',
-                                            count:
-                                                0, // Replace with actual data
-                                            icon: Icons.list_alt,
-                                            backgroundColor: Colors.blue,
-                                            iconColor: Colors.blue.shade800,
-                                          ),
-                                        );
-                                      } else {
-                                        return Container();
-                                      }
-                                    },
-                                  ),
-                                ],
-                              ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-*/
-
 class DashboardPage extends StatefulWidget {
   @override
   State<DashboardPage> createState() => _DashboardPageState();
@@ -353,6 +24,7 @@ class _DashboardPageState extends State<DashboardPage>
   @override
   void initState() {
     super.initState();
+     context.read<ProfileSectionBloc>().add(const FetchProfileInfo());
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 250),
@@ -601,7 +273,7 @@ class _DashboardPageState extends State<DashboardPage>
                                                           BorderRadius.circular(
                                                               8),
                                                     ),
-                                                    child: Center(
+                                                    child: const Center(
                                                         child: Text(
                                                       '',
                                                       style: TextStyle(
@@ -678,65 +350,85 @@ class _DashboardPageState extends State<DashboardPage>
                                                 ),
                                               );
                                             } else if (index == 6) {
-                                              return ResponsiveCard(
-                                                child: OverviewCard(
-                                                  title: 'Total Mechanics',
-                                                  count: state.dashboardModel!
-                                                      .totalMechanic
-                                                      .toString(),
-                                                  //  icon: Icons.list_alt,
-                                                  container: Container(
-                                                    height: 44,
-                                                    width: 44,
-                                                    decoration: BoxDecoration(
-                                                      color: mechanicscardColor,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
+                                              return GestureDetector(
+                                                onTap: () {
+                                                   context.read<JobSheetBloc>().add(
+                                                      const FetchMechanics(
+                                                          status: jobSheetStatus
+                                                              .success));
+                                                  Navigator.pushNamed(context,
+                                                      '/mechanics_listing');
+                                                },
+                                                child: ResponsiveCard(
+                                                  child: OverviewCard(
+                                                    title: 'Total Mechanics',
+                                                    count: state.dashboardModel!
+                                                        .totalMechanic
+                                                        .toString(),
+                                                    //  icon: Icons.list_alt,
+                                                    container: Container(
+                                                      height: 44,
+                                                      width: 44,
+                                                      decoration: BoxDecoration(
+                                                        color: mechanicscardColor,
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                8),
+                                                      ),
+                                                      child: Center(
+                                                          child: Text(
+                                                        '',
+                                                        style: TextStyle(
+                                                            fontSize: 25,
+                                                            color:
+                                                                mechanicsIconColor),
+                                                      )),
                                                     ),
-                                                    child: Center(
-                                                        child: Text(
-                                                      '',
-                                                      style: TextStyle(
-                                                          fontSize: 25,
-                                                          color:
-                                                              mechanicsIconColor),
-                                                    )),
+                                                    backgroundColor: Colors.blue,
+                                                    iconColor:
+                                                        Colors.blue.shade800,
                                                   ),
-                                                  backgroundColor: Colors.blue,
-                                                  iconColor:
-                                                      Colors.blue.shade800,
                                                 ),
                                               );
                                             } else if (index == 7) {
-                                              return ResponsiveCard(
-                                                child: OverviewCard(
-                                                  title: 'Total Labours',
-                                                  count: state.dashboardModel!
-                                                      .totalLabour
-                                                      .toString(),
-                                                  // icon: Icons.list_alt,
-                                                  container: Container(
-                                                    height: 44,
-                                                    width: 44,
-                                                    decoration: BoxDecoration(
-                                                      color: labourscardColor,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
+                                              return GestureDetector(
+                                                onTap: () {
+                                                   context.read<JobSheetBloc>().add(
+                                                      const FetchLabour(
+                                                          status: jobSheetStatus
+                                                              .success));
+                                                  Navigator.pushNamed(context,
+                                                      '/labours_listing');
+                                                },
+                                                child: ResponsiveCard(
+                                                  child: OverviewCard(
+                                                    title: 'Total Labours',
+                                                    count: state.dashboardModel!
+                                                        .totalLabour
+                                                        .toString(),
+                                                    // icon: Icons.list_alt,
+                                                    container: Container(
+                                                      height: 44,
+                                                      width: 44,
+                                                      decoration: BoxDecoration(
+                                                        color: labourscardColor,
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                8),
+                                                      ),
+                                                      child: Center(
+                                                          child: Text(
+                                                        '',
+                                                        style: TextStyle(
+                                                            fontSize: 25,
+                                                            color:
+                                                                laboursIconColor),
+                                                      )),
                                                     ),
-                                                    child: Center(
-                                                        child: Text(
-                                                      '',
-                                                      style: TextStyle(
-                                                          fontSize: 25,
-                                                          color:
-                                                              laboursIconColor),
-                                                    )),
+                                                    backgroundColor: Colors.blue,
+                                                    iconColor:
+                                                        Colors.blue.shade800,
                                                   ),
-                                                  backgroundColor: Colors.blue,
-                                                  iconColor:
-                                                      Colors.blue.shade800,
                                                 ),
                                               );
                                             } else {

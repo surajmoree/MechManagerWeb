@@ -19,6 +19,8 @@ import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_details_bloc.dart/
 import '../../base_layout.dart';
 
 class EstimatePage extends StatefulWidget {
+  const EstimatePage({super.key});
+
   @override
   State<EstimatePage> createState() => _EstimatePageState();
 }
@@ -31,7 +33,7 @@ class _EstimatePageState extends State<EstimatePage>
       ValueNotifier<String>('/job_sheet_listing');
   final _formKey = GlobalKey<FormState>();
   final formKey = GlobalKey<FormState>();
-  final _formKeys = GlobalKey<FormState>();
+
   String? productId;
   List<dynamic> tasksList = [];
   List<dynamic> assignLabourList = [];

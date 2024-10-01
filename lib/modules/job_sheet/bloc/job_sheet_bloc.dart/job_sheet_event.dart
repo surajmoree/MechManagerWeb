@@ -67,7 +67,6 @@ class AddJobSheet extends JobSheetEvent {
   });
 }
 
-
 class FetchEstimateList extends JobSheetEvent {
   final int? timestamp;
   final String? direction;
@@ -85,12 +84,9 @@ class DeleteEstimate extends JobSheetEvent {
   const DeleteEstimate({required this.id});
 }
 
-
-
 class ClearListingData extends JobSheetEvent {
   const ClearListingData();
 }
-
 
 class FetchInvoiceList extends JobSheetEvent {
   final int? timestamp;
@@ -105,7 +101,91 @@ class FetchInvoiceList extends JobSheetEvent {
   });
 }
 
+class FetchSparePartList extends JobSheetEvent {
+  final int? timestamp;
+  final String? direction;
+  final String? searchKeyword;
+  final jobSheetStatus? status;
+
+  const FetchSparePartList(
+      {this.timestamp,
+      this.direction,
+      this.searchKeyword,
+      required this.status});
+}
+
+class FetchLabour extends JobSheetEvent
+{
+  final int? timestamp;
+  final String? direction;
+  final String? searchKeyword;
+  final jobSheetStatus? status;
+
+  const FetchLabour(
+      {this.timestamp,
+      this.direction,
+      this.searchKeyword,
+      required this.status});
+}
+
+class FetchMechanics extends JobSheetEvent {
+  final int? timestamp;
+  final String? direction;
+  final String? searchKeyword;
+  final jobSheetStatus? status;
+
+  const FetchMechanics(
+      {this.timestamp,
+      this.direction,
+      this.searchKeyword,
+      required this.status});
+}
+
 class DeleteInvoice extends JobSheetEvent {
   final String id;
   const DeleteInvoice({required this.id});
+}
+
+class DeleteMechanic extends JobSheetEvent {
+  final String id;
+
+  const DeleteMechanic({required this.id});
+}
+
+class DeleteLabour extends JobSheetEvent
+{
+  final String id;
+
+const  DeleteLabour({required this.id});
+
+  
+}
+
+class CreateAddInvoice extends JobSheetEvent {
+  final Map<String, dynamic>? formData;
+  const CreateAddInvoice({
+    this.formData,
+  });
+}
+
+class CreateMechanicEvent extends JobSheetEvent
+{
+  final Map<String,dynamic>? formData;
+
+const  CreateMechanicEvent({ this.formData});
+}
+
+class CreateLabourEvent extends JobSheetEvent
+{
+  final Map<String,dynamic>? formData;
+
+ const CreateLabourEvent({ this.formData});
+  
+}
+
+class AddEstimate extends JobSheetEvent {
+  final Map<String, dynamic>? formData;
+  const AddEstimate({
+    this.formData,
+  });
 }

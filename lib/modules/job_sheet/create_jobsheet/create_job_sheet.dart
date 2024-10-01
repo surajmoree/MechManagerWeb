@@ -15,7 +15,7 @@ import 'package:mech_manager/config/colors.dart';
 import 'package:mech_manager/config/data.dart';
 import 'package:mech_manager/models/customer_complaint.dart';
 import 'package:mech_manager/models/customer_model.dart';
-import 'package:mech_manager/models/mechanic_model.dart';
+import 'package:mech_manager/models/mechanic_listeningmodel.dart';
 import 'package:mech_manager/models/vehicle_model.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_bloc.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_event.dart';
@@ -105,7 +105,7 @@ class _CreateJobSheetState extends State<CreateJobSheet>
       vsync: this,
       duration: const Duration(milliseconds: 250),
     );
-      _animationController.forward();
+    _animationController.forward();
   }
 
   @override
@@ -2113,7 +2113,8 @@ class _CreateJobSheetState extends State<CreateJobSheet>
                                         BlocBuilder<SearchMechanicBloc,
                                                 SearchMechanicState>(
                                             builder: (context, state) {
-                                          return Autocomplete<MechanicModel>(
+                                          return Autocomplete<
+                                              MechanicListingModel>(
                                             optionsBuilder: (TextEditingValue
                                                 textEditingValue) {
                                               if (textEditingValue
@@ -2484,7 +2485,7 @@ class _CreateJobSheetState extends State<CreateJobSheet>
 
                                         if (_formKey.currentState!.validate()) {
                                           Map<String, dynamic> formData = {
-                                             "id": "",
+                                            "id": "",
                                             "job_sheet_id": "001-001",
                                             "full_name": fullNameController.text
                                                 .toString(),

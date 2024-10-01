@@ -21,6 +21,10 @@ class JobSheetRepository extends Repository {
     return jobSheetApi.getJobSheetDetails(jsonData);
   }
 
+  Future<dynamic> getLabourDetails(jsonData) {
+    return jobSheetApi.getLabourDetails(jsonData);
+  }
+
   Future<dynamic> getJobSheetImages(jsonData) {
     return jobSheetApi.getJobSheetImages(jsonData);
   }
@@ -76,9 +80,23 @@ class JobSheetRepository extends Repository {
     return jobSheetApi.updateCustomer(jsonData, id);
   }
 
+  //get profile details
+  Future<dynamic> getProfileDetail(jsonData) async {
+    return jobSheetApi.getProfileDetail(jsonData);
+  }
+
   // update vehicle
   Future<dynamic> updateVehicle(jsonData, String id) {
     return jobSheetApi.updateVehicle(jsonData, id);
+  }
+
+  Future<dynamic> updateMechanic(jsonData, String id) {
+    return jobSheetApi.updateMechanic(jsonData, id);
+  }
+
+  //updateLabour
+  Future<dynamic> updateLabour(jsonData, String id) {
+    return jobSheetApi.updateLabour(jsonData, id);
   }
 
   // search spare part
@@ -96,12 +114,66 @@ class JobSheetRepository extends Repository {
     return jobSheetApi.getInvoice(jsonData);
   }
 
+  // fetch spare parts
+  Future<dynamic> getSpareParts(jsonData) async {
+    return jobSheetApi.getSpareParts(jsonData);
+  }
+
+  Future<dynamic> getLabour(jsonData) async {
+    return jobSheetApi.getLabour(jsonData);
+  }
+
+  //search mechanics
+  Future<dynamic> getMechanics(jsonData) async {
+    return jobSheetApi.getMechanics(jsonData);
+  }
+
   // delete inoice
   Future<dynamic> deleteInvoice(jsonData) {
     return jobSheetApi.deleteInvoice(jsonData);
   }
 
+  Future<dynamic> deleteMechanic(jsonData) {
+    return jobSheetApi.deleteMechanic(jsonData);
+  }
+
+  Future<dynamic> deleteLabour(jsonData) {
+    return jobSheetApi.deleteLabour(jsonData);
+  }
+
   Future<dynamic> getInvoiceByInvoiceId(jsonData) async {
     return jobSheetApi.getInvoiceByInvoiceId(jsonData);
   }
+
+  Future<dynamic> getMechanicById(jsonData) async {
+    return jobSheetApi.getMechanicById(jsonData);
+  }
+
+  Future<dynamic> createAddInvoice(jsonData) async {
+    return jobSheetApi.createAddInvoice(jsonData);
+  }
+
+  Future<dynamic> createMechanic(jsonData) async {
+    return jobSheetApi.createMechanic(jsonData);
+  }
+
+  //createLabour
+
+  Future<dynamic> createLabour(jsonData) async {
+    return jobSheetApi.createLabour(jsonData);
+  }
+
+  Future<dynamic> addEstimate(jsonData) async {
+    return jobSheetApi.addEstimate(jsonData);
+  }
+
+
+
+
+
+  // fetch profile information
+  Future<dynamic> profileInformation(jsonData) async {
+    return jobSheetApi.profileInformation(jsonData);
+  }
+
 }

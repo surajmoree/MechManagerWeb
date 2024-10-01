@@ -2,7 +2,10 @@ import 'package:equatable/equatable.dart';
 import 'package:mech_manager/models/estimate_model.dart';
 import 'package:mech_manager/models/invoice_model.dart';
 import 'package:mech_manager/models/job_card_details_model.dart';
+import 'package:mech_manager/models/labour_model.dart';
+import 'package:mech_manager/models/mechanic_model.dart';
 import 'package:mech_manager/models/product_model.dart';
+import 'package:mech_manager/models/profile_model.dart';
 import 'package:mech_manager/models/slider_image_model.dart';
 import 'package:mech_manager/models/spare_part_model.dart';
 
@@ -34,16 +37,24 @@ class JobSheetDetailsState extends Equatable {
   List<SparePartModel>? sparePartList;
   List<ProductModel>? productList;
   InvoiceModel? invoiceModel;
+ MechanicModel? mechanicModel;
+ LabourModel? labourModel;
+  UpdateProfileModel? profilModel;
+
+
  
 
   JobSheetDetailsState({
     this.status = JobSheetDetailsStatus.initial,
     this.jobSheetDetails = JobSheetDetailModel.empty,
+    this.labourModel = LabourModel.empty,
     this.imageSliderModel = ImageSliderModel.empty,
      this.estimateModel = EstimateModel.empty,
+     this.profilModel = UpdateProfileModel.empty,
      this.sparePartList = const [],
       this.productList = const [],
       this.invoiceModel = InvoiceModel.empty,
+     this.mechanicModel = MechanicModel.empty,
   
   });
 
@@ -53,10 +64,12 @@ class JobSheetDetailsState extends Equatable {
         jobSheetDetails!,
         imageSliderModel!,
         estimateModel!,
+        labourModel!,
         sparePartList!,
          productList!,
          invoiceModel!,
-        
+         mechanicModel!,
+        profilModel!
       ];
 
   JobSheetDetailsState copyWith({
@@ -67,6 +80,9 @@ class JobSheetDetailsState extends Equatable {
     List<SparePartModel>? sparePartList,
      List<ProductModel>? productList,
      InvoiceModel? invoiceModel,
+    MechanicModel? mechanicModel,
+    LabourModel? labourModel,
+    UpdateProfileModel? profilModel,
     
   }) {
     return JobSheetDetailsState(
@@ -77,6 +93,9 @@ class JobSheetDetailsState extends Equatable {
         sparePartList: sparePartList ?? this.sparePartList,
         productList: productList ?? this.productList,
         invoiceModel: invoiceModel ?? this.invoiceModel,
+        mechanicModel: mechanicModel?? this.mechanicModel,
+        labourModel: labourModel?? this.labourModel,
+        profilModel: profilModel?? this.profilModel
     );
   }
 }

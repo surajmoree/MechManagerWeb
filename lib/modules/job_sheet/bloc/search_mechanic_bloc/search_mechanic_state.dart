@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
-import 'package:mech_manager/models/mechanic_model.dart';
+import 'package:mech_manager/models/mechanic_listeningmodel.dart';
 
 enum MechanicStatus { initial, success, failure }
 
 class SearchMechanicState extends Equatable {
   MechanicStatus? status;
-  List<MechanicModel>? mechanicList;
+  List<MechanicListingModel>? mechanicList;
 
   SearchMechanicState(
       {this.status = MechanicStatus.initial, this.mechanicList = const []});
@@ -15,7 +15,7 @@ class SearchMechanicState extends Equatable {
 
   SearchMechanicState copyWith({
     MechanicStatus? status,
-    List<MechanicModel>? mechanicList,
+    List<MechanicListingModel>? mechanicList,
   }) {
     return SearchMechanicState(
       status: status ?? this.status,

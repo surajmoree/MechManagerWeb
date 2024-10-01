@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mech_manager/config.dart';
 import 'package:mech_manager/config/colors.dart';
+import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_details_bloc.dart/job_sheet_details_bloc.dart';
+import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_details_bloc.dart/job_sheet_details_event.dart';
+import 'package:mech_manager/modules/job_sheet/bloc/profile_bloc/profile_section_bloc.dart';
+import 'package:mech_manager/modules/job_sheet/bloc/profile_bloc/profile_section_state.dart';
 
 class MyDrawer extends StatefulWidget {
   final VoidCallback closeDrawer;
@@ -114,7 +119,8 @@ class _MyDrawerState extends State<MyDrawer> {
                               route: '/invoice_listing',
                               isSelected: selectedRoute == "/invoice_listing",
                               onTap: () {
-                                selectedRouteNotifier.value = "/invoice_listing";
+                                selectedRouteNotifier.value =
+                                    "/invoice_listing";
                                 Navigator.of(context)
                                     .pushNamed('/invoice_listing');
                               },
@@ -180,11 +186,14 @@ class _MyDrawerState extends State<MyDrawer> {
                             DrawerItem(
                                 imageIcon: '',
                                 title: 'Mechanics',
-                                route: '/mechanics_page',
-                                isSelected: selectedRoute == "/mechanics_page",
-                                onTap:(){
-                                  selectedRouteNotifier.value="/mechanics_page";
-                                  Navigator.of(context).pushNamed("/mechanics_page");
+                                route: '/mechanics_listing',
+                                isSelected:
+                                    selectedRoute == "/mechanics_listing",
+                                onTap: () {
+                                  selectedRouteNotifier.value =
+                                      "/mechanics_listing";
+                                  Navigator.of(context)
+                                      .pushNamed("/mechanics_listing");
                                 }),
                             SizedBox(
                               height: 3,
@@ -192,24 +201,48 @@ class _MyDrawerState extends State<MyDrawer> {
                             DrawerItem(
                                 imageIcon: '',
                                 title: 'Labours',
-                                route: '/labours_page',
-                                isSelected: selectedRoute == "/labours_page",
-                                onTap:(){
-                                  selectedRouteNotifier.value="/labours_page";
-                                  Navigator.of(context).pushNamed("/labours_page");
+                                route: '/labours_listing',
+                                isSelected: selectedRoute == "/labours_listing",
+                                onTap: () {
+                                  selectedRouteNotifier.value =
+                                      "/labours_listing";
+                                  Navigator.of(context)
+                                      .pushNamed("/labours_listing");
                                 }),
                             SizedBox(
                               height: 3,
                             ),
-                            DrawerItem(
-                                imageIcon: '',
-                                title: 'Settings',
-                                route: '/setting_page',
-                                isSelected: selectedRoute == "/setting_page",
-                                onTap: (){
-                                  selectedRouteNotifier.value="/setting_page";
-                                  Navigator.of(context).pushNamed("/setting_page");
-                                }),
+                            BlocConsumer<ProfileSectionBloc, ProfileSectionState>(
+                              listener: (context, state) {},
+                              builder: (context, state) {
+                                final profileId =
+                                    state.profileModel!.companyId.toString();
+                                print('profileeeee id $profileId');
+                                return DrawerItem(
+                                    imageIcon: '',
+                                    title: 'Settings',
+                                    route: '/setting_page',
+                                    isSelected:
+                                        selectedRoute == "/setting_page",
+                                    onTap: () {
+                                      setState(() {
+                                        Navigator.of(context).pushNamed("/setting_page");
+                                        selectedRouteNotifier.value =
+                                            "/setting_page";
+                                        context.read<JobSheetDetailsBloc>().add(
+                                            GetProfileDetail(id: profileId)
+                                            // EditStaffEvent(
+                                            //     id: state
+                                            //         .profileModel!.companyId
+                                            //         .toString())
+                                            );
+                                      });
+
+                                      //SettingsPage
+                                      // Navigator.of(context).pushNamed("/setting_page");
+                                    });
+                              },
+                            ),
                             SizedBox(
                               height: 3,
                             ),

@@ -15,7 +15,7 @@ import 'package:mech_manager/config/app_icons.dart';
 import 'package:mech_manager/config/colors.dart';
 import 'package:mech_manager/config/data.dart';
 import 'package:mech_manager/models/customer_complaint.dart';
-import 'package:mech_manager/models/mechanic_model.dart';
+import 'package:mech_manager/models/mechanic_listeningmodel.dart';
 import 'package:mech_manager/models/vehicle_model.dart';
 import 'package:mech_manager/modules/dashboard/dashboard_page.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_bloc.dart';
@@ -2185,7 +2185,7 @@ class _EditJobSheetState extends State<EditJobSheet>
                                         BlocBuilder<SearchMechanicBloc,
                                                 SearchMechanicState>(
                                             builder: (context, state) {
-                                          return Autocomplete<MechanicModel>(
+                                          return Autocomplete<MechanicListingModel>(
                                             optionsBuilder: (TextEditingValue
                                                 textEditingValue) {
                                               if (textEditingValue

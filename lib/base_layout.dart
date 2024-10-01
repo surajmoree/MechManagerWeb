@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mech_manager/components/skeletone/mobile_drawer.dart';
 import 'package:mech_manager/config/colors.dart';
-import 'package:mech_manager/modules/estimate/create_estimate.dart';
-import 'package:mech_manager/modules/invoice/create_invoice.dart';
+import 'package:mech_manager/modules/Settings/settings_page.dart';
+import 'package:mech_manager/modules/estimate/create_estimate_form.dart';
+import 'package:mech_manager/modules/invoice/create_invoice_form.dart';
+import 'package:mech_manager/modules/job_sheet/bloc/profile_bloc/profile_section_bloc.dart';
+import 'package:mech_manager/modules/job_sheet/bloc/profile_bloc/profile_section_event.dart';
 import 'package:mech_manager/modules/job_sheet/create_jobsheet/create_job_sheet.dart';
+import 'package:mech_manager/modules/labours/create_labour.dart';
+import 'package:mech_manager/modules/mechanics/create_mechanic.dart';
 
 import 'components/skeletone/drawer.dart';
 
@@ -173,6 +179,50 @@ class BaseLayout extends StatelessWidget {
                         size: 35,
                       ),
                     ),
+
+                    if (activeRouteNotifier.value ==
+                      '/mechanics_listing') // Correct the route string
+                    FloatingActionButton(
+                      backgroundColor: primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CreateMechanic(),
+                          ),
+                        );
+                      },
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.black,
+                        size: 35,
+                      ),
+                    ),
+
+                    if (activeRouteNotifier.value ==
+                      '/labours_listing') // Correct the route string
+                    FloatingActionButton(
+                      backgroundColor: primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CreateLabour(),
+                          ),
+                        );
+                      },
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.black,
+                        size: 35,
+                      ),
+                    ),
                 ],
               ),
       ),
@@ -249,7 +299,11 @@ class HumbergerIconButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 18),
       child: GestureDetector(
-        onTap: () {},
+        onTap: () {
+           Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SettingsPage()));
+              context.read<ProfileSectionBloc>().add(const FetchProfileInfo());
+        },
         child: CircleAvatar(
           backgroundColor: blackColor,
           radius: 16,
