@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:mech_manager/config.dart';
 import 'package:mech_manager/config/constants.dart';
+import 'package:mech_manager/models/customer_model.dart';
 import 'package:mech_manager/models/estimate_model.dart';
 import 'package:mech_manager/models/invoice_model.dart';
 import 'package:mech_manager/models/job_card_details_model.dart';
@@ -37,6 +38,8 @@ class JobSheetDetailsBloc
     on<UpdateMechanic>(_onUpdateMechanic);
     on<UpdateLabour>(_onUpdateLabour);
     on<GetProfileDetail>(_onGetProfileDetails);
+    on<UpdateProfile>(_onUpdateProfile);
+    on<GetCustomerById>(_onGetCustomerById);
   }
 
   Future<void> _onGetJobSheetDetails(
@@ -301,23 +304,63 @@ class JobSheetDetailsBloc
     }
   }
 
-  //  _onUpdateLabour(
-  //     UpdateLabour event, Emitter<JobSheetDetailsState> emit) async {
-  //   emit(state.copyWith(status: JobSheetDetailsStatus.updating));
-  //   dynamic jwtToken = await storage.read(key: "token");
-  //   Map<String, Object> jsonData = {
-  //     "token": jwtToken.toString(),
-  //     "formData": jsonEncode(event.formData)
-  //   };
+  Future<void> _onUpdateProfile(
+      UpdateProfile event, Emitter<JobSheetDetailsState> emit) async {
+    emit(state.copyWith(status: JobSheetDetailsStatus.updating));
+    dynamic token = await storage.read(key: 'token');
 
-  //   final result =
-  //       await jobSheetRepository.updateMechanic(jsonData, event.id.toString());
+    Map<String, Object> jsonData = {
+      "token": token.toString(),
+      "formData": jsonEncode(event.formData),
+    };
 
-  //   if (result['status'] == "Success") {
-  //     emit(state.copyWith(status: JobSheetDetailsStatus.updated));
-  //     emit(state.copyWith(status: JobSheetDetailsStatus.success));
-  //   }
-  // }
+    final result = await jobSheetRepository.updateProfile(jsonData, event.id.toString());
+
+    if(result['status'] == "Success")
+    {
+      emit(state.copyWith(status: JobSheetDetailsStatus.updated));
+       await Future.delayed(const Duration(seconds: 1));
+      emit(state.copyWith(status: JobSheetDetailsStatus.success));
+      if(event.profileImage.path.isNotEmpty)
+      {
+        callProfileImageUploadApi(event.profileImage,token,event.id.toString(),"company_logo");
+      }
+    }else {
+      emit(state.copyWith(status: JobSheetDetailsStatus.failed));
+    }
+  }
+
+
+  callProfileImageUploadApi(
+      XFile  imageFile, String token, String id, String imageType) async {
+    List<int> imageData =
+        await imageFile.readAsBytes();
+    const host = Constants.hostname;
+    const protocol = Constants.protocol;
+
+      var uri = Uri.parse(
+          "$protocol://$host/update_company_logo/$id/$imageType/${DateTime.now().microsecondsSinceEpoch}");
+
+    var request = http.MultipartRequest("PUT", uri);
+    dynamic modifiedFileName = generateUniqueFileName(imageFile.name);
+
+   
+     request.files.add(http.MultipartFile.fromBytes(
+      imageType,
+      imageData,
+      filename: modifiedFileName,
+    ));
+     request.headers.addAll({
+      'Accept': 'application/json, text/plain',
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $token"
+    });
+
+    var imageSendResponse = await request.send();
+    if (imageSendResponse.statusCode == 200) {}
+  }
+
+ 
 
   Future<void> _onSearchSparePart(
       SearchSparePart event, Emitter<JobSheetDetailsState> emit) async {
@@ -433,6 +476,26 @@ class JobSheetDetailsBloc
     }
   }
 
+  Future<void> _onGetCustomerById(GetCustomerById event, Emitter<JobSheetDetailsState>emit)async
+  {
+    emit(state.copyWith(status: JobSheetDetailsStatus.loading));
+    dynamic token = await storage.read(key: 'token');
+    Map<String,Object> jsonData =
+    {
+      "token": token.toString(),
+      "id": event.id.toString(),
+    };
+    final result = await jobSheetRepository.getCustomerById(jsonData);
+
+    if(result != null && result.isNotEmpty)
+    {
+      emit(state.copyWith(status:  JobSheetDetailsStatus.success,customerModel: CustomerModel.fromJson(result)));
+    } else {
+      emit(state.copyWith(
+          status: JobSheetDetailsStatus.failed,
+          customerModel: CustomerModel.empty));
+    }
+  }
 
   Future<void> _onGetProfileDetails(
       GetProfileDetail event, Emitter<JobSheetDetailsState> emit) async {
@@ -443,8 +506,7 @@ class JobSheetDetailsBloc
       "token": jwtToken.toString(),
       "id": event.id.toString(),
     };
-    final result =
-        await jobSheetRepository.getProfileDetail(jsonData);
+    final result = await jobSheetRepository.getProfileDetail(jsonData);
 
     if (result != null && result.isNotEmpty) {
       emit(state.copyWith(
@@ -459,27 +521,8 @@ class JobSheetDetailsBloc
     }
   }
 
-/*
-  Future<void> _onGetProfileDetails(
-      GetProfileDetail event, Emitter<JobSheetDetailsState> emit) async {
-    emit(state.copyWith(status: JobSheetDetailsStatus.loading));
-    dynamic token = await storage.read(key: 'token');
-    Map<String, Object> jsonData = {
-      "token": token.toString(),
-      "id": event.id.toString()
-    };
+ 
 
-    final result = await jobSheetRepository.getProfileDetail(jsonData);
 
-    if (result != null && result.isNotEmpty) {
-      emit(state.copyWith(
-          status: JobSheetDetailsStatus.success,
-          profilModel: UpdateProfileModel.fromJson(result)));
-    } else {
-      emit(state.copyWith(
-          status: JobSheetDetailsStatus.failed,
-          profilModel: UpdateProfileModel.empty));
-    }
-  }
-  */
+  
 }

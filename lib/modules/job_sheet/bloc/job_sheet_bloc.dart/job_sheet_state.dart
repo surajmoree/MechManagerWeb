@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:mech_manager/models/customer_listening_model.dart';
 import 'package:mech_manager/models/dashboard_model.dart';
 import 'package:mech_manager/models/estimate_listiening_model.dart';
 import 'package:mech_manager/models/invoice_listening_model.dart';
@@ -17,6 +18,7 @@ enum jobSheetStatus {
   estimateSuccess,
   mechanicSuccess,
   labourSuccess,
+  customerSuccess,
   invoiceSubmitSuccess,
   submitFailure,
   sending,
@@ -33,6 +35,7 @@ class JobSheetState extends Equatable {
   List<SparePartModel> sparePartListing;
   List<MechanicListingModel> mechanicListing;
   List<LabourModelListingModel> labourListing;
+  List<CustomerListingModel> customerListing;
 
   int? lastTimestamp;
   int? currentEstimateId;
@@ -51,6 +54,7 @@ class JobSheetState extends Equatable {
     this.sparePartListing = const [],
     this.mechanicListing = const [],
     this.labourListing = const [],
+    this.customerListing = const [],
     this.dashboardModel = DashboardModel.empty,
     this.lastTimestamp,
     this.page = 1,
@@ -72,6 +76,7 @@ class JobSheetState extends Equatable {
        sparePartListing,
        mechanicListing,
        labourListing,
+       customerListing,
         page!,
         hasReachedMax!,
         loadShow!,
@@ -91,6 +96,7 @@ class JobSheetState extends Equatable {
       List<EstimateListingModel>? estimateListing,
       int? currentEstimateId,
       List<LabourModelListingModel>? labourListing,
+      List<CustomerListingModel>? customerListing,
       List<InvoiceListingModel>? invoiceListing,
        List<SparePartModel>? sparePartListing,
        List<MechanicListingModel>? mechanicListing,
@@ -109,6 +115,7 @@ class JobSheetState extends Equatable {
         sparePartListing: sparePartListing?? this.sparePartListing,
         mechanicListing : mechanicListing?? this.mechanicListing,
         labourListing: labourListing?? this.labourListing,
+        customerListing: customerListing?? this.customerListing,
         lastTimestamp: lastTimestamp ?? this.lastTimestamp,
     
         currentInvoiceId: currentInvoiceId ?? this.currentInvoiceId,

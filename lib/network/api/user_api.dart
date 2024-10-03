@@ -13,4 +13,15 @@ class UserApi extends Api {
       print(_);
     }
   }
+
+  Future<void> logOut(String token)async
+  {
+    try
+    {
+      await requestGET(path: '/logout',parameters:{'token':token} );
+    }catch (e) {
+      print('Error in logout: $e');
+      throw e;
+    }
+  }
 }

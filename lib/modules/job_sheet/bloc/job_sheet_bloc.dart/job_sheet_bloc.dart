@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:mech_manager/config.dart';
 import 'package:mech_manager/config/constants.dart';
+import 'package:mech_manager/models/customer_listening_model.dart';
 import 'package:mech_manager/models/dashboard_model.dart';
 import 'package:mech_manager/models/estimate_listiening_model.dart';
 import 'package:mech_manager/models/invoice_listening_model.dart';
@@ -16,6 +17,7 @@ import 'package:mech_manager/models/mechanic_listeningmodel.dart';
 import 'package:mech_manager/models/spare_part_model.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_event.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_state.dart';
+import 'package:mech_manager/network/repositories/authentication.dart';
 import 'package:mech_manager/network/repositories/job_sheet_repository.dart';
 
 class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
@@ -37,8 +39,14 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
     on<FetchLabour>(_onFetchLabourList);
     on<DeleteLabour>(_onDeleteLabour);
     on<CreateLabourEvent>(_onCreateLabour);
+    on<ClearListingData>(_onClearListingData);
+    on<FetchCustomer>(_onFetchCustomerList);
+    on<CreateCustomerEvent>(_onCreateCustomer);
+    on<LogOutEvent>(_onLogOut);
+    
   }
   final JobSheetRepository jobSheetRepository = JobSheetRepository();
+  final AuthenticationRepo authenticationRepo = AuthenticationRepo();
 
   Future<void> _onAddJobSheet(
       AddJobSheet event, Emitter<JobSheetState> emit) async {
@@ -378,7 +386,8 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
 
     if (result != null && result.isNotEmpty) {
       List<LabourModelListingModel> labourList = result
-          .map<LabourModelListingModel>((jsonData) => LabourModelListingModel.fromJson(jsonData))
+          .map<LabourModelListingModel>(
+              (jsonData) => LabourModelListingModel.fromJson(jsonData))
           .toList();
 
       final bool hasReachedMax = labourList.length < 10;
@@ -394,6 +403,49 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
     } else {
       emit(state.copyWith(status: jobSheetStatus.failure));
     }
+  }
+
+  _onFetchCustomerList(FetchCustomer event, Emitter<JobSheetState> emit) async {
+    if (state.hasReachedMax! && event.timestamp != null) {
+      return;
+    }
+    emit(state.copyWith(
+        status: (event.status == jobSheetStatus.success)
+            ? jobSheetStatus.success
+            : jobSheetStatus.loading));
+
+    dynamic token = await storage.read(key: 'token');
+
+    Map<String, String> jsonData = {
+      'token': token!.toString(),
+      'timestamp': event.timestamp.toString(),
+      'direction': event.direction ?? 'down',
+      'search': event.searchKeyword ?? '',
+    };
+
+    final result = await jobSheetRepository.getCustomer(jsonData);
+
+      if (result != null && result.isNotEmpty) {
+      List<CustomerListingModel> customerList = result
+          .map<CustomerListingModel>((jsonData) => CustomerListingModel.fromJson(jsonData))
+          .toList();
+
+      final bool hasReachedMax = customerList.length < 10;
+
+      if (event.timestamp != null && event.timestamp.toString().isNotEmpty) {
+        customerList = List.from(state.customerListing)..addAll(customerList);
+      }
+      return emit(state.copyWith(
+          status: jobSheetStatus.success,
+          customerListing: customerList,
+          lastTimestamp: customerList.last.timestamp,
+          hasReachedMax: hasReachedMax));
+    } 
+     else {
+      emit(state.copyWith(status: jobSheetStatus.failure));
+    }
+
+
   }
 
   _onFetchSparePartList(
@@ -466,7 +518,8 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
 
     if (result != null && result.isNotEmpty) {
       List<MechanicListingModel> mechanicList = result
-          .map<MechanicListingModel>((jsonData) => MechanicListingModel.fromJson(jsonData))
+          .map<MechanicListingModel>(
+              (jsonData) => MechanicListingModel.fromJson(jsonData))
           .toList();
       final bool hasReachedMax = mechanicList.length < 10;
       if (event.timestamp != null && event.timestamp.toString().isNotEmpty) {
@@ -579,26 +632,42 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
     }
   }
 
-  Future<void> _onCreateLabour(CreateLabourEvent event, Emitter<JobSheetState> emit)async
-  {
+  Future<void> _onCreateLabour(
+      CreateLabourEvent event, Emitter<JobSheetState> emit) async {
     emit(state.copyWith(status: jobSheetStatus.sending));
-     dynamic token = await storage.read(key: 'token');
+    dynamic token = await storage.read(key: 'token');
 
-     Map<String,dynamic> jsonData =
-     {
+    Map<String, dynamic> jsonData = {
       "token": token.toString(),
       "formData": jsonEncode(event.formData),
-     };
+    };
 
-
-     final result=  await jobSheetRepository.createLabour(jsonData);
-     if(result['status'] == 'Success')
-     {
+    final result = await jobSheetRepository.createLabour(jsonData);
+    if (result['status'] == 'Success') {
       emit(state.copyWith(status: jobSheetStatus.labourSuccess));
-     } else {
+    } else {
       emit(state.copyWith(status: jobSheetStatus.submitFailure));
     }
+  }
 
+  Future<void> _onCreateCustomer(CreateCustomerEvent event, Emitter<JobSheetState>emit)async
+  {
+    emit(state.copyWith(status: jobSheetStatus.sending));
+
+    dynamic token = await storage.read(key: 'token');
+    Map<String, dynamic> jsonData =
+    {
+      "token": token.toString(),
+      "formData": jsonEncode(event.formData),
+    };
+
+    final result = await jobSheetRepository.createCustomer(jsonData);
+
+    if (result['status'] == 'Success') {
+      emit(state.copyWith(status: jobSheetStatus.customerSuccess));
+    } else {
+      emit(state.copyWith(status: jobSheetStatus.submitFailure));
+    }
   }
 
   Future<void> _onAddEstimate(
@@ -618,6 +687,34 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
           currentEstimateId: result['last_id']));
     } else {
       emit(state.copyWith(status: jobSheetStatus.submitFailure));
+    }
+  }
+
+  _onClearListingData(ClearListingData event, Emitter<JobSheetState> emit) {
+    emit(state.copyWith(
+        status: jobSheetStatus.initial,
+        currentEstimateId: 0,
+        currentInvoiceId: 0,
+        dashboardModel: DashboardModel.empty,
+        estimateListing: [],
+        // estimateModel: ,
+        hasReachedMax: false,
+        invoiceListing: [],
+        // invoiceModel: ,
+        jobSheetList: [],
+        loadShow: false,
+        page: 0,
+        totalPages: 0));
+  }
+
+  Future<void> _onLogOut(LogOutEvent event, Emitter<JobSheetState> emit) async {
+    dynamic token = await storage.read(key: 'token');
+
+    if (token != null) {
+      await authenticationRepo.logOut(token);
+      await storage.delete(key: 'token');
+    } else {
+      emit(state.copyWith(status: jobSheetStatus.failure));
     }
   }
 }

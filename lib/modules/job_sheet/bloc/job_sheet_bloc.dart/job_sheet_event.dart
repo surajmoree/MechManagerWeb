@@ -114,8 +114,7 @@ class FetchSparePartList extends JobSheetEvent {
       required this.status});
 }
 
-class FetchLabour extends JobSheetEvent
-{
+class FetchLabour extends JobSheetEvent {
   final int? timestamp;
   final String? direction;
   final String? searchKeyword;
@@ -126,6 +125,16 @@ class FetchLabour extends JobSheetEvent
       this.direction,
       this.searchKeyword,
       required this.status});
+}
+
+class FetchCustomer extends JobSheetEvent {
+  final int? timestamp;
+  final String? direction;
+  final String? searchKeyword;
+  final jobSheetStatus? status;
+
+ const FetchCustomer(
+      {this.timestamp, this.direction, this.searchKeyword, this.status});
 }
 
 class FetchMechanics extends JobSheetEvent {
@@ -152,13 +161,10 @@ class DeleteMechanic extends JobSheetEvent {
   const DeleteMechanic({required this.id});
 }
 
-class DeleteLabour extends JobSheetEvent
-{
+class DeleteLabour extends JobSheetEvent {
   final String id;
 
-const  DeleteLabour({required this.id});
-
-  
+  const DeleteLabour({required this.id});
 }
 
 class CreateAddInvoice extends JobSheetEvent {
@@ -168,19 +174,22 @@ class CreateAddInvoice extends JobSheetEvent {
   });
 }
 
-class CreateMechanicEvent extends JobSheetEvent
-{
-  final Map<String,dynamic>? formData;
+class CreateMechanicEvent extends JobSheetEvent {
+  final Map<String, dynamic>? formData;
 
-const  CreateMechanicEvent({ this.formData});
+  const CreateMechanicEvent({this.formData});
 }
 
-class CreateLabourEvent extends JobSheetEvent
-{
-  final Map<String,dynamic>? formData;
+class CreateLabourEvent extends JobSheetEvent {
+  final Map<String, dynamic>? formData;
 
- const CreateLabourEvent({ this.formData});
-  
+  const CreateLabourEvent({this.formData});
+}
+
+class CreateCustomerEvent extends JobSheetEvent {
+  final Map<String, dynamic>? formData;
+
+  const CreateCustomerEvent({this.formData});
 }
 
 class AddEstimate extends JobSheetEvent {
@@ -189,3 +198,5 @@ class AddEstimate extends JobSheetEvent {
     this.formData,
   });
 }
+
+class LogOutEvent extends JobSheetEvent {}

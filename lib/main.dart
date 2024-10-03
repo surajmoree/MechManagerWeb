@@ -50,6 +50,7 @@ class MyApp extends StatelessWidget {
                 ..add(const FetchSparePartList(status: jobSheetStatus.initial))
                 ..add(const FetchMechanics(status: jobSheetStatus.initial))
                 ..add(const FetchLabour(status: jobSheetStatus.initial))
+                ..add(const FetchCustomer(status: jobSheetStatus.initial))
                 
               //  ..add(const FetchDashboard(status: jobSheetStatus.initial))
               // ..add(const FetchServiceList(status: jobSheetStatus.initial)),
