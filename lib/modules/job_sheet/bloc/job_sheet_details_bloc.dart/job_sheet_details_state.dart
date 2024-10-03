@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:mech_manager/models/customer_model.dart';
 import 'package:mech_manager/models/estimate_model.dart';
 import 'package:mech_manager/models/invoice_model.dart';
 import 'package:mech_manager/models/job_card_details_model.dart';
@@ -40,6 +41,7 @@ class JobSheetDetailsState extends Equatable {
  MechanicModel? mechanicModel;
  LabourModel? labourModel;
   UpdateProfileModel? profilModel;
+  CustomerModel? customerModel;
 
 
  
@@ -50,6 +52,7 @@ class JobSheetDetailsState extends Equatable {
     this.labourModel = LabourModel.empty,
     this.imageSliderModel = ImageSliderModel.empty,
      this.estimateModel = EstimateModel.empty,
+     this.customerModel = CustomerModel.empty,
      this.profilModel = UpdateProfileModel.empty,
      this.sparePartList = const [],
       this.productList = const [],
@@ -69,7 +72,8 @@ class JobSheetDetailsState extends Equatable {
          productList!,
          invoiceModel!,
          mechanicModel!,
-        profilModel!
+        profilModel!,
+        customerModel!
       ];
 
   JobSheetDetailsState copyWith({
@@ -82,6 +86,7 @@ class JobSheetDetailsState extends Equatable {
      InvoiceModel? invoiceModel,
     MechanicModel? mechanicModel,
     LabourModel? labourModel,
+    CustomerModel? customerModel,
     UpdateProfileModel? profilModel,
     
   }) {
@@ -95,7 +100,9 @@ class JobSheetDetailsState extends Equatable {
         invoiceModel: invoiceModel ?? this.invoiceModel,
         mechanicModel: mechanicModel?? this.mechanicModel,
         labourModel: labourModel?? this.labourModel,
-        profilModel: profilModel?? this.profilModel
+        profilModel: profilModel?? this.profilModel,
+        customerModel: customerModel ?? this.customerModel
+        
     );
   }
 }

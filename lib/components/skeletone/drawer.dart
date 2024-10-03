@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mech_manager/config.dart';
 import 'package:mech_manager/config/colors.dart';
+import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_bloc.dart';
+import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_event.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_details_bloc.dart/job_sheet_details_bloc.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_details_bloc.dart/job_sheet_details_event.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/profile_bloc/profile_section_bloc.dart';
@@ -144,13 +146,13 @@ class _MyDrawerState extends State<MyDrawer> {
                             DrawerItem(
                                 imageIcon: '',
                                 title: 'Customers',
-                                route: '/customer_page',
-                                isSelected: selectedRoute == "/customer_page",
+                                route: '/customer_listing',
+                                isSelected: selectedRoute == "/customer_listing",
                                 onTap: () {
                                   selectedRouteNotifier.value =
-                                      ('/customer_page');
+                                      ('/customer_listing');
                                   Navigator.of(context)
-                                      .pushNamed('/customer_page');
+                                      .pushNamed('/customer_listing');
                                 }),
                             SizedBox(
                               height: 3,
@@ -212,7 +214,8 @@ class _MyDrawerState extends State<MyDrawer> {
                             SizedBox(
                               height: 3,
                             ),
-                            BlocConsumer<ProfileSectionBloc, ProfileSectionState>(
+                            BlocConsumer<ProfileSectionBloc,
+                                ProfileSectionState>(
                               listener: (context, state) {},
                               builder: (context, state) {
                                 final profileId =
@@ -226,7 +229,8 @@ class _MyDrawerState extends State<MyDrawer> {
                                         selectedRoute == "/setting_page",
                                     onTap: () {
                                       setState(() {
-                                        Navigator.of(context).pushNamed("/setting_page");
+                                        Navigator.of(context)
+                                            .pushNamed("/setting_page");
                                         selectedRouteNotifier.value =
                                             "/setting_page";
                                         context.read<JobSheetDetailsBloc>().add(
@@ -246,27 +250,35 @@ class _MyDrawerState extends State<MyDrawer> {
                             SizedBox(
                               height: 3,
                             ),
-                            Container(
-                              width: 160,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(7)),
-                                color: Colors.black, // Define your black color
-                              ),
-                              child: ListTile(
-                                leading: Text(
-                                  '',
-                                  style: TextStyle(
-                                      fontSize: 18, color: whiteColor),
+                            GestureDetector(
+                              onTap: () {
+                                context.read<JobSheetBloc>().add(LogOutEvent());
+                                Navigator.pushNamedAndRemoveUntil(
+                                    context, '/login_screen', (route) => false);
+                              },
+                              child: Container(
+                                width: 160,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(7)),
+                                  color:
+                                      Colors.black, // Define your black color
                                 ),
-                                title: Text(
-                                  'Logout',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14), // Minimized font size
+                                child: ListTile(
+                                  leading: Text(
+                                    '',
+                                    style: TextStyle(
+                                        fontSize: 18, color: whiteColor),
+                                  ),
+                                  title: Text(
+                                    'Logout',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14), // Minimized font size
+                                  ),
+                                  // onTap: widget.closeDrawer,
                                 ),
-                                onTap: widget.closeDrawer,
                               ),
                             ),
                             SizedBox(

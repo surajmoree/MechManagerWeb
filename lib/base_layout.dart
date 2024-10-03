@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mech_manager/components/skeletone/mobile_drawer.dart';
 import 'package:mech_manager/config/colors.dart';
-import 'package:mech_manager/modules/Settings/settings_page.dart';
+import 'package:mech_manager/modules/customer/create_customer.dart';
 import 'package:mech_manager/modules/estimate/create_estimate_form.dart';
 import 'package:mech_manager/modules/invoice/create_invoice_form.dart';
+import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_bloc.dart';
+import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_event.dart';
+import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_details_bloc.dart/job_sheet_details_bloc.dart';
+import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_details_bloc.dart/job_sheet_details_event.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/profile_bloc/profile_section_bloc.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/profile_bloc/profile_section_event.dart';
+import 'package:mech_manager/modules/job_sheet/bloc/profile_bloc/profile_section_state.dart';
 import 'package:mech_manager/modules/job_sheet/create_jobsheet/create_job_sheet.dart';
 import 'package:mech_manager/modules/labours/create_labour.dart';
 import 'package:mech_manager/modules/mechanics/create_mechanic.dart';
@@ -179,8 +184,7 @@ class BaseLayout extends StatelessWidget {
                         size: 35,
                       ),
                     ),
-
-                    if (activeRouteNotifier.value ==
+                  if (activeRouteNotifier.value ==
                       '/mechanics_listing') // Correct the route string
                     FloatingActionButton(
                       backgroundColor: primaryColor,
@@ -201,8 +205,7 @@ class BaseLayout extends StatelessWidget {
                         size: 35,
                       ),
                     ),
-
-                    if (activeRouteNotifier.value ==
+                  if (activeRouteNotifier.value ==
                       '/labours_listing') // Correct the route string
                     FloatingActionButton(
                       backgroundColor: primaryColor,
@@ -214,6 +217,28 @@ class BaseLayout extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) => CreateLabour(),
+                          ),
+                        );
+                      },
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.black,
+                        size: 35,
+                      ),
+                    ),
+                    //CreateCustomer
+                    if (activeRouteNotifier.value ==
+                      '/customer_listing') // Correct the route string
+                    FloatingActionButton(
+                      backgroundColor: primaryColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CreateCustomer(),
                           ),
                         );
                       },
@@ -296,30 +321,68 @@ class HumbergerIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 18),
-      child: GestureDetector(
-        onTap: () {
-           Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SettingsPage()));
-              context.read<ProfileSectionBloc>().add(const FetchProfileInfo());
-        },
-        child: CircleAvatar(
-          backgroundColor: blackColor,
-          radius: 16,
-          child: ClipOval(
-            child: SizedBox.fromSize(
-              size: const Size.fromRadius(16),
-              child: const Center(
+    return BlocConsumer<ProfileSectionBloc, ProfileSectionState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        final id = state.profileModel!.companyId.toString();
+        return Padding(
+          padding: const EdgeInsets.only(
+            right: 18,
+          ),
+          child: PopupMenuButton(
+            color: blackColor,
+            tooltip: '',
+            offset: const Offset(
+                0, 40), // Adjust the offset to control the position
+            itemBuilder: (context) => <PopupMenuEntry>[
+              const PopupMenuItem(
+                value: 'Setting',
                 child: Text(
-                  "",
+                  'Setting',
                   style: TextStyle(color: whiteColor),
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'Logout',
+                child: Text('Logout', style: TextStyle(color: whiteColor)),
+              ),
+            ],
+            onSelected: (value) async{
+              if (value == 'Setting') {
+                print('setttinggg');
+                Navigator.of(context).pushNamed("/setting_page");
+                // Navigator.push(context,
+                //     MaterialPageRoute(builder: (context) => SettingsPage()));
+                context
+                    .read<ProfileSectionBloc>()
+                    .add(const FetchProfileInfo());
+                context
+                    .read<JobSheetDetailsBloc>()
+                    .add(GetProfileDetail(id: id));
+              } else if (value == 'Logout') {
+               context.read<JobSheetBloc>().add(LogOutEvent());
+                 Navigator.pushNamedAndRemoveUntil(
+                    context, '/login_screen', (route) => false);
+              }
+            },
+            child: CircleAvatar(
+              backgroundColor: blackColor,
+              radius: 16,
+              child: ClipOval(
+                child: SizedBox.fromSize(
+                  size: const Size.fromRadius(16),
+                  child: const Center(
+                    child: Text(
+                      "",
+                      style: TextStyle(color: whiteColor),
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

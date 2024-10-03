@@ -259,6 +259,19 @@ class JobSheetApi extends Api {
     }
   }
 
+  //update profile
+
+  Future<dynamic> updateProfile(jsonData,String id)async
+  {
+    try{
+      final response = await  requestPUT(path: '/update_company/$id', parameters: jsonData);
+      print('profile update $response');
+      return response;
+    }catch (er) {
+      print("Error is------$er");
+    }
+  }
+
   Future<dynamic> searchSparePart(jsonData) async {
     try {
       final apiResponse =
@@ -300,6 +313,20 @@ class JobSheetApi extends Api {
               .timeout(const Duration(seconds: 30));
       return invoiceList['labours'];
     } catch (e, _) {
+      print(e);
+      return null;
+    }
+  }
+
+  //get customer
+
+  Future<dynamic> getCustomer(jsonData)async
+  {
+    try{
+      final response = await requestGET(path: '/get-customers',parameters: jsonData);
+      print('customer list response $response');
+      return response['customers'];
+    }catch (e, _) {
       print(e);
       return null;
     }
@@ -400,6 +427,19 @@ class JobSheetApi extends Api {
     }
   }
 
+  Future<dynamic> getCustomerById(jsonData)async
+  {
+    try
+    {
+      final response = await requestGET(path: '/customer_details/${jsonData['id']}',parameters: jsonData);
+      print('get customer $response');
+      return response['customer'];
+    }catch (er) {
+      print("Error is---------$er");
+    }
+
+  }
+
   Future<dynamic> createAddInvoice(jsonData) async {
     try {
       final response =
@@ -434,6 +474,18 @@ class JobSheetApi extends Api {
     }
   }
 
+  Future<dynamic> createCustomer(jsonData)async
+  {
+    try{
+      final response = await requestPOST(path: '/create-customers',parameters: jsonData);
+      print('create customer response $response');
+      return response;
+    } catch (e, _) {
+      print(e);
+    }
+  }
+  
+
   Future<dynamic> addEstimate(jsonData) async {
     try {
       final response =
@@ -462,6 +514,18 @@ class JobSheetApi extends Api {
           value: profileInformation['user']['first_name'].toString());
       return profileInformation['user'];
     } catch (e, _) {
+      print(e);
+    }
+  }
+
+  Future<dynamic> changePassword(jsonData,String id)async
+  {
+    try
+    {
+      final response = await requestPUT(path: '/update_password/$id', parameters: jsonData);
+      print('update pasword response $response');
+      return response;
+    }catch (e, _) {
       print(e);
     }
   }

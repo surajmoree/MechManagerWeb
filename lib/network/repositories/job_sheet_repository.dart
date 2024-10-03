@@ -99,6 +99,12 @@ class JobSheetRepository extends Repository {
     return jobSheetApi.updateLabour(jsonData, id);
   }
 
+  //updateProfile
+
+  Future<dynamic> updateProfile(jsonData, String id) {
+    return jobSheetApi.updateProfile(jsonData, id);
+  }
+
   // search spare part
   Future<dynamic> searchSparePart(jsonData) async {
     return jobSheetApi.searchSparePart(jsonData);
@@ -122,6 +128,12 @@ class JobSheetRepository extends Repository {
   Future<dynamic> getLabour(jsonData) async {
     return jobSheetApi.getLabour(jsonData);
   }
+
+   Future<dynamic> getCustomer(jsonData) async {
+    return jobSheetApi.getCustomer(jsonData);
+  }
+
+
 
   //search mechanics
   Future<dynamic> getMechanics(jsonData) async {
@@ -149,6 +161,12 @@ class JobSheetRepository extends Repository {
     return jobSheetApi.getMechanicById(jsonData);
   }
 
+  //getCustomerById
+
+  Future<dynamic> getCustomerById(jsonData) async {
+    return jobSheetApi.getCustomerById(jsonData);
+  }
+
   Future<dynamic> createAddInvoice(jsonData) async {
     return jobSheetApi.createAddInvoice(jsonData);
   }
@@ -163,17 +181,26 @@ class JobSheetRepository extends Repository {
     return jobSheetApi.createLabour(jsonData);
   }
 
-  Future<dynamic> addEstimate(jsonData) async {
-    return jobSheetApi.addEstimate(jsonData);
+  //createCustomer
+    Future<dynamic> createCustomer(jsonData) async {
+    return jobSheetApi.createCustomer(jsonData);
   }
 
 
 
 
+  Future<dynamic> addEstimate(jsonData) async {
+    return jobSheetApi.addEstimate(jsonData);
+  }
 
   // fetch profile information
   Future<dynamic> profileInformation(jsonData) async {
     return jobSheetApi.profileInformation(jsonData);
   }
 
+  //update password
+
+  Future<dynamic> changePassword(jsonData, String id) async {
+    return jobSheetApi.changePassword(jsonData, id);
+  }
 }

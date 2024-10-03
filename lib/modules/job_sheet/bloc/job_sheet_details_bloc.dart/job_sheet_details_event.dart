@@ -100,6 +100,16 @@ class UpdateVehicle extends JobSheetDetailsEvent {
   const UpdateVehicle({this.formData, required this.id});
 }
 
+class UpdateProfile extends JobSheetDetailsEvent
+{
+  final Map<String,dynamic>? formData;
+  final String id;
+  final XFile profileImage;
+
+ const UpdateProfile(this.profileImage, {required this.formData, required this.id});
+  
+}
+
 class SearchSparePart extends JobSheetDetailsEvent {
   final String? searchKeyword;
   const SearchSparePart({required this.searchKeyword});
@@ -129,15 +139,21 @@ class GetLabourById extends JobSheetDetailsEvent {
   const GetLabourById({required this.id});
 }
 
-// class GetProfileDetail extends JobSheetDetailsEvent
-// {
-//   final String id;
+class GetCustomerById extends JobSheetDetailsEvent
+{
+  final String id;
 
-//   const GetProfileDetail({required this.id});
-// }
+const  GetCustomerById({required this.id});
+}
+
+
 
 class GetProfileDetail extends JobSheetDetailsEvent {
   final String id;
 
   const GetProfileDetail({required this.id});
+}
+
+class ClearData extends JobSheetDetailsEvent {
+  const ClearData();
 }
