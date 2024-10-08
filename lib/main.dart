@@ -51,11 +51,13 @@ class MyApp extends StatelessWidget {
                 ..add(const FetchMechanics(status: jobSheetStatus.initial))
                 ..add(const FetchLabour(status: jobSheetStatus.initial))
                 ..add(const FetchCustomer(status: jobSheetStatus.initial))
+                ..add(const GetCustomerInfoJobCard(status: jobSheetStatus.initial))
+                ..add(const FetchStock(status: jobSheetStatus.initial))
                 
               //  ..add(const FetchDashboard(status: jobSheetStatus.initial))
               // ..add(const FetchServiceList(status: jobSheetStatus.initial)),
               ),
-          // FetchMechanics
+          // FetchStock
           BlocProvider<JobSheetDetailsBloc>(
               create: (context) => JobSheetDetailsBloc()),
           BlocProvider<SearchBloc>(create: (context) => SearchBloc()),

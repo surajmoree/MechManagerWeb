@@ -66,6 +66,13 @@ class JobSheetRepository extends Repository {
     return jobSheetApi.getEstimate(jsonData);
   }
 
+  //get stock
+
+  Future<dynamic> getStock(jsonData)async
+  {
+    return jobSheetApi.getStock(jsonData);
+  }
+
   // delete estimate
   Future<dynamic> deleteEstimate(jsonData) {
     return jobSheetApi.deleteEstimate(jsonData);
@@ -76,6 +83,11 @@ class JobSheetRepository extends Repository {
     return jobSheetApi.getEstimateDetails(jsonData);
   }
 
+  // get customer info jobcard
+
+Future<dynamic> getCustomerInfoJobCard(jsonData,String id) {
+    return jobSheetApi.getCustomerInfoJobCard(jsonData, id);
+  }
   Future<dynamic> updateCustomer(jsonData, String id) {
     return jobSheetApi.updateCustomer(jsonData, id);
   }

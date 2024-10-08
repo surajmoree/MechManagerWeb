@@ -175,12 +175,12 @@ class _MyDrawerState extends State<MyDrawer> {
                             DrawerItem(
                                 imageIcon: '',
                                 title: 'Stocks',
-                                route: '/stock_page',
-                                isSelected: selectedRoute == "/stock_page",
+                                route: '/stock_listing',
+                                isSelected: selectedRoute == "/stock_listing",
                                 onTap: () {
-                                  selectedRouteNotifier.value = '/stock_page';
+                                  selectedRouteNotifier.value = '/stock_listing';
                                   Navigator.of(context)
-                                      .pushNamed('/stock_page');
+                                      .pushNamed('/stock_listing');
                                 }),
                             SizedBox(
                               height: 3,

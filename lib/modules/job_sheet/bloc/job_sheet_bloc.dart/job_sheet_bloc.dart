@@ -7,6 +7,9 @@ import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:mech_manager/config.dart';
 import 'package:mech_manager/config/constants.dart';
+import 'package:mech_manager/models/customer_info_estimate_list_model.dart';
+import 'package:mech_manager/models/customer_info_invoice_list_model.dart';
+import 'package:mech_manager/models/customer_info_jobcard_list_model.dart';
 import 'package:mech_manager/models/customer_listening_model.dart';
 import 'package:mech_manager/models/dashboard_model.dart';
 import 'package:mech_manager/models/estimate_listiening_model.dart';
@@ -15,6 +18,7 @@ import 'package:mech_manager/models/job_sheet.dart';
 import 'package:mech_manager/models/labour_listeningmodel.dart';
 import 'package:mech_manager/models/mechanic_listeningmodel.dart';
 import 'package:mech_manager/models/spare_part_model.dart';
+import 'package:mech_manager/models/stock_listening_model.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_event.dart';
 import 'package:mech_manager/modules/job_sheet/bloc/job_sheet_bloc.dart/job_sheet_state.dart';
 import 'package:mech_manager/network/repositories/authentication.dart';
@@ -42,8 +46,11 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
     on<ClearListingData>(_onClearListingData);
     on<FetchCustomer>(_onFetchCustomerList);
     on<CreateCustomerEvent>(_onCreateCustomer);
+    on<GetCustomerInfoJobCard>(_onGetCustomerInfoJobCard);
+    on<GetCustomerInfoEstimate>(_onGetCustomerInfoEstimate);
+    on<GetCustomerInfoInvoice>(_onGetCustomerInfoInvoice);
+    on<FetchStock>(_onFetchInStock);
     on<LogOutEvent>(_onLogOut);
-    
   }
   final JobSheetRepository jobSheetRepository = JobSheetRepository();
   final AuthenticationRepo authenticationRepo = AuthenticationRepo();
@@ -405,6 +412,49 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
     }
   }
 
+  _onFetchInStock(FetchStock event, Emitter<JobSheetState> emit) async {
+    if (state.hasReachedMax! && event.timestamp != null) {
+      return;
+    }
+
+    emit(state.copyWith(
+        status: (event.status == jobSheetStatus.success)
+            ? jobSheetStatus.success
+            : jobSheetStatus.loading));
+
+    dynamic token = await storage.read(key: 'token');
+
+    Map<String, String> jsonData = {
+      'token': token!.toString(),
+      'timestamp': event.timestamp.toString(),
+      'direction': event.direction ?? 'down',
+      'search': event.searchKeyword ?? '',
+      'filter': event.filter ?? 'in_stock',
+    };
+
+    final result = await jobSheetRepository.getStock(jsonData);
+
+    if (result != null && result.isNotEmpty) {
+      List<StockListeningModel> stocklist = result
+          .map<StockListeningModel>(
+              (jsonData) => StockListeningModel.fromJson(jsonData))
+          .toList();
+      final bool hasReachedMax = stocklist.length < 10;
+
+      if (event.timestamp != null && event.timestamp.toString().isNotEmpty) {
+        stocklist = List.from(state.stocklisting)..addAll(stocklist);
+      }
+
+      return emit(state.copyWith(
+          status: jobSheetStatus.success,
+          stocklisting: stocklist,
+          lastTimestamp: stocklist.last.timestamp,
+          hasReachedMax: hasReachedMax));
+    }else {
+      emit(state.copyWith(status: jobSheetStatus.failure));
+    }
+  }
+
   _onFetchCustomerList(FetchCustomer event, Emitter<JobSheetState> emit) async {
     if (state.hasReachedMax! && event.timestamp != null) {
       return;
@@ -425,9 +475,10 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
 
     final result = await jobSheetRepository.getCustomer(jsonData);
 
-      if (result != null && result.isNotEmpty) {
+    if (result != null && result.isNotEmpty) {
       List<CustomerListingModel> customerList = result
-          .map<CustomerListingModel>((jsonData) => CustomerListingModel.fromJson(jsonData))
+          .map<CustomerListingModel>(
+              (jsonData) => CustomerListingModel.fromJson(jsonData))
           .toList();
 
       final bool hasReachedMax = customerList.length < 10;
@@ -440,12 +491,106 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
           customerListing: customerList,
           lastTimestamp: customerList.last.timestamp,
           hasReachedMax: hasReachedMax));
-    } 
-     else {
+    } else {
       emit(state.copyWith(status: jobSheetStatus.failure));
     }
+  }
 
+  Future<void> _onGetCustomerInfoJobCard(
+      GetCustomerInfoJobCard event, Emitter<JobSheetState> emit) async {
+    emit(state.copyWith(
+      status: jobSheetStatus.loading,
+      customerInfoJobcardlisting: [], // Clear the previous list
+    ));
+    dynamic token = await storage.read(key: 'token');
 
+    Map<String, Object> jsonData = {
+      "token": token.toString(),
+      "vehicle_id": event.vehicleId.toString(),
+      "filter": "Jobcard",
+    };
+
+    final result = await jobSheetRepository.getCustomerInfoJobCard(
+        jsonData, event.id.toString());
+    print('result offf jobcard bu id $result');
+    if (result != null && result.isNotEmpty) {
+      List<CustomerInfoJobCardListModel> customerjobcardlist = result
+          .map<CustomerInfoJobCardListModel>(
+              (jsonData) => CustomerInfoJobCardListModel.fromJson(jsonData))
+          .toList();
+      customerjobcardlist = List.from(state.customerInfoJobcardlisting)
+        ..addAll(customerjobcardlist);
+      return emit(state.copyWith(
+        status: jobSheetStatus.success,
+        customerInfoJobcardlisting: customerjobcardlist,
+      ));
+    } else {
+      emit(state.copyWith(status: jobSheetStatus.failure));
+    }
+  }
+
+  //GetCustomerInfoEstimate
+
+  Future<void> _onGetCustomerInfoEstimate(
+      GetCustomerInfoEstimate event, Emitter<JobSheetState> emit) async {
+    emit(state.copyWith(
+        status: jobSheetStatus.loading, customerInfoestimatelisting: []));
+    dynamic token = await storage.read(key: 'token');
+
+    Map<String, Object> jsonData = {
+      "token": token.toString(),
+      "vehicle_id": event.vehicleId.toString(),
+      "filter": "Estimate",
+    };
+
+    final result = await jobSheetRepository.getCustomerInfoJobCard(
+        jsonData, event.id.toString());
+    print('result offf estimatelist by id $result');
+    if (result != null && result.isNotEmpty) {
+      List<CustomerInfoEstimateListModel> customerestimatelist = result
+          .map<CustomerInfoEstimateListModel>(
+              (jsonData) => CustomerInfoEstimateListModel.fromJson(jsonData))
+          .toList();
+      customerestimatelist = List.from(state.customerInfoestimatelisting)
+        ..addAll(customerestimatelist);
+      return emit(state.copyWith(
+        status: jobSheetStatus.success,
+        customerInfoestimatelisting: customerestimatelist,
+      ));
+    } else {
+      emit(state.copyWith(status: jobSheetStatus.failure));
+    }
+  }
+
+  Future<void> _onGetCustomerInfoInvoice(
+      GetCustomerInfoInvoice event, Emitter<JobSheetState> emit) async {
+    emit(state.copyWith(
+        status: jobSheetStatus.loading, customerInfoinvoicelisting: []));
+    dynamic token = await storage.read(key: 'token');
+    Map<String, Object> jsonData = {
+      "token": token.toString(),
+      "vehicle_id": event.vehicleId.toString(),
+      "filter": "Invoice",
+    };
+
+    final result = await jobSheetRepository.getCustomerInfoJobCard(
+        jsonData, event.id.toString());
+
+    if (result != null && result.isNotEmpty) {
+      List<CustomerInfoInvoiceListModel> customerinvoicelist = result
+          .map<CustomerInfoInvoiceListModel>(
+              (jsonData) => CustomerInfoInvoiceListModel.fromJson(jsonData))
+          .toList();
+      customerinvoicelist = List.from(state.customerInfoinvoicelisting)
+        ..addAll(customerinvoicelist);
+
+      return emit(state.copyWith(
+        status: jobSheetStatus.success,
+        customerInfoinvoicelisting: customerinvoicelist,
+      ));
+    } else {
+      emit(state.copyWith(status: jobSheetStatus.failure));
+    }
   }
 
   _onFetchSparePartList(
@@ -650,13 +795,12 @@ class JobSheetBloc extends Bloc<JobSheetEvent, JobSheetState> {
     }
   }
 
-  Future<void> _onCreateCustomer(CreateCustomerEvent event, Emitter<JobSheetState>emit)async
-  {
+  Future<void> _onCreateCustomer(
+      CreateCustomerEvent event, Emitter<JobSheetState> emit) async {
     emit(state.copyWith(status: jobSheetStatus.sending));
 
     dynamic token = await storage.read(key: 'token');
-    Map<String, dynamic> jsonData =
-    {
+    Map<String, dynamic> jsonData = {
       "token": token.toString(),
       "formData": jsonEncode(event.formData),
     };

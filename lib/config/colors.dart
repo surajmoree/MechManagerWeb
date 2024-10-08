@@ -57,8 +57,13 @@ const Color complentboxColor= Color(0xffF9FAFB);
 const Color complentborderColor= Color(0xff9CA3AF);
 const Color tablerowcolor= Color(0xff6B7280);
 const Color savebuttoncolor= Color(0xff22C55E);
+const Color emailcolor= Color(0xffDC2626);
+const Color emailbuttoncolor= Color(0xffFEE2E2);
+const Color callcolor= Color(0xff2563EB);
+const Color callbuttoncolor= Color(0xffDBEAFE);
+const Color stockbuttoncolor= Color(0xffF3F4F6);
 
-//0xff22C55E
+//0xffF3F4F6
 
 Color hexToColor(String code) {
   return Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);

@@ -127,13 +127,28 @@ class FetchLabour extends JobSheetEvent {
       required this.status});
 }
 
+class FetchStock extends JobSheetEvent {
+  final int? timestamp;
+  final String? direction;
+  final String? searchKeyword;
+  final jobSheetStatus? status;
+  final String? filter;
+
+  const FetchStock(
+      {this.timestamp,
+      this.direction,
+      this.searchKeyword,
+      this.filter,
+      required this.status});
+}
+
 class FetchCustomer extends JobSheetEvent {
   final int? timestamp;
   final String? direction;
   final String? searchKeyword;
   final jobSheetStatus? status;
 
- const FetchCustomer(
+  const FetchCustomer(
       {this.timestamp, this.direction, this.searchKeyword, this.status});
 }
 
@@ -184,6 +199,31 @@ class CreateLabourEvent extends JobSheetEvent {
   final Map<String, dynamic>? formData;
 
   const CreateLabourEvent({this.formData});
+}
+
+class GetCustomerInfoJobCard extends JobSheetEvent {
+  final jobSheetStatus? status;
+  final String? id;
+  final String? vehicleId;
+
+  const GetCustomerInfoJobCard({this.id, required this.status, this.vehicleId});
+}
+
+class GetCustomerInfoEstimate extends JobSheetEvent {
+  final jobSheetStatus? status;
+  final String? id;
+  final String? vehicleId;
+
+  const GetCustomerInfoEstimate(
+      {this.id, required this.status, this.vehicleId});
+}
+
+class GetCustomerInfoInvoice extends JobSheetEvent {
+  final jobSheetStatus? status;
+  final String? id;
+  final String? vehicleId;
+
+  const GetCustomerInfoInvoice({this.id, required this.status, this.vehicleId});
 }
 
 class CreateCustomerEvent extends JobSheetEvent {

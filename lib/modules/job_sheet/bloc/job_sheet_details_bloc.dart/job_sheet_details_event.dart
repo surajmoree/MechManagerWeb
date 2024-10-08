@@ -86,6 +86,8 @@ class GetEstimateDetailsByEstimate extends JobSheetDetailsEvent {
   });
 }
 
+
+
 class ResetLastEstimateId extends JobSheetDetailsEvent {}
 
 class UpdateCustomer extends JobSheetDetailsEvent {
