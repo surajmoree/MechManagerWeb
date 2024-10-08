@@ -182,6 +182,19 @@ class JobSheetApi extends Api {
     }
   }
 
+  //get stocks
+  Future<dynamic> getStock(jsonData) async {
+    try {
+      final response =
+          await requestGET(path: '/get-products', parameters: jsonData);
+      print('stock list   $response');
+      return response['products'];
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
   ///////delete estimate///
 
   Future<dynamic> deleteEstimate(jsonData) async {
@@ -201,6 +214,20 @@ class JobSheetApi extends Api {
       final getEstimateResponse = await requestGET(
           path: 'get_estimate/${jsonData['id']}', parameters: jsonData);
       return getEstimateResponse['Estimate'];
+    } catch (er) {
+      print("Error is---------$er");
+    }
+  }
+
+  Future<dynamic> getCustomerInfoJobCard(jsonData, String id) async {
+    try {
+      final response = await requestGET(
+        path: 'customer_info/$id',
+        parameters: jsonData,
+      );
+
+      print('Customer info job card response: $response');
+      return response["customer_info"];
     } catch (er) {
       print("Error is---------$er");
     }
@@ -261,13 +288,13 @@ class JobSheetApi extends Api {
 
   //update profile
 
-  Future<dynamic> updateProfile(jsonData,String id)async
-  {
-    try{
-      final response = await  requestPUT(path: '/update_company/$id', parameters: jsonData);
+  Future<dynamic> updateProfile(jsonData, String id) async {
+    try {
+      final response =
+          await requestPUT(path: '/update_company/$id', parameters: jsonData);
       print('profile update $response');
       return response;
-    }catch (er) {
+    } catch (er) {
       print("Error is------$er");
     }
   }
@@ -320,13 +347,13 @@ class JobSheetApi extends Api {
 
   //get customer
 
-  Future<dynamic> getCustomer(jsonData)async
-  {
-    try{
-      final response = await requestGET(path: '/get-customers',parameters: jsonData);
+  Future<dynamic> getCustomer(jsonData) async {
+    try {
+      final response =
+          await requestGET(path: '/get-customers', parameters: jsonData);
       print('customer list response $response');
       return response['customers'];
-    }catch (e, _) {
+    } catch (e, _) {
       print(e);
       return null;
     }
@@ -427,17 +454,15 @@ class JobSheetApi extends Api {
     }
   }
 
-  Future<dynamic> getCustomerById(jsonData)async
-  {
-    try
-    {
-      final response = await requestGET(path: '/customer_details/${jsonData['id']}',parameters: jsonData);
+  Future<dynamic> getCustomerById(jsonData) async {
+    try {
+      final response = await requestGET(
+          path: '/customer_details/${jsonData['id']}', parameters: jsonData);
       print('get customer $response');
       return response['customer'];
-    }catch (er) {
+    } catch (er) {
       print("Error is---------$er");
     }
-
   }
 
   Future<dynamic> createAddInvoice(jsonData) async {
@@ -474,17 +499,16 @@ class JobSheetApi extends Api {
     }
   }
 
-  Future<dynamic> createCustomer(jsonData)async
-  {
-    try{
-      final response = await requestPOST(path: '/create-customers',parameters: jsonData);
+  Future<dynamic> createCustomer(jsonData) async {
+    try {
+      final response =
+          await requestPOST(path: '/create-customers', parameters: jsonData);
       print('create customer response $response');
       return response;
     } catch (e, _) {
       print(e);
     }
   }
-  
 
   Future<dynamic> addEstimate(jsonData) async {
     try {
@@ -496,10 +520,6 @@ class JobSheetApi extends Api {
       print(e);
     }
   }
-
-
-
-
 
   /////profile information////////////
   Future<dynamic> profileInformation(jsonData) async {
@@ -518,14 +538,13 @@ class JobSheetApi extends Api {
     }
   }
 
-  Future<dynamic> changePassword(jsonData,String id)async
-  {
-    try
-    {
-      final response = await requestPUT(path: '/update_password/$id', parameters: jsonData);
+  Future<dynamic> changePassword(jsonData, String id) async {
+    try {
+      final response =
+          await requestPUT(path: '/update_password/$id', parameters: jsonData);
       print('update pasword response $response');
       return response;
-    }catch (e, _) {
+    } catch (e, _) {
       print(e);
     }
   }

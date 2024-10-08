@@ -15,7 +15,7 @@ import 'package:mech_manager/modules/labours/labours_listening.dart';
 import 'package:mech_manager/modules/mechanics/mechanics_listening.dart';
 import 'package:mech_manager/modules/spare_Parts/spare_parts_listening.dart';
 import 'package:mech_manager/modules/staff/staff_page.dart';
-import 'package:mech_manager/modules/stocks/stocks_page.dart';
+import 'package:mech_manager/modules/stocks/stocks_listening.dart';
 
 import '../modules/dashboard/dashboard_page.dart';
 import '../modules/job_sheet/job_sheet_listening.dart';
@@ -88,8 +88,14 @@ class AppRouter {
       case "/spare_parts_page":
         return MaterialPageRoute(builder: (_) => SparePartsPage());
 
-      case "/stock_page":
-        return MaterialPageRoute(builder: (_) => StockPage());
+      case "/stock_listing":
+       return MaterialPageRoute(
+            builder: (_) => BlocProvider(
+                  create: (context) => JobSheetBloc()
+                    ..add(
+                        const FetchStock(status: jobSheetStatus.initial)),
+                  child: const StockPage(),
+                ));
 
       case "/mechanics_listing":
       //  return MaterialPageRoute(builder: (_) => MechanicsPage());

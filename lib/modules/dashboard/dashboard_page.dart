@@ -288,34 +288,44 @@ class _DashboardPageState extends State<DashboardPage>
                                                 ),
                                               );
                                             } else if (index == 4) {
-                                              return ResponsiveCard(
-                                                child: OverviewCard(
-                                                  title: 'Total Customers',
-                                                  count: state.dashboardModel!
-                                                      .totalCustomer
-                                                      .toString(),
-                                                  //  icon: Icons.list_alt,
-                                                  container: Container(
-                                                    height: 44,
-                                                    width: 44,
-                                                    decoration: BoxDecoration(
-                                                      color: customercardColor,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8),
+                                              return GestureDetector(
+                                                onTap: () {
+                                                   context.read<JobSheetBloc>().add(
+                                                      const FetchCustomer(
+                                                          status: jobSheetStatus
+                                                              .success));
+                                                  Navigator.pushNamed(context,
+                                                      '/customer_listing');
+                                                },
+                                                child: ResponsiveCard(
+                                                  child: OverviewCard(
+                                                    title: 'Total Customers',
+                                                    count: state.dashboardModel!
+                                                        .totalCustomer
+                                                        .toString(),
+                                                    //  icon: Icons.list_alt,
+                                                    container: Container(
+                                                      height: 44,
+                                                      width: 44,
+                                                      decoration: BoxDecoration(
+                                                        color: customercardColor,
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                8),
+                                                      ),
+                                                      child: Center(
+                                                          child: Text(
+                                                        '',
+                                                        style: TextStyle(
+                                                            fontSize: 25,
+                                                            color:
+                                                                customerIconColor),
+                                                      )),
                                                     ),
-                                                    child: Center(
-                                                        child: Text(
-                                                      '',
-                                                      style: TextStyle(
-                                                          fontSize: 25,
-                                                          color:
-                                                              customerIconColor),
-                                                    )),
+                                                    backgroundColor: Colors.blue,
+                                                    iconColor:
+                                                        Colors.blue.shade800,
                                                   ),
-                                                  backgroundColor: Colors.blue,
-                                                  iconColor:
-                                                      Colors.blue.shade800,
                                                 ),
                                               );
                                             } else if (index == 5) {
